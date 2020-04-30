@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.InputMismatchException;
 
 public class GUI
 {
@@ -20,7 +19,7 @@ public class GUI
 
     private void addMenuBar ()
     {
-        new MenuBar (baseFrame);
+        baseFrame.setJMenuBar (new MenuBar (baseFrame));
     }
 
 

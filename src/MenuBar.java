@@ -5,10 +5,9 @@ import java.awt.event.ActionListener;
 import java.util.InputMismatchException;
 
 
-public class MenuBar
+public class MenuBar extends JMenuBar
 {
     private JFrame baseFrame;
-    private JMenuBar menuBar;
     private JMenuItem option;
     private JMenuItem exit;
     private JMenuItem toggleFullScreen;
@@ -19,12 +18,11 @@ public class MenuBar
 
     public MenuBar (JFrame baseFrame)
     {
+        super();
         if (baseFrame == null)
             throw new InputMismatchException ("ERROR : Wrong Input");
 
-        menuBar = new JMenuBar ();
         this.baseFrame = baseFrame;
-        baseFrame.setJMenuBar (menuBar);
 
         createApplicationMenu ();
         createViewMenu ();
@@ -50,7 +48,7 @@ public class MenuBar
         application.add (option);
         application.addSeparator ();
         application.add (exit);
-        menuBar.add (application);
+        this.add (application);
     }
 
     private void createViewMenu ()
@@ -72,7 +70,7 @@ public class MenuBar
 
         view.add (toggleFullScreen);
         view.add (toggleSideBar);
-        menuBar.add (view);
+        this.add (view);
     }
 
     private void createHelpMenu ()
@@ -94,7 +92,7 @@ public class MenuBar
         helpMenu.add (help);
         helpMenu.addSeparator ();
         helpMenu.add (about);
-        menuBar.add (helpMenu);
+        this.add (helpMenu);
     }
 
     private class ItemHandler implements ActionListener
