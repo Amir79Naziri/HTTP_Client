@@ -23,26 +23,7 @@ public class GUI
         new MenuBar (baseFrame);
     }
 
-    public void addRequestListPanel (JPanel requestList)
-    {
-        if (requestList == null)
-            throw new InputMismatchException ("Input is not a matchPanel");
-        baseFrame.add (requestList,BorderLayout.WEST);
-    }
 
-    public void addConfigurationPanel (JPanel configuration)
-    {
-        if (configuration == null)
-            throw new InputMismatchException ("Input is not a matchPanel");
-        baseFrame.add (configuration,BorderLayout.CENTER);
-    }
-
-    public void addResultPanel (JPanel result)
-    {
-        if (result == null)
-            throw new InputMismatchException ("Input is not a matchPanel");
-        baseFrame.add (result,BorderLayout.WEST);
-    }
 
     public void setBaseFrameVisible ()
     {
