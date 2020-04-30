@@ -110,12 +110,6 @@ public class MenuBar
                                 "ID : 9726081\n" +
                                 "e-mail : naziriamirreza@gmail.com","About",
                         JOptionPane.PLAIN_MESSAGE);
-            } else if (e.getSource () == exit)
-            {
-                if (baseFrame.getDefaultCloseOperation () ==
-                        WindowConstants.EXIT_ON_CLOSE)
-                    System.exit (0);
-
             } else if (e.getSource () == help)
             {
                 JOptionPane.showMessageDialog (baseFrame
