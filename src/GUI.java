@@ -4,6 +4,7 @@ import java.awt.*;
 public class GUI
 {
     private JFrame baseFrame;
+    private FirstPanel firstPanel;
 
     public GUI ()
     {
@@ -15,6 +16,7 @@ public class GUI
         baseFrame.setLayout (new BorderLayout ());
 
         addMenuBar ();
+        addFirstPanel ();
     }
 
     private void addMenuBar ()
@@ -22,7 +24,11 @@ public class GUI
         baseFrame.setJMenuBar (new MenuBar (baseFrame));
     }
 
-
+    private void addFirstPanel ()
+    {
+        firstPanel = new FirstPanel ();
+        baseFrame.add (firstPanel,BorderLayout.WEST);
+    }
 
     public void setBaseFrameVisible ()
     {

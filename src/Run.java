@@ -6,7 +6,7 @@ public class Run
 
 
         try {
-            UIManager.setLookAndFeel ("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            UIManager.setLookAndFeel (UIManager.getSystemLookAndFeelClassName ());
         } catch (Exception e)
         {
             e.printStackTrace ();
