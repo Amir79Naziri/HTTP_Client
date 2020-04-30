@@ -1,4 +1,7 @@
 import javax.swing.*;
 
-public class RequestsPanel extends JPanel {
+
+public class RequestsPanel extends JPanel
+{
+    private HashMap<>
 }

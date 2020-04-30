@@ -29,7 +29,6 @@ public class GUI
         firstPanel = new FirstPanel ();
         baseFrame.add (firstPanel,BorderLayout.WEST);
     }
-
     public void setBaseFrameVisible ()
     {
         baseFrame.setVisible (true);
