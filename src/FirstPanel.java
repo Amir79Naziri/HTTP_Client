@@ -1,11 +1,11 @@
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class FirstPanel extends JPanel
 {
     private JButton filterButton;
     private JButton addRequest;
-    private RequestsPanel requestsPanel;
 
 
     public FirstPanel ()
@@ -14,6 +14,7 @@ public class FirstPanel extends JPanel
         setLayout (new BoxLayout (this,BoxLayout.Y_AXIS));
         createHeaderPanel ();
         createFilterPanel ();
+        createRequestsPanel ();
     }
 
     private void createHeaderPanel ()
@@ -59,5 +60,15 @@ public class FirstPanel extends JPanel
         filterPanel.add (searchText);
         filterPanel.add (filterButton);
         filterPanel.add (addRequest);
+    }
+
+    private void createRequestsPanel ()
+    {
+        JPanel requestsPanel = new RequestsPanel ();
+        JScrollPane scrollPane = new JScrollPane (requestsPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setAutoscrolls (true);
+        scrollPane.setBorder (new LineBorder (new Color (16, 22, 30, 208),1));
+        add (scrollPane);
     }
 }

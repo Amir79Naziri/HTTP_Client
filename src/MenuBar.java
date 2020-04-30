@@ -34,6 +34,7 @@ public class MenuBar extends JMenuBar
         ItemHandler itemHandler = new ItemHandler ();
         JMenu application = new JMenu ("Application");
         application.setMnemonic ('A');
+        application.getPopupMenu ().setPreferredSize (new Dimension (170,65));
 
         option = new JMenuItem ("Option");
         option.setMnemonic ('O');
@@ -78,6 +79,7 @@ public class MenuBar extends JMenuBar
         ItemHandler itemHandler = new ItemHandler ();
         JMenu helpMenu = new JMenu ("Help");
         helpMenu.setMnemonic ('H');
+        helpMenu.getPopupMenu ().setPreferredSize (new Dimension (170,65));
 
         help = new JMenuItem ("Help");
         help.setMnemonic ('l');
