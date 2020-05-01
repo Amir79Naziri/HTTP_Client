@@ -1,11 +1,14 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class FirstPanel extends JPanel
 {
     private JButton filterButton;
     private JButton addRequest;
+    private JTextField searchText;
 
 
     public FirstPanel ()
@@ -45,7 +48,7 @@ public class FirstPanel extends JPanel
         filterPanel.setLayout (new FlowLayout (FlowLayout.LEFT));
         add(filterPanel);
 
-        JTextField searchText = new JTextField ("filter");
+        searchText = new JTextField ("filter");
         searchText.setPreferredSize (new Dimension (270,30));
         searchText.setFont (new Font ("Arial",Font.PLAIN,14));
 
@@ -82,6 +85,21 @@ public class FirstPanel extends JPanel
             requestsPanel.addNewRequest (RequestType.PATCH,"sdf");
             requestsPanel.addNewRequest (RequestType.PUT,"kfj");
             requestsPanel.addNewRequest (RequestType.POST,"eeee");
+        }
+    }
+
+    private class buttonHandler implements ActionListener
+    {
+        @Override
+        public void actionPerformed (ActionEvent e) {
+
+            if (e.getSource () == addRequest)
+            {
+                // add a new request
+            } else if (e.getSource () == filterButton || e.getSource () == searchText)
+            {
+                // add filter to list
+            }
         }
     }
 }
