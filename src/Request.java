@@ -6,12 +6,32 @@ import java.awt.event.MouseEvent;
 
 public class Request extends JPanel
 {
-    public Request ()
+    JPanel chose;
+    public Request (RequestType type, String name)
     {
         super();
         setLayout (new FlowLayout (FlowLayout.LEFT));
         setBackground (new Color (46, 53, 53, 255));
-        addMouseListener (new MouseHandler ());
+
+        chose = new JPanel ();
+        chose.setBackground (new Color (122, 103,218));
+        chose.setPreferredSize (new Dimension (2,29));
+        chose.setVisible (false);
+
+        JLabel typeLabel = new JLabel (type.getName ());
+        typeLabel.setFont (new Font ("Arial",Font.PLAIN,10));
+        typeLabel.setForeground (type.getColor ());
+        typeLabel.setPreferredSize (new Dimension (40,29));
+
+
+        JLabel nameLabel = new JLabel (name);
+        nameLabel.setFont (new Font ("Arial",Font.PLAIN,13));
+
+        nameLabel.setForeground (Color.WHITE);
+
+        add (chose);
+        add (typeLabel);
+        add (nameLabel);
     }
 
     @Override
@@ -29,28 +49,8 @@ public class Request extends JPanel
     }
 
 
-    private class MouseHandler extends MouseAdapter
-    {
-
-        @Override
-        public void mouseEntered (MouseEvent e) {
-
-            e.getComponent ().requestFocusInWindow ();
-            e.getComponent ().setBackground (new Color (71, 80, 87, 255));
-
-        }
-
-        @Override
-        public void mouseExited (MouseEvent e) {
-
-            e.getComponent ().setBackground (new Color (46, 53, 53, 255));
-
-        }
-
-        @Override
-        public void mouseClicked (MouseEvent e) {
-            super.mouseClicked (e);
-        }
+    public void setChoseVisibly (boolean visibly) {
+        chose.setVisible (visibly);
     }
 
     @Override

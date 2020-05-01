@@ -39,7 +39,7 @@ public class FirstPanel extends JPanel
 
     private void createFilterPanel ()
     {
-        Color color = new Color (16, 22, 30, 208);
+        Color color = new Color (46, 53, 53, 255);
         JPanel filterPanel = new JPanel ();
         filterPanel.setPreferredSize (new Dimension (350,40));
         filterPanel.setMaximumSize (new Dimension (350,40));
@@ -50,7 +50,9 @@ public class FirstPanel extends JPanel
 
         searchText = new JTextField ("filter");
         searchText.setPreferredSize (new Dimension (270,30));
-        searchText.setFont (new Font ("Arial",Font.PLAIN,14));
+        searchText.setFont (new Font ("Arial",Font.PLAIN,15));
+        searchText.setBackground (color);
+        searchText.setForeground (Color.WHITE);
 
 
         filterButton = new JButton ();
