@@ -64,11 +64,21 @@ public class FirstPanel extends JPanel
 
     private void createRequestsPanel ()
     {
-        JPanel requestsPanel = new RequestsPanel ();
+        RequestsPanel requestsPanel = new RequestsPanel ();
         JScrollPane scrollPane = new JScrollPane (requestsPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setAutoscrolls (true);
+        scrollPane.getVerticalScrollBar ().setPreferredSize (new Dimension (10,8));
         scrollPane.setBorder (new LineBorder (new Color (16, 22, 30, 208),1));
         add (scrollPane);
+
+        for (int i = 0; i < 3; i++)
+        {
+            requestsPanel.addNewRequest (RequestType.GET,"Ammm");
+            requestsPanel.addNewRequest (RequestType.DELETE,"dfsfg");
+            requestsPanel.addNewRequest (RequestType.PATCH,"sdf");
+            requestsPanel.addNewRequest (RequestType.PUT,"kfj");
+            requestsPanel.addNewRequest (RequestType.POST,"eeee");
+        }
     }
 }
