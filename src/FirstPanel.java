@@ -52,9 +52,12 @@ public class FirstPanel extends JPanel
 
         filterButton = new JButton ();
         filterButton.setPreferredSize (new Dimension (30,30));
+        filterButton.setIcon (new ImageIcon ("./images/filter.png"));
 
         addRequest = new JButton ();
         addRequest.setPreferredSize (new Dimension (30,30));
+        addRequest.setIcon (new ImageIcon ("./images/addR1.png"));
+
 
 
         filterPanel.add (searchText);
@@ -72,7 +75,7 @@ public class FirstPanel extends JPanel
         scrollPane.setBorder (new LineBorder (new Color (16, 22, 30, 208),1));
         add (scrollPane);
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 5; i++)
         {
             requestsPanel.addNewRequest (RequestType.GET,"Ammm");
             requestsPanel.addNewRequest (RequestType.DELETE,"dfsfg");
