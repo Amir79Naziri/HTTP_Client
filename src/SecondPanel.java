@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.InputMismatchException;
 
 public class SecondPanel extends JPanel
 {
@@ -34,7 +35,7 @@ public class SecondPanel extends JPanel
         
 
         url = new JTextField ("https://api.myproduct.com/v1/users");
-        url.setPreferredSize (new Dimension (340,45));
+        url.setPreferredSize (new Dimension (300,45));
         url.setMaximumSize (new Dimension (300,45));
         url.setMinimumSize (new Dimension (70,45));
         url.setBorder (new LineBorder (Color.WHITE,1));
@@ -59,12 +60,8 @@ public class SecondPanel extends JPanel
 
         queryPanel = new QueryPanel ();
         headerPanel = new HeaderPanel ();
-        tabbedPane.addTab ("Query",new JScrollPane (queryPanel,
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
-        tabbedPane.addTab ("Header",new JScrollPane (headerPanel,
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
+        tabbedPane.addTab ("Query",fetchToJScrollPane (queryPanel));
+        tabbedPane.addTab ("Header",fetchToJScrollPane (headerPanel));
 
         for (int i = 0; i < 18; i++)
         {
@@ -80,4 +77,14 @@ public class SecondPanel extends JPanel
         add (tabbedPane,BorderLayout.CENTER);
     }
 
+    private JScrollPane fetchToJScrollPane (JPanel panel)
+    {
+        if (panel == null)
+            throw new InputMismatchException ("Input is not valid");
+        JScrollPane scrollPane = new JScrollPane (panel,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setBorder (new LineBorder (new Color (16, 22, 30, 208),1));
+        scrollPane.getVerticalScrollBar ().setPreferredSize (new Dimension (10,8));
+        return scrollPane;
+    }
 }

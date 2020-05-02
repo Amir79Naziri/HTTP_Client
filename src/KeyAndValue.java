@@ -12,11 +12,10 @@ public class KeyAndValue extends JPanel
     private JCheckBox active;
     private JButton delete;
     private JButton settings;
-    private boolean canDelete;
+//    private boolean canDelete;
 
     public KeyAndValue (String keyName, String valueName)
     {
-        canDelete = false;
         setLayout (new FlowLayout (FlowLayout.LEFT,9,9));
         setBackground (new Color (40, 38, 37, 255));
         createComponents (keyName, valueName);

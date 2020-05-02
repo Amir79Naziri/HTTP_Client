@@ -20,11 +20,6 @@ public class RequestsPanel extends JPanel
     public void addNewRequest (RequestType type, String name)
     {
         Request request = new Request (type,name);
-//        request.setBackground (new Color (46, 53, 53, 255));
-//        request.setLayout (new FlowLayout (FlowLayout.LEFT));
-//        request.setPreferredSize (new Dimension (340,40));
-//        request.setMaximumSize (new Dimension (340,40));
-//        request.setMinimumSize (new Dimension (340,40));
         request.addMouseListener (new MouseHandler ());
 
 
