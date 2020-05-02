@@ -44,7 +44,6 @@ public class RequestsPanel extends JPanel
         @Override
         public void mouseEntered (MouseEvent e) {
 
-            e.getComponent ().requestFocusInWindow ();
             e.getComponent ().setBackground (new Color (71, 80, 87, 255));
 
         }
@@ -64,7 +63,10 @@ public class RequestsPanel extends JPanel
                 for (Request request : requests)
                 {
                     if (request == e.getComponent ())
+                    {
+                        request.requestFocusInWindow ();
                         request.setChoseVisibly (true);
+                    }
                     else
                         request.setChoseVisibly (false);
                 }

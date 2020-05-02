@@ -5,6 +5,7 @@ public class GUI
 {
     private JFrame baseFrame;
     private FirstPanel firstPanel;
+    private SecondPanel secondPanel;
 
     public GUI ()
     {
@@ -17,6 +18,7 @@ public class GUI
 
         addMenuBar ();
         addFirstPanel ();
+        addSecondPanel ();
     }
 
     private void addMenuBar ()
@@ -28,6 +30,12 @@ public class GUI
     {
         firstPanel = new FirstPanel ();
         baseFrame.add (firstPanel,BorderLayout.WEST);
+    }
+
+    private void addSecondPanel ()
+    {
+        secondPanel = new SecondPanel ();
+        baseFrame.add (secondPanel,BorderLayout.CENTER);
     }
     public void setBaseFrameVisible ()
     {

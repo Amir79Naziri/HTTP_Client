@@ -34,19 +34,6 @@ public class Request extends JPanel
         add (nameLabel);
     }
 
-    @Override
-    protected void paintComponent (Graphics g) {
-
-//        Graphics2D g2d = (Graphics2D)g;
-//        g2d.setColor (Color.WHITE);
-//        g2d.fillArc (getX (), getY (),getHeight (),getHeight (),90,180);
-//        g2d.fillRect (getX () + getHeight () / 2,getY (),getWidth () - getHeight (),
-//                getHeight ());
-//        g2d.fillArc (getWidth () - getHeight () -1 ,getY (),getHeight (),getHeight (),
-//                90,-180);
-//        g2d.setColor (new Color (46, 53, 53, 255));
-        super.paintComponent (g);
-    }
 
 
     public void setChoseVisibly (boolean visibly) {
@@ -55,16 +42,16 @@ public class Request extends JPanel
 
     @Override
     public Dimension getMinimumSize () {
-        return new Dimension (340,40);
+        return new Dimension (340,38);
     }
 
     @Override
     public Dimension getMaximumSize () {
-        return new Dimension (340,40);
+        return new Dimension (340,38);
     }
 
     @Override
     public Dimension getPreferredSize () {
-        return new Dimension (340,40);
+        return new Dimension (340,38);
     }
 }
