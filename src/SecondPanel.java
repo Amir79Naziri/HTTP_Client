@@ -8,6 +8,9 @@ public class SecondPanel extends JPanel
     private JComboBox<String> type;
     private JButton send;
 
+    private QueryPanel queryPanel;
+    private HeaderPanel headerPanel;
+
 
     public SecondPanel ()
     {
@@ -31,7 +34,7 @@ public class SecondPanel extends JPanel
         
 
         url = new JTextField ("https://api.myproduct.com/v1/users");
-        url.setPreferredSize (new Dimension (370,45));
+        url.setPreferredSize (new Dimension (340,45));
         url.setMaximumSize (new Dimension (300,45));
         url.setMinimumSize (new Dimension (70,45));
         url.setBorder (new LineBorder (Color.WHITE,1));
@@ -54,11 +57,27 @@ public class SecondPanel extends JPanel
     {
         JTabbedPane tabbedPane = new JTabbedPane ();
 
-        tabbedPane.addTab ("Header",new JScrollPane ((new HeaderPanel ())));
+        queryPanel = new QueryPanel ();
+        headerPanel = new HeaderPanel ();
+        tabbedPane.addTab ("Query",new JScrollPane (queryPanel,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
+        tabbedPane.addTab ("Header",new JScrollPane (headerPanel,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
+
+        for (int i = 0; i < 18; i++)
+        {
+            queryPanel.addNewKeyAndValue ();
+        }
+
+        for (int i = 0; i < 7; i++)
+        {
+            headerPanel.addNewKeyAndValue ();
+        }
+
 
         add (tabbedPane,BorderLayout.CENTER);
-
-
     }
 
 }

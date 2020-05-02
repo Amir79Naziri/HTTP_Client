@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.InputMismatchException;
 
 public class KeyAndValue extends JPanel
@@ -11,9 +12,11 @@ public class KeyAndValue extends JPanel
     private JCheckBox active;
     private JButton delete;
     private JButton settings;
+    private boolean canDelete;
 
     public KeyAndValue (String keyName, String valueName)
     {
+        canDelete = false;
         setLayout (new FlowLayout (FlowLayout.LEFT,9,9));
         setBackground (new Color (40, 38, 37, 255));
         createComponents (keyName, valueName);
@@ -44,9 +47,10 @@ public class KeyAndValue extends JPanel
         delete = new JButton (new ImageIcon ("./images/trashR1.png"));
         delete.setRolloverIcon (new ImageIcon ("./images/trashR2.png"));
         delete.setRolloverEnabled (true);
-        delete.setPreferredSize (new Dimension (16,18));
+        delete.setPreferredSize (new Dimension (16,16));
         delete.setBackground (color);
         delete.setFocusPainted (false);
+        delete.addActionListener (new ComponentHandler ());
 
         add(settings);
         add(panelKey);
@@ -64,12 +68,49 @@ public class KeyAndValue extends JPanel
         panel.setLayout (new BoxLayout (panel,BoxLayout.Y_AXIS));
 
         textField.setPreferredSize (new Dimension (155,30));
+        textField.addMouseListener (new ComponentHandler ());
+
         textField.setBackground (color);
+        textField.setFont (new Font ("Arial",Font.PLAIN,11));
         textField.setBorder (new LineBorder (color,1));
         textField.setForeground (Color.WHITE);
         panel.add (textField);
         panel.add (new JSeparator (SwingConstants.HORIZONTAL));
     }
+
+
+    private class ComponentHandler extends MouseAdapter
+            implements ActionListener
+    {
+        @Override
+        public void actionPerformed (ActionEvent e) {
+            if (e.getSource () == delete)
+            {
+                setVisible (false);
+
+            }
+        }
+
+        @Override
+        public void mouseEntered (MouseEvent e) {
+
+            if (e.getComponent () instanceof JTextField)
+            {
+                JTextField textField = (JTextField)(e.getComponent ());
+                textField.setFont (new Font ("Arial",Font.BOLD + Font.ITALIC,11));
+            }
+        }
+
+        @Override
+        public void mouseExited (MouseEvent e) {
+            if (e.getComponent () instanceof JTextField)
+            {
+                JTextField textField = (JTextField)(e.getComponent ());
+                textField.setFont (new Font ("Arial",Font.PLAIN,11));
+            }
+        }
+    }
+
 
     @Override
     public Dimension getMaximumSize () {
