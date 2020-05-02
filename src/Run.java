@@ -5,8 +5,8 @@ public class Run
     public static void main (String[] args) {
 
 
-        try {
-            UIManager.setLookAndFeel (UIManager.getSystemLookAndFeelClassName ());
+        try { // "javax.swing.plaf.nimbus.NimbusLookAndFeel"
+            UIManager.setLookAndFeel ("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception e)
         {
             e.printStackTrace ();
