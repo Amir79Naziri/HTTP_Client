@@ -39,7 +39,7 @@ public class FirstPanel extends JPanel
 
     private void createFilterPanel ()
     {
-        Color color = new Color (46, 53, 53, 255);
+        Color color = new Color (45, 46, 42, 255);
         JPanel filterPanel = new JPanel ();
         filterPanel.setPreferredSize (new Dimension (350,40));
         filterPanel.setMaximumSize (new Dimension (350,40));
@@ -56,12 +56,17 @@ public class FirstPanel extends JPanel
 
 
         filterButton = new JButton ();
-        filterButton.setPreferredSize (new Dimension (30,30));
-        filterButton.setIcon (new ImageIcon ("./images/filter.png"));
+        filterButton.setPreferredSize (new Dimension (22,22));
+        filterButton.setIcon (new ImageIcon ("./images/filterR2.png"));
+        filterButton.setRolloverIcon (new ImageIcon ("./images/filterR1.png"));
+        filterButton.setRolloverEnabled (true);
 
         addRequest = new JButton ();
-        addRequest.setPreferredSize (new Dimension (30,30));
+        addRequest.setPreferredSize (new Dimension (22,22));
         addRequest.setIcon (new ImageIcon ("./images/addR1.png"));
+        addRequest.setRolloverIcon (new ImageIcon ("./images/addR2.png"));
+        addRequest.setRolloverEnabled (true);
+        addRequest.setBackground (color);
 
 
 

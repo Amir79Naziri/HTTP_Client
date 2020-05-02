@@ -13,7 +13,7 @@ public class RequestsPanel extends JPanel
     {
         super();
         setLayout (new BoxLayout (this,BoxLayout.Y_AXIS));
-        setBackground (new Color (46, 53, 53, 255));
+        setBackground (new Color (45, 46, 42, 255));
         requests = new ArrayList<> ();
     }
 
@@ -44,14 +44,14 @@ public class RequestsPanel extends JPanel
         @Override
         public void mouseEntered (MouseEvent e) {
 
-            e.getComponent ().setBackground (new Color (71, 80, 87, 255));
+            e.getComponent ().setBackground (new Color (60, 62, 63, 255));
 
         }
 
         @Override
         public void mouseExited (MouseEvent e) {
 
-            e.getComponent ().setBackground (new Color (46, 53, 53, 255));
+            e.getComponent ().setBackground (new Color (45, 46, 42, 255));
 
         }
 

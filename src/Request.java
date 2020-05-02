@@ -11,7 +11,7 @@ public class Request extends JPanel
     {
         super();
         setLayout (new FlowLayout (FlowLayout.LEFT));
-        setBackground (new Color (46, 53, 53, 255));
+        setBackground (new Color (45, 46, 42, 255));
 
         chose = new JPanel ();
         chose.setBackground (new Color (122, 103,218));

@@ -13,7 +13,9 @@ public class HeaderPanel extends JPanel
         super();
         headers = new ArrayList<> ();
         setLayout (new BoxLayout (this,BoxLayout.Y_AXIS));
-        setBackground (new Color (31, 38, 38, 255));
+        setBackground (new Color (40, 38, 37, 255));
+        addNewHeader ();
+        addNewHeader ();
         addNewHeader ();
         addNewHeader ();
     }
@@ -25,7 +27,6 @@ public class HeaderPanel extends JPanel
         add (keyAndValue);
         JSeparator separator = new JSeparator ();
         separator.setPreferredSize (new Dimension (200,1));
-//        add(new JSeparator ());
     }
 
 

@@ -32,7 +32,7 @@ public class SecondPanel extends JPanel
 
         url = new JTextField ("https://api.myproduct.com/v1/users");
         url.setPreferredSize (new Dimension (370,45));
-        url.setMaximumSize (new Dimension (370,45));
+        url.setMaximumSize (new Dimension (300,45));
         url.setMinimumSize (new Dimension (70,45));
         url.setBorder (new LineBorder (Color.WHITE,1));
         url.setFont (new Font ("Arial",Font.PLAIN,12));
@@ -55,7 +55,7 @@ public class SecondPanel extends JPanel
         JTabbedPane tabbedPane = new JTabbedPane ();
 
         tabbedPane.addTab ("Header",new JScrollPane ((new HeaderPanel ())));
-        tabbedPane.setBackground (Color.BLACK);
+
         add (tabbedPane,BorderLayout.CENTER);
 
 
