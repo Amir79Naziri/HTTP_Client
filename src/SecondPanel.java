@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.InputMismatchException;
@@ -32,6 +33,7 @@ public class SecondPanel extends JPanel
         type.setPreferredSize (new Dimension (76,35));
         type.setFont (new Font ("Arial",Font.PLAIN,11));
         type.setBackground (Color.WHITE);
+
         
 
         url = new JTextField ("https://api.myproduct.com/v1/users");

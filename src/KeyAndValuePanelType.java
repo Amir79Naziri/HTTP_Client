@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 
-public class KeyAndValuePanelType extends JPanel
+public abstract class KeyAndValuePanelType extends JPanel
 {
     private ArrayList<KeyAndValue> keyAndValues;
 
@@ -19,4 +19,6 @@ public class KeyAndValuePanelType extends JPanel
     public ArrayList<KeyAndValue> getKeyAndValues () {
         return keyAndValues;
     }
+
+    abstract public void addNewKeyAndValue ();
 }

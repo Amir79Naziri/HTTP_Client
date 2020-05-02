@@ -26,8 +26,8 @@ public class Request extends JPanel
 
         JLabel nameLabel = new JLabel (name);
         nameLabel.setFont (new Font ("Arial",Font.PLAIN,13));
+        nameLabel.setForeground (Color.LIGHT_GRAY);
 
-        nameLabel.setForeground (Color.WHITE);
 
         add (chose);
         add (typeLabel);

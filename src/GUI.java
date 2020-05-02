@@ -23,13 +23,25 @@ public class GUI
 
     private void addMenuBar ()
     {
-        baseFrame.setJMenuBar (new MenuBar (baseFrame));
+        baseFrame.setJMenuBar (new MenuBar (this));
     }
 
     private void addFirstPanel ()
     {
         firstPanel = new FirstPanel ();
         baseFrame.add (firstPanel,BorderLayout.WEST);
+    }
+
+    public FirstPanel getFirstPanel () {
+        return firstPanel;
+    }
+
+    public JFrame getBaseFrame () {
+        return baseFrame;
+    }
+
+    public SecondPanel getSecondPanel () {
+        return secondPanel;
     }
 
     private void addSecondPanel ()

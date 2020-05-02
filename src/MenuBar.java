@@ -7,7 +7,7 @@ import java.util.InputMismatchException;
 
 public class MenuBar extends JMenuBar
 {
-    private JFrame baseFrame;
+    private GUI gui;
     private JMenuItem option;
     private JMenuItem exit;
     private JMenuItem toggleFullScreen;
@@ -16,13 +16,13 @@ public class MenuBar extends JMenuBar
     private JMenuItem help;
 
 
-    public MenuBar (JFrame baseFrame)
+    public MenuBar (GUI gui)
     {
         super();
-        if (baseFrame == null)
+        if (gui == null)
             throw new InputMismatchException ("ERROR : Wrong Input");
 
-        this.baseFrame = baseFrame;
+        this.gui = gui;
 
         createApplicationMenu ();
         createViewMenu ();
@@ -104,7 +104,7 @@ public class MenuBar extends JMenuBar
             if (e.getSource () == about)
             {
 
-                JOptionPane.showMessageDialog (baseFrame,
+                JOptionPane.showMessageDialog (gui.getBaseFrame (),
                         "Developer Information :\t\t\n" +
                                 "Name : Amirreza Naziri\n" +
                                 "ID : 9726081\n" +
@@ -112,9 +112,15 @@ public class MenuBar extends JMenuBar
                         JOptionPane.PLAIN_MESSAGE);
             } else if (e.getSource () == help)
             {
-                JOptionPane.showMessageDialog (baseFrame
+                JOptionPane.showMessageDialog (gui.getBaseFrame ()
                         , "help information", "Help",
                         JOptionPane.PLAIN_MESSAGE);
+            } else if (e.getSource () == toggleSideBar)
+            {
+                if (gui.getFirstPanel ().isVisible ())
+                    gui.getFirstPanel ().setVisible (false);
+                else
+                    gui.getFirstPanel ().setVisible (true);
             }
         }
     }

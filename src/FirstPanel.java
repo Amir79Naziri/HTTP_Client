@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -52,7 +54,11 @@ public class FirstPanel extends JPanel
         searchText.setPreferredSize (new Dimension (270,30));
         searchText.setFont (new Font ("Arial",Font.PLAIN,15));
         searchText.setBackground (color);
-        searchText.setForeground (Color.WHITE);
+        searchText.setForeground (Color.LIGHT_GRAY);
+        searchText.setBorder (BorderFactory.createCompoundBorder (
+                new LineBorder (Color.GRAY,1,true),
+                new EmptyBorder (1,5,1,5)));
+
 
 
         filterButton = new JButton ();
@@ -78,7 +84,8 @@ public class FirstPanel extends JPanel
     private void createRequestsPanel ()
     {
         RequestsPanel requestsPanel = new RequestsPanel ();
-        JScrollPane scrollPane = new JScrollPane (requestsPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+        JScrollPane scrollPane = new JScrollPane
+                (requestsPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setAutoscrolls (true);
         scrollPane.getVerticalScrollBar ().setPreferredSize (new Dimension (10,8));

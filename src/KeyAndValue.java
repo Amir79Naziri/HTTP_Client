@@ -12,6 +12,8 @@ public class KeyAndValue extends JPanel
     private JCheckBox active;
     private JButton delete;
     private JButton settings;
+
+
 //    private boolean canDelete;
 
     public KeyAndValue (String keyName, String valueName)
@@ -30,9 +32,11 @@ public class KeyAndValue extends JPanel
         settings.setFocusable (false);
         settings.setFocusPainted (false);
 
+
         JPanel panelKey = new JPanel ();
         key = new JTextField (keyName);
         createTextPanel (color, panelKey, key);
+
 
         JPanel panelValue = new JPanel ();
         value = new JTextField (valueName);
@@ -41,6 +45,7 @@ public class KeyAndValue extends JPanel
         active = new JCheckBox ("");
         active.setPreferredSize (new Dimension (30,30));
         active.setSelected (true);
+        active.addItemListener (new ComponentHandler ());
 
 
         delete = new JButton (new ImageIcon ("./images/trashR1.png"));
@@ -69,25 +74,41 @@ public class KeyAndValue extends JPanel
         textField.setPreferredSize (new Dimension (155,30));
         textField.addMouseListener (new ComponentHandler ());
 
+
         textField.setBackground (color);
         textField.setFont (new Font ("Arial",Font.PLAIN,11));
         textField.setBorder (new LineBorder (color,1));
-        textField.setForeground (Color.WHITE);
+        textField.setForeground (Color.GRAY);
         panel.add (textField);
         panel.add (new JSeparator (SwingConstants.HORIZONTAL));
     }
 
 
     private class ComponentHandler extends MouseAdapter
-            implements ActionListener
+            implements ActionListener, ItemListener
     {
         @Override
         public void actionPerformed (ActionEvent e) {
             if (e.getSource () == delete)
             {
                 setVisible (false);
-
             }
+        }
+
+        @Override
+        public void itemStateChanged (ItemEvent e) {
+
+            if (!active.isSelected ())
+            {
+                key.setForeground (Color.DARK_GRAY);
+                value.setForeground (Color.DARK_GRAY);
+
+            } else
+            {
+                key.setForeground (Color.GRAY);
+                value.setForeground (Color.GRAY);
+            }
+            repaint ();
         }
 
         @Override
