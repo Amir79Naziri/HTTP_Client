@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 
 public class FirstPanel extends JPanel
 {
-    private JButton filterButton;
+
     private JButton addRequest;
     private JTextField searchText;
 
@@ -28,7 +28,7 @@ public class FirstPanel extends JPanel
         JPanel header = new JPanel (new BorderLayout (3,4));
         header.setPreferredSize (new Dimension (350,55));
 //        header.setMaximumSize (new Dimension (350,55));
-        header.setMinimumSize ((new Dimension (350,55)));
+        header.setMinimumSize ((new Dimension (300,55)));
 
         JLabel label = new JLabel ("  HTTP client");
         label.setFont (new Font ("Arial",Font.PLAIN,20));
@@ -45,13 +45,14 @@ public class FirstPanel extends JPanel
         JPanel filterPanel = new JPanel ();
         filterPanel.setPreferredSize (new Dimension (350,40));
 //        filterPanel.setMaximumSize (new Dimension (350,40));
-        filterPanel.setMinimumSize ((new Dimension (350,40)));
+        filterPanel.setMinimumSize ((new Dimension (300,40)));
         filterPanel.setBackground (color);
         filterPanel.setLayout (new FlowLayout (FlowLayout.LEFT));
         add(filterPanel);
 
         searchText = new JTextField ("filter");
         searchText.setPreferredSize (new Dimension (270,30));
+        searchText.setMinimumSize (new Dimension (200,30));
         searchText.setFont (new Font ("Arial",Font.PLAIN,15));
         searchText.setBackground (color);
         searchText.setForeground (Color.LIGHT_GRAY);
@@ -61,11 +62,7 @@ public class FirstPanel extends JPanel
 
 
 
-        filterButton = new JButton ();
-        filterButton.setPreferredSize (new Dimension (22,22));
-        filterButton.setIcon (new ImageIcon ("./images/filterR2.png"));
-        filterButton.setRolloverIcon (new ImageIcon ("./images/filterR1.png"));
-        filterButton.setRolloverEnabled (true);
+
 
         addRequest = new JButton ();
         addRequest.setPreferredSize (new Dimension (22,22));
@@ -77,7 +74,7 @@ public class FirstPanel extends JPanel
 
 
         filterPanel.add (searchText);
-        filterPanel.add (filterButton);
+
         filterPanel.add (addRequest);
     }
 
@@ -110,7 +107,7 @@ public class FirstPanel extends JPanel
             if (e.getSource () == addRequest)
             {
                 // add a new request
-            } else if (e.getSource () == filterButton || e.getSource () == searchText)
+            } else if (e.getSource () == searchText)
             {
                 // add filter to list
             }

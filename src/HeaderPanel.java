@@ -3,10 +3,13 @@ import java.awt.*;
 
 public class HeaderPanel extends KeyAndValuePanelType
 {
+
     public HeaderPanel ()
     {
         super();
     }
+
+
 
     public void addNewKeyAndValue ()
     {

@@ -42,7 +42,7 @@ public class Request extends JPanel
 
     @Override
     public Dimension getMinimumSize () {
-        return new Dimension (340,38);
+        return new Dimension (300,38);
     }
 
 //    @Override

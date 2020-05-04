@@ -47,6 +47,10 @@ public class GUI
         return baseFrame;
     }
 
+    public JSplitPane getSplitPane () {
+        return splitPane;
+    }
+
     public SecondPanel getSecondPanel () {
         return secondPanel;
     }
