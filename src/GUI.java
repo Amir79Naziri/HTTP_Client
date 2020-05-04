@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class GUI
@@ -6,19 +7,24 @@ public class GUI
     private JFrame baseFrame;
     private FirstPanel firstPanel;
     private SecondPanel secondPanel;
+    private JSplitPane splitPane;
 
     public GUI ()
     {
+        splitPane = new JSplitPane (JSplitPane.HORIZONTAL_SPLIT);
+        splitPane.setDividerSize (1);
+        splitPane.setBorder (new LineBorder (Color.DARK_GRAY,1));
         baseFrame = new JFrame ("HTTP client");
         baseFrame.setLocation (100,80);
         baseFrame.setMinimumSize (new Dimension (1000,650));
         baseFrame.setSize (1350,670);
         baseFrame.setDefaultCloseOperation (WindowConstants.EXIT_ON_CLOSE);
-        baseFrame.setLayout (new BorderLayout ());
+//        baseFrame.setLayout (new BorderLayout ());
 
         addMenuBar ();
         addFirstPanel ();
         addSecondPanel ();
+        baseFrame.add (splitPane);
     }
 
     private void addMenuBar ()
@@ -29,7 +35,8 @@ public class GUI
     private void addFirstPanel ()
     {
         firstPanel = new FirstPanel ();
-        baseFrame.add (firstPanel,BorderLayout.WEST);
+        splitPane.add (firstPanel);
+
     }
 
     public FirstPanel getFirstPanel () {
@@ -47,7 +54,7 @@ public class GUI
     private void addSecondPanel ()
     {
         secondPanel = new SecondPanel ();
-        baseFrame.add (secondPanel,BorderLayout.CENTER);
+        splitPane.add (secondPanel);
     }
     public void setBaseFrameVisible ()
     {

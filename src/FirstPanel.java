@@ -27,7 +27,7 @@ public class FirstPanel extends JPanel
         Color color = new Color (122, 103,218);
         JPanel header = new JPanel (new BorderLayout (3,4));
         header.setPreferredSize (new Dimension (350,55));
-        header.setMaximumSize (new Dimension (350,55));
+//        header.setMaximumSize (new Dimension (350,55));
         header.setMinimumSize ((new Dimension (350,55)));
 
         JLabel label = new JLabel ("  HTTP client");
@@ -44,7 +44,7 @@ public class FirstPanel extends JPanel
         Color color = new Color (45, 46, 42, 255);
         JPanel filterPanel = new JPanel ();
         filterPanel.setPreferredSize (new Dimension (350,40));
-        filterPanel.setMaximumSize (new Dimension (350,40));
+//        filterPanel.setMaximumSize (new Dimension (350,40));
         filterPanel.setMinimumSize ((new Dimension (350,40)));
         filterPanel.setBackground (color);
         filterPanel.setLayout (new FlowLayout (FlowLayout.LEFT));

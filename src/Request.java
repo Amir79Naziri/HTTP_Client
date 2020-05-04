@@ -45,10 +45,10 @@ public class Request extends JPanel
         return new Dimension (340,38);
     }
 
-    @Override
-    public Dimension getMaximumSize () {
-        return new Dimension (340,38);
-    }
+//    @Override
+//    public Dimension getMaximumSize () {
+//        return new Dimension (340,38);
+//    }
 
     @Override
     public Dimension getPreferredSize () {
