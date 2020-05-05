@@ -14,7 +14,7 @@ public class QueryPanel extends JPanel
         setLayout (new BorderLayout ());
         setBackground (new Color (40, 38, 37, 255));
         addURLPreview ();
-        keyAndValuePanel = new KeyAndValuePanel ();
+        keyAndValuePanel = new KeyAndValuePanel ("name", "value");
         add (keyAndValuePanel,BorderLayout.CENTER);
     }
 
@@ -49,7 +49,7 @@ public class QueryPanel extends JPanel
 
     public void addNewKeyAndValue ()
     {
-        keyAndValuePanel.addNewKeyAndValue ("name", "value");
+        keyAndValuePanel.addNewKeyAndValue ();
     }
 
     public KeyAndValuePanel getKeyAndValuePanel () {
