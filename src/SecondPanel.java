@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
@@ -35,8 +34,6 @@ public class SecondPanel extends JPanel
         type.setPreferredSize (new Dimension (76,35));
         type.setFont (new Font ("Arial",Font.PLAIN,11));
         type.setBackground (Color.WHITE);
-
-        
 
         url = new JTextField ("https://api.myproduct.com/v1/users");
         url.setPreferredSize (new Dimension (300,45));
@@ -74,12 +71,12 @@ public class SecondPanel extends JPanel
         tabbedPane.addTab ("Query",fetchToJScrollPane (queryPanel));
         tabbedPane.addTab ("Header",fetchToJScrollPane (headerPanel));
 
-        for (int i = 0; i < 18; i++)
+        for (int i = 0; i < 10; i++)
         {
             queryPanel.addNewKeyAndValue ();
         }
 
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < 17; i++)
         {
             headerPanel.addNewKeyAndValue ();
         }
@@ -105,7 +102,7 @@ public class SecondPanel extends JPanel
         @Override
         public void keyReleased (KeyEvent e) {
             String a = url.getText ();
-            queryPanel.getPre ().setText (a);
+            queryPanel.getPreviewURLText ().setText (a);
         }
 
         @Override

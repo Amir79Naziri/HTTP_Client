@@ -51,7 +51,7 @@ public class FirstPanel extends JPanel
         add(filterPanel);
 
         searchText = new JTextField ("filter");
-        searchText.setPreferredSize (new Dimension (270,30));
+        searchText.setPreferredSize (new Dimension (310,30));
         searchText.setMinimumSize (new Dimension (200,30));
         searchText.setFont (new Font ("Arial",Font.PLAIN,15));
         searchText.setBackground (color);

@@ -4,11 +4,11 @@ import java.awt.*;
 import java.util.ArrayList;
 
 
-public abstract class KeyAndValuePanelType extends JPanel
+public class KeyAndValuePanel extends JPanel
 {
     private ArrayList<KeyAndValue> keyAndValues;
 
-    public KeyAndValuePanelType ()
+    public KeyAndValuePanel ()
     {
         super();
         keyAndValues = new ArrayList<> ();
@@ -20,5 +20,12 @@ public abstract class KeyAndValuePanelType extends JPanel
         return keyAndValues;
     }
 
-    abstract public void addNewKeyAndValue ();
+    public void addNewKeyAndValue (String key, String value)
+    {
+        KeyAndValue keyAndValue = new KeyAndValue (key, value,true);
+        getKeyAndValues ().add (keyAndValue);
+        add (keyAndValue);
+        JSeparator separator = new JSeparator ();
+        separator.setPreferredSize (new Dimension (200,1));
+    }
 }

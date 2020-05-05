@@ -16,7 +16,7 @@ public class KeyAndValue extends JPanel
 
 //    private boolean canDelete;
 
-    public KeyAndValue (String keyName, String valueName)
+    public KeyAndValue (String keyName, String valueName, boolean isEditable)
     {
         setLayout (new FlowLayout (FlowLayout.LEFT,9,9));
         setBackground (new Color (40, 38, 37, 255));
@@ -26,12 +26,12 @@ public class KeyAndValue extends JPanel
     private void createComponents (String keyName, String valueName)
     {
         Color color = new Color (40, 38, 37, 255);
+
         settings = new JButton (new ImageIcon ("./images/data.png"));
         settings.setPreferredSize (new Dimension (11,13));
         settings.setBackground (Color.WHITE);
         settings.setFocusable (false);
         settings.setFocusPainted (false);
-
 
         JPanel panelKey = new JPanel ();
         key = new JTextField (keyName);
@@ -56,11 +56,13 @@ public class KeyAndValue extends JPanel
         delete.setFocusPainted (false);
         delete.addActionListener (new ComponentHandler ());
 
+
         add(settings);
         add(panelKey);
         add(panelValue);
         add (active);
         add(delete);
+
     }
 
     private void createTextPanel (Color color, JPanel panel, JTextField textField) {
@@ -114,7 +116,7 @@ public class KeyAndValue extends JPanel
         @Override
         public void mouseEntered (MouseEvent e) {
 
-            if (e.getComponent () instanceof JTextField)
+            if (e.getComponent () instanceof JTextField && active.isSelected ())
             {
                 JTextField textField = (JTextField)(e.getComponent ());
                 textField.setFont (new Font ("Arial",Font.BOLD + Font.ITALIC,11));
@@ -123,7 +125,7 @@ public class KeyAndValue extends JPanel
 
         @Override
         public void mouseExited (MouseEvent e) {
-            if (e.getComponent () instanceof JTextField)
+            if (e.getComponent () instanceof JTextField && active.isSelected ())
             {
                 JTextField textField = (JTextField)(e.getComponent ());
                 textField.setFont (new Font ("Arial",Font.PLAIN,11));
