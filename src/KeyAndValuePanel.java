@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 
 import java.awt.event.ActionEvent;
@@ -6,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 
 public class KeyAndValuePanel extends JPanel
@@ -55,6 +57,8 @@ public class KeyAndValuePanel extends JPanel
         add (keyAndValue,keyAndValues.size () - 1);
         JSeparator separator = new JSeparator ();
         separator.setPreferredSize (new Dimension (200,1));
+        keyAndValue.setVisible (false);
+        keyAndValue.setVisible (true);
     }
 
     public void toggleAllDescription ()
@@ -72,7 +76,6 @@ public class KeyAndValuePanel extends JPanel
 //            keyAndValues.remove (keyAndValue);
         }
     }
-
     private class ComponentHandler extends MouseAdapter
             implements ActionListener
     {

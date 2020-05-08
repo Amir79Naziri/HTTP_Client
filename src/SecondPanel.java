@@ -2,7 +2,6 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.InputMismatchException;
 
 public class SecondPanel extends JPanel
 {
@@ -13,6 +12,7 @@ public class SecondPanel extends JPanel
 
     private QueryPanel queryPanel;
     private HeaderPanel headerPanel;
+    private FormUrlPanel formUrlPanel;
 
 
     public SecondPanel ()
@@ -68,8 +68,10 @@ public class SecondPanel extends JPanel
 
         queryPanel = new QueryPanel ();
         headerPanel = new HeaderPanel ();
-        tabbedPane.addTab ("Query",fetchToJScrollPane (queryPanel));
-        tabbedPane.addTab ("Header",fetchToJScrollPane (headerPanel));
+        formUrlPanel = new FormUrlPanel ();
+        tabbedPane.addTab ("Body",formUrlPanel);
+        tabbedPane.addTab ("Query",queryPanel);
+        tabbedPane.addTab ("Header",headerPanel);
 
         for (int i = 0; i < 10; i++)
         {
@@ -85,16 +87,7 @@ public class SecondPanel extends JPanel
         add (tabbedPane,BorderLayout.CENTER);
     }
 
-    private JScrollPane fetchToJScrollPane (JPanel panel)
-    {
-        if (panel == null)
-            throw new InputMismatchException ("Input is not valid");
-        JScrollPane scrollPane = new JScrollPane (panel,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setBorder (new LineBorder (new Color (16, 22, 30, 208),1));
-        scrollPane.getVerticalScrollBar ().setPreferredSize (new Dimension (10,8));
-        return scrollPane;
-    }
+
 
     private class ComponentHandler extends KeyAdapter
         implements ActionListener, ItemListener
