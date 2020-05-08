@@ -7,6 +7,7 @@ public class GUI
     private JFrame baseFrame;
     private FirstPanel firstPanel;
     private SecondPanel secondPanel;
+    private ThirdPanel thirdPanel;
     private JSplitPane splitPane;
 
     public GUI ()
@@ -14,6 +15,7 @@ public class GUI
         splitPane = new JSplitPane (JSplitPane.HORIZONTAL_SPLIT);
         splitPane.setDividerSize (1);
         splitPane.setBorder (new LineBorder (Color.DARK_GRAY,1));
+
         baseFrame = new JFrame ("HTTP client");
         baseFrame.setLocation (100,80);
         baseFrame.setMinimumSize (new Dimension (1000,650));
@@ -22,8 +24,9 @@ public class GUI
 //        baseFrame.setLayout (new BorderLayout ());
 
         addMenuBar ();
-        addFirstPanel ();
+//        addFirstPanel ();
         addSecondPanel ();
+        addThirdPanel ();
         baseFrame.add (splitPane);
     }
 
@@ -37,6 +40,18 @@ public class GUI
         firstPanel = new FirstPanel ();
         splitPane.add (firstPanel);
 
+    }
+
+    private void addThirdPanel ()
+    {
+        thirdPanel = new ThirdPanel ();
+        splitPane.add (thirdPanel);
+    }
+
+    private void addSecondPanel ()
+    {
+        secondPanel = new SecondPanel ();
+        splitPane.add (secondPanel);
     }
 
     public FirstPanel getFirstPanel () {
@@ -55,11 +70,7 @@ public class GUI
         return secondPanel;
     }
 
-    private void addSecondPanel ()
-    {
-        secondPanel = new SecondPanel ();
-        splitPane.add (secondPanel);
-    }
+
     public void setBaseFrameVisible ()
     {
         baseFrame.setVisible (true);

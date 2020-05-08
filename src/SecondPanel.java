@@ -114,6 +114,8 @@ public class SecondPanel extends JPanel
 
 
 
+
+
     private class ComponentHandler extends KeyAdapter
         implements ActionListener, ItemListener
     {
