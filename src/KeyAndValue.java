@@ -42,7 +42,6 @@ public class KeyAndValue extends JPanel
         Color color = new Color (40, 38, 37, 255);
 
         settings = new JButton (new ImageIcon ("./images/data.png"));
-        settings.setPreferredSize (new Dimension (11,13));
         settings.setBackground (Color.WHITE);
         settings.setFocusable (false);
         settings.setFocusPainted (false);
@@ -63,7 +62,6 @@ public class KeyAndValue extends JPanel
 
 
         active = new JCheckBox ("");
-        active.setPreferredSize (new Dimension (30,30));
         active.setSelected (true);
         active.addItemListener (new ComponentHandler ());
 
@@ -102,7 +100,6 @@ public class KeyAndValue extends JPanel
         Color color = new Color (40, 38, 37, 255);
 
         settings = new JButton ("a");
-        settings.setPreferredSize (new Dimension (11,13));
         settings.setBackground (Color.WHITE);
         settings.setFocusable (true);
         settings.setFocusPainted (true);
@@ -125,7 +122,6 @@ public class KeyAndValue extends JPanel
         JLabel fake = new JLabel ("");
         fake.setBackground (color);
         fake.setFocusable (false);
-        fake.setPreferredSize (new Dimension (55,30));
 
         constraints.insets = new Insets (2,5,2,5);
         constraints.fill = GridBagConstraints.HORIZONTAL;

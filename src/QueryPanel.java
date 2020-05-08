@@ -27,7 +27,9 @@ public class QueryPanel extends JPanel
     private void addURLPreview ()
     {
         Color color = new Color (40, 38, 37, 255);
-        JPanel panel = new JPanel (new FlowLayout (FlowLayout.LEFT));
+        GridBagConstraints constraints = new GridBagConstraints ();
+        GridBagLayout layout = new GridBagLayout ();
+        JPanel panel = new JPanel (layout);
         panel.setBackground (color);
         JLabel label = new JLabel ("URL PREVIEW");
         label.setFont (new Font ("Arial",Font.PLAIN,9));
@@ -35,7 +37,7 @@ public class QueryPanel extends JPanel
         label.setBackground (color);
         previewURLText = new JTextField ();
         previewURLText.setEditable (false);
-        previewURLText.setPreferredSize (new Dimension (400,30));
+
 
         previewURLText.setForeground (Color.LIGHT_GRAY);
         previewURLText.setBackground (new Color (50, 48, 47, 255));
@@ -56,9 +58,30 @@ public class QueryPanel extends JPanel
             }
         });
 
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.insets = new Insets (5,5,5,5);
+        layout.setConstraints (label,constraints);
         panel.add (label);
+
+        constraints.gridx = 1;
+        constraints.gridwidth = 6;
+        constraints.weightx = 0.5;
+        constraints.ipady = 10;
+        layout.setConstraints (previewURLText,constraints);
         panel.add(previewURLText);
+
+        constraints.gridx = 7;
+        constraints.gridwidth = 1;
+        constraints.weightx = 0.0;
+        constraints.ipady = 0;
+        layout.setConstraints (copy,constraints);
         panel.add (copy);
+
+
         add(panel,BorderLayout.NORTH);
     }
 
