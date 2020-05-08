@@ -80,7 +80,6 @@ public class FirstPanel extends JPanel
         constraints.weightx = 0.0;
         constraints.ipady = -15;
         constraints.ipadx = -30;
-        constraints.fill = GridBagConstraints.NONE;
 
         layout.setConstraints (addRequest,constraints);
         filterPanel.add(addRequest);
