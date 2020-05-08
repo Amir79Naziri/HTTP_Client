@@ -27,7 +27,6 @@ public class FirstPanel extends JPanel
         Color color = new Color (122, 103,218);
         JPanel header = new JPanel (new BorderLayout (3,4));
         header.setPreferredSize (new Dimension (350,55));
-//        header.setMaximumSize (new Dimension (350,55));
         header.setMinimumSize ((new Dimension (300,55)));
 
         JLabel label = new JLabel ("  HTTP client");
@@ -43,16 +42,13 @@ public class FirstPanel extends JPanel
     {
         Color color = new Color (45, 46, 42, 255);
         JPanel filterPanel = new JPanel ();
-        filterPanel.setPreferredSize (new Dimension (350,40));
-//        filterPanel.setMaximumSize (new Dimension (350,40));
-        filterPanel.setMinimumSize ((new Dimension (300,40)));
+        GridBagLayout layout = new GridBagLayout ();
+        GridBagConstraints constraints = new GridBagConstraints ();
         filterPanel.setBackground (color);
-        filterPanel.setLayout (new FlowLayout (FlowLayout.LEFT));
+        filterPanel.setLayout (layout);
         add(filterPanel);
 
         searchText = new JTextField ("filter");
-        searchText.setPreferredSize (new Dimension (310,30));
-        searchText.setMinimumSize (new Dimension (200,30));
         searchText.setFont (new Font ("Arial",Font.PLAIN,15));
         searchText.setBackground (color);
         searchText.setForeground (Color.LIGHT_GRAY);
@@ -60,22 +56,34 @@ public class FirstPanel extends JPanel
                 new LineBorder (Color.GRAY,1,true),
                 new EmptyBorder (1,5,1,5)));
 
-
-
-
-
         addRequest = new JButton ();
-        addRequest.setPreferredSize (new Dimension (22,22));
         addRequest.setIcon (new ImageIcon ("./images/addR1.png"));
         addRequest.setRolloverIcon (new ImageIcon ("./images/addR2.png"));
         addRequest.setRolloverEnabled (true);
         addRequest.setBackground (color);
 
 
-
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 100;
+        constraints.gridheight = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.ipady = 10;
+        constraints.weightx = 0.5;
+        constraints.insets = new Insets (5,5,5,5);
+        layout.setConstraints (searchText,constraints);
         filterPanel.add (searchText);
 
-        filterPanel.add (addRequest);
+        constraints.gridx = 100;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        constraints.weightx = 0.0;
+        constraints.ipady = -15;
+        constraints.ipadx = -30;
+        constraints.fill = GridBagConstraints.NONE;
+
+        layout.setConstraints (addRequest,constraints);
+        filterPanel.add(addRequest);
     }
 
     private void createRequestsPanel ()

@@ -12,6 +12,7 @@ public class JsonPanel extends JPanel
 
     public JsonPanel ()
     {
+        super();
         setLayout (new BorderLayout (15,15));
         setBackground (new Color (40, 38, 37, 255));
         addTextAria ();
