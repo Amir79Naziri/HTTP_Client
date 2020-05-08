@@ -16,12 +16,17 @@ public class KeyAndValue extends JPanel
     private JButton settings;
     private boolean isEditable;
     private boolean showDescription;
+    private GridBagLayout layout;
+    private GridBagConstraints constraints;
+
     public KeyAndValue (String keyName, String valueName, boolean isEditable,
                         boolean showDescription)
     {
         this.isEditable = isEditable;
         this.showDescription = showDescription;
-        setLayout (new FlowLayout (FlowLayout.CENTER,9,9));
+        constraints = new GridBagConstraints ();
+        layout = new GridBagLayout ();
+        setLayout (layout);
         setBackground (new Color (40, 38, 37, 255));
 
 
@@ -72,12 +77,24 @@ public class KeyAndValue extends JPanel
         delete.addActionListener (new ComponentHandler ());
 
 
-        add(settings);
-        add(panelKey);
-        add(panelValue);
-        add(panelDesc);
-        add (active);
-        add(delete);
+        constraints.insets = new Insets (2,5,2,5);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.ipady = -15;
+        constraints.ipadx = -30;
+        addComponent (settings,0,1);
+        constraints.ipady = 32;
+        constraints.weightx = 0.5;
+        constraints.ipadx = 0;
+        addComponent (panelKey,1,10);
+        addComponent (panelValue,11,10);
+        addComponent (panelDesc,21,10);
+        constraints.weightx = 0.0;
+        constraints.ipady = 0;
+        constraints.ipadx = 0;
+        addComponent (active,31,1);
+        constraints.ipady = -13;
+        constraints.ipadx = -30;
+        addComponent (delete,32,1);
     }
 
     private void createComponentsV2 (String keyName, String valueName)
@@ -109,12 +126,36 @@ public class KeyAndValue extends JPanel
         fake.setBackground (color);
         fake.setFocusable (false);
         fake.setPreferredSize (new Dimension (55,30));
-        add(settings);
-        add(panelKey);
-        add(panelValue);
-        add (panelDesc);
-        add(fake);
+
+        constraints.insets = new Insets (2,5,2,5);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.ipady = -13;
+        constraints.ipadx = -17;
+        addComponent (settings,0,1);
+        constraints.weightx = 0.5;
+        constraints.ipady = 32;
+        addComponent (panelKey,1,10);
+        addComponent (panelValue,11,10);
+        addComponent (panelDesc,21,10);
+        constraints.ipadx = 40;
+        constraints.weightx = 0.0;
+        constraints.ipady = 0;
+        addComponent (fake,31,1);
+
     }
+
+    private void addComponent (JComponent component, int col, int width)
+    {
+        if (component == null)
+            throw new InputMismatchException ("inValid input");
+        constraints.gridx = col;
+        constraints.gridy = 0;
+        constraints.gridwidth = width;
+        constraints.gridheight = 1;
+        layout.setConstraints (component,constraints);
+        add (component);
+    }
+
 
     public JButton getSettings () {
         return settings;
@@ -140,11 +181,13 @@ public class KeyAndValue extends JPanel
 
         if (panel == null || textField == null)
             throw new InputMismatchException ("input is not valid");
-        panel.setPreferredSize (new Dimension (155,32));
-        panel.setBackground (color);
-        panel.setLayout (new BoxLayout (panel,BoxLayout.Y_AXIS));
 
-        textField.setPreferredSize (new Dimension (155,30));
+        panel.setBackground (color);
+        GridBagConstraints constraints2 = new GridBagConstraints ();
+        GridBagLayout layout2 = new GridBagLayout ();
+        panel.setLayout (layout2);
+
+
         if (isEditable)
             textField.addMouseListener (new ComponentHandler ());
 
@@ -153,8 +196,20 @@ public class KeyAndValue extends JPanel
         textField.setFont (new Font ("Arial",Font.PLAIN,11));
         textField.setBorder (new LineBorder (color,1));
         textField.setForeground (Color.GRAY);
+        JSeparator separator = new JSeparator (SwingConstants.HORIZONTAL);
+
+        constraints2.gridx = 0;
+        constraints2.gridy = 0;
+        constraints2.gridwidth = 10;
+        constraints2.gridheight = 1;
+        constraints2.fill = GridBagConstraints.HORIZONTAL;
+        constraints2.weightx = 0.5;
+        layout2.setConstraints (textField,constraints2);
         panel.add (textField);
-        panel.add (new JSeparator (SwingConstants.HORIZONTAL));
+
+        constraints2.gridy = 1;
+        layout2.setConstraints (separator,constraints2);
+        panel.add (separator);
     }
 
 
@@ -220,16 +275,16 @@ public class KeyAndValue extends JPanel
 
     @Override
     public Dimension getMaximumSize () {
-        return new Dimension (600,45);
+        return new Dimension (900,45);
     }
 
     @Override
     public Dimension getPreferredSize () {
-        return new Dimension (500,45);
+        return new Dimension (100,45);
     }
 
     @Override
     public Dimension getMinimumSize () {
-        return new Dimension (450,45);
+        return new Dimension (100,45);
     }
 }
