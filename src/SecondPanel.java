@@ -81,9 +81,11 @@ public class SecondPanel extends JPanel
 
     }
 
+
     private void createBasePanel ()
     {
         JTabbedPane tabbedPane = new JTabbedPane ();
+
 
         queryPanel = new QueryPanel ();
         headerPanel = new HeaderPanel ();

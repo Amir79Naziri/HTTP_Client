@@ -70,7 +70,7 @@ public class QueryPanel extends JPanel
         constraints.gridx = 1;
         constraints.gridwidth = 6;
         constraints.weightx = 0.5;
-        constraints.ipady = 10;
+        constraints.ipady = 15;
         layout.setConstraints (previewURLText,constraints);
         panel.add(previewURLText);
 

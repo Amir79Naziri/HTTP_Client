@@ -35,6 +35,7 @@ public class KeyAndValuePanel extends JPanel
         fixedKeyAndValue.getKey ().addMouseListener (componentHandler);
         fixedKeyAndValue.getValue ().addMouseListener (componentHandler);
         fixedKeyAndValue.getSettings ().addMouseListener (componentHandler);
+        fixedKeyAndValue.getDescribe ().addMouseListener (componentHandler);
 
         deleteAll = new JMenuItem ("Delete All Items");
         deleteAll.addActionListener (componentHandler);
@@ -88,7 +89,7 @@ public class KeyAndValuePanel extends JPanel
         }
 
         @Override
-        public void mouseClicked (MouseEvent e) {
+        public void mousePressed (MouseEvent e) {
             if (e.getComponent () == fixedKeyAndValue.getSettings())
                 popupMenu.show (e.getComponent (),e.getX (),e.getY ());
             else if (e.getComponent () == fixedKeyAndValue.getValue () ||
@@ -96,7 +97,6 @@ public class KeyAndValuePanel extends JPanel
             fixedKeyAndValue.getDescribe ())
             {
                 addNewKeyAndValue ();
-                repaint ();
             }
 
 

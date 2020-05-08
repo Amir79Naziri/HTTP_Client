@@ -107,15 +107,19 @@ public class KeyAndValue extends JPanel
         JPanel panelKey = new JPanel ();
         key = new JTextField (keyName);
         key.setEditable (false);
+        key.setCursor (Cursor.getPredefinedCursor (Cursor.TEXT_CURSOR));
         createTextPanel (color, panelKey, key);
 
         JPanel panelValue = new JPanel ();
         value = new JTextField (valueName);
         value.setEditable (false);
+        value.setCursor (Cursor.getPredefinedCursor (Cursor.TEXT_CURSOR));
         createTextPanel (color, panelValue, value);
 
         panelDesc = new JPanel ();
         describe = new JTextField ("description");
+        describe.setEditable (false);
+        describe.setCursor (Cursor.getPredefinedCursor (Cursor.TEXT_CURSOR));
         createTextPanel (color,panelDesc,describe);
         panelDesc.setVisible (showDescription);
 
@@ -200,6 +204,7 @@ public class KeyAndValue extends JPanel
         constraints2.gridheight = 1;
         constraints2.fill = GridBagConstraints.HORIZONTAL;
         constraints2.weightx = 0.5;
+        constraints2.insets = new Insets (4,0,4,0);
         layout2.setConstraints (textField,constraints2);
         panel.add (textField);
 
