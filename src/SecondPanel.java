@@ -14,6 +14,7 @@ public class SecondPanel extends JPanel
     private HeaderPanel headerPanel;
     private FormUrlPanel formUrlPanel;
     private JsonPanel jsonPanel;
+    private BearerPanel bearerPanel;
 
 
     public SecondPanel ()
@@ -91,7 +92,9 @@ public class SecondPanel extends JPanel
         headerPanel = new HeaderPanel ();
         formUrlPanel = new FormUrlPanel ();
         jsonPanel = new JsonPanel ();
+        bearerPanel = new BearerPanel ();
         tabbedPane.addTab ("Body",formUrlPanel);
+        tabbedPane.addTab ("Bearer",bearerPanel);
         tabbedPane.addTab ("Query",queryPanel);
         tabbedPane.addTab ("Header",headerPanel);
 

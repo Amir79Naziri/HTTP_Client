@@ -31,7 +31,7 @@ public class QueryPanel extends JPanel
         GridBagLayout layout = new GridBagLayout ();
         JPanel panel = new JPanel (layout);
         panel.setBackground (color);
-        JLabel label = new JLabel ("URL PREVIEW");
+        JLabel label = new JLabel ("URL PREVIEW ");
         label.setFont (new Font ("Arial",Font.PLAIN,9));
         label.setForeground (Color.LIGHT_GRAY);
         label.setBackground (color);

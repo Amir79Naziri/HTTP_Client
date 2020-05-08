@@ -27,7 +27,7 @@ public class JsonPanel extends JPanel
         textArea.setFont (new Font ("Arial",Font.PLAIN,12));
         textArea.setLineWrap (true);
         textArea.setWrapStyleWord (true);
-        textArea.setSelectedTextColor (new Color (60, 62, 63, 255));
+
 
         JScrollPane scrollPane = new JScrollPane
                 (textArea,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,

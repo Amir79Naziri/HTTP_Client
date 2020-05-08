@@ -45,25 +45,31 @@ public class KeyAndValue extends JPanel
         settings.setBackground (Color.WHITE);
         settings.setFocusable (false);
         settings.setFocusPainted (false);
-
+        ComponentHandler componentHandler = new ComponentHandler ();
         JPanel panelKey = new JPanel ();
         key = new JTextField (keyName);
         createTextPanel (color, panelKey, key);
+        if (isEditable)
+            key.addMouseListener (componentHandler);
 
 
         JPanel panelValue = new JPanel ();
         value = new JTextField (valueName);
         createTextPanel (color, panelValue, value);
+        if (isEditable)
+            value.addMouseListener (componentHandler);
 
         panelDesc = new JPanel ();
         describe = new JTextField ("description");
         createTextPanel (color,panelDesc,describe);
         panelDesc.setVisible (showDescription);
+        if (isEditable)
+            describe.addMouseListener (componentHandler);
 
 
         active = new JCheckBox ("");
         active.setSelected (true);
-        active.addItemListener (new ComponentHandler ());
+        active.addItemListener (componentHandler);
 
 
         delete = new JButton (new ImageIcon ("./images/trashR1.png"));
@@ -177,7 +183,7 @@ public class KeyAndValue extends JPanel
         return describe;
     }
 
-    private void createTextPanel (Color color, JPanel panel, JTextField textField) {
+    public static void createTextPanel (Color color, JPanel panel, JTextField textField) {
 
         if (panel == null || textField == null)
             throw new InputMismatchException ("input is not valid");
@@ -187,9 +193,6 @@ public class KeyAndValue extends JPanel
         GridBagLayout layout2 = new GridBagLayout ();
         panel.setLayout (layout2);
 
-
-        if (isEditable)
-            textField.addMouseListener (new ComponentHandler ());
 
 
         textField.setBackground (color);
