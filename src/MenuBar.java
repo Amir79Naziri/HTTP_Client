@@ -118,9 +118,14 @@ public class MenuBar extends JMenuBar
             } else if (e.getSource () == toggleSideBar)
             {
                 if (gui.getFirstPanel ().isVisible ())
+                {
                     gui.getFirstPanel ().setVisible (false);
+                }
                 else
+                {
                     gui.getFirstPanel ().setVisible (true);
+                    gui.getSplitPane ().setLeftComponent (gui.getFirstPanel ());
+                }
             }
         }
     }

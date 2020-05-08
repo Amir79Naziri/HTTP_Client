@@ -98,15 +98,6 @@ public class SecondPanel extends JPanel
         tabbedPane.addTab ("Query",queryPanel);
         tabbedPane.addTab ("Header",headerPanel);
 
-        for (int i = 0; i < 10; i++)
-        {
-            queryPanel.addNewKeyAndValue ();
-        }
-
-        for (int i = 0; i < 17; i++)
-        {
-            headerPanel.addNewKeyAndValue ();
-        }
 
 
         add (tabbedPane,BorderLayout.CENTER);

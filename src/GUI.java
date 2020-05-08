@@ -9,24 +9,34 @@ public class GUI
     private SecondPanel secondPanel;
     private ThirdPanel thirdPanel;
     private JSplitPane splitPane;
+    private JSplitPane splitPane2;
 
     public GUI ()
     {
         splitPane = new JSplitPane (JSplitPane.HORIZONTAL_SPLIT);
-        splitPane.setDividerSize (1);
+        splitPane.setDividerSize (2);
         splitPane.setBorder (new LineBorder (Color.DARK_GRAY,1));
+        splitPane2 = new JSplitPane (JSplitPane.HORIZONTAL_SPLIT);
+        splitPane2.setDividerSize (2);
+        splitPane2.setBorder (new LineBorder (Color.DARK_GRAY,1));
+
+
 
         baseFrame = new JFrame ("HTTP client");
         baseFrame.setLocation (100,80);
         baseFrame.setMinimumSize (new Dimension (1000,650));
         baseFrame.setSize (1350,670);
         baseFrame.setDefaultCloseOperation (WindowConstants.EXIT_ON_CLOSE);
-//        baseFrame.setLayout (new BorderLayout ());
+        baseFrame.setLayout (new BorderLayout ());
 
+        firstPanel = new FirstPanel ();
+        secondPanel = new SecondPanel ();
+        thirdPanel = new ThirdPanel ();
         addMenuBar ();
-//        addFirstPanel ();
-        addSecondPanel ();
-        addThirdPanel ();
+        splitPane2.setRightComponent (thirdPanel);
+        splitPane2.setLeftComponent (secondPanel);
+        splitPane.setLeftComponent (firstPanel);
+        splitPane.setRightComponent (splitPane2);
         baseFrame.add (splitPane);
     }
 
@@ -35,24 +45,6 @@ public class GUI
         baseFrame.setJMenuBar (new MenuBar (this));
     }
 
-    private void addFirstPanel ()
-    {
-        firstPanel = new FirstPanel ();
-        splitPane.add (firstPanel);
-
-    }
-
-    private void addThirdPanel ()
-    {
-        thirdPanel = new ThirdPanel ();
-        splitPane.add (thirdPanel);
-    }
-
-    private void addSecondPanel ()
-    {
-        secondPanel = new SecondPanel ();
-        splitPane.add (secondPanel);
-    }
 
     public FirstPanel getFirstPanel () {
         return firstPanel;
@@ -64,6 +56,10 @@ public class GUI
 
     public JSplitPane getSplitPane () {
         return splitPane;
+    }
+
+    public JSplitPane getSplitPane2 () {
+        return splitPane2;
     }
 
     public SecondPanel getSecondPanel () {
