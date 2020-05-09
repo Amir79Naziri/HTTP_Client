@@ -9,8 +9,8 @@ public class GUI
     private AddRequestDialog addRequestDialog;
     private OptionDialog optionDialog;
     private FirstPanel firstPanel;
-    private SecondPanel secondPanel;
-    private ThirdPanel thirdPanel;
+    private JPanel secondPanel;
+    private JPanel thirdPanel;
     private JSplitPane splitPane;
     private JSplitPane splitPane2;
 
@@ -33,8 +33,8 @@ public class GUI
         addRequestDialog = new AddRequestDialog ();
         optionDialog = new OptionDialog ();
         firstPanel = new FirstPanel (this);
-        secondPanel = new SecondPanel ();
-        thirdPanel = new ThirdPanel ();
+        secondPanel = new NullPanel (1);
+        thirdPanel = new NullPanel (2);
         addMenuBar ();
 
         splitPane2.setRightComponent (thirdPanel);
@@ -74,7 +74,17 @@ public class GUI
     }
 
     public SecondPanel getSecondPanel () {
-        return secondPanel;
+        if (secondPanel instanceof SecondPanel)
+            return (SecondPanel)secondPanel;
+        else
+            return null;
+    }
+
+    public ThirdPanel getThirdPanel () {
+        if (thirdPanel instanceof ThirdPanel)
+            return (ThirdPanel) thirdPanel;
+        else
+            return null;
     }
 
 
