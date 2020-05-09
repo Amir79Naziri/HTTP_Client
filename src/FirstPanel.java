@@ -20,7 +20,7 @@ public class FirstPanel extends JPanel
         setLayout (new BoxLayout (this,BoxLayout.Y_AXIS));
         createHeaderPanel ();
         createFilterPanel ();
-        createRequestsPanel ();
+        createRequestsPanel (gui);
     }
 
     private void createHeaderPanel ()
@@ -91,9 +91,9 @@ public class FirstPanel extends JPanel
         filterPanel.add(addRequest);
     }
 
-    private void createRequestsPanel ()
+    private void createRequestsPanel (GUI gui)
     {
-        requestsPanel = new RequestsPanel ();
+        requestsPanel = new RequestsPanel (gui);
         JScrollPane scrollPane = new JScrollPane
                 (requestsPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

@@ -28,8 +28,8 @@ public class ThirdPanel extends JPanel
         headerStatus.setBackground (Color.WHITE);
         headerStatus.setPreferredSize (new Dimension (200,55));
 
-        statusMessage = new JLabel ("200 OK");
-        statusMessage.setBackground (new Color (15, 133, 9));
+        statusMessage = new JLabel ("ERROR");
+        statusMessage.setBackground (new Color (189, 24, 15));
         createLabel (statusMessage,60);
 
 

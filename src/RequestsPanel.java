@@ -8,10 +8,12 @@ import java.util.ArrayList;
 public class RequestsPanel extends JPanel
 {
     private ArrayList<Request> requests;
+    private GUI gui;
 
-    public RequestsPanel ()
+    public RequestsPanel (GUI gui)
     {
         super();
+        this.gui = gui;
         setLayout (new BoxLayout (this,BoxLayout.Y_AXIS));
         setBackground (new Color (45, 46, 42, 255));
         requests = new ArrayList<> ();
@@ -19,7 +21,7 @@ public class RequestsPanel extends JPanel
 
     public void addNewRequest (RequestType type, String name)
     {
-        Request request = new Request (type,name);
+        Request request = new Request (type,name,gui);
         request.addMouseListener (new MouseHandler ());
 
         requests.add (request);
@@ -60,6 +62,9 @@ public class RequestsPanel extends JPanel
                     if (request == e.getComponent ()) {
                         request.requestFocusInWindow ();
                         request.setChoseVisibly (true);
+                        gui.setSecondPanel (request.getSecondPanel ());
+                        gui.setThirdPanel (request.getSecondPanel ().getThirdPanel ());
+
                     } else
                         request.setChoseVisibly (false);
                 }

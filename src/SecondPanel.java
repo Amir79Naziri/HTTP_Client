@@ -5,6 +5,9 @@ import java.awt.event.*;
 
 public class SecondPanel extends JPanel
 {
+
+    private JPanel thirdPanel;
+
     private JTextField url;
     private JComboBox<String> type;
     private JButton send;
@@ -15,11 +18,14 @@ public class SecondPanel extends JPanel
     private FormUrlPanel formUrlPanel;
     private JsonPanel jsonPanel;
     private BearerPanel bearerPanel;
+    private GUI gui;
 
 
-    public SecondPanel ()
+    public SecondPanel (GUI gui)
     {
         super();
+        this.gui = gui;
+        thirdPanel = new NullPanel (2);
         setLayout (new BorderLayout ());
         createURLPanel ();
         createBasePanel ();
@@ -46,6 +52,7 @@ public class SecondPanel extends JPanel
         send = new JButton ("Send");
         send.setFont (new Font ("Arial",Font.PLAIN,11));
         send.setBackground (Color.WHITE);
+        send.addActionListener (new ComponentHandler ());
 
         save = new JButton ("Save");
         save.setFont (new Font ("Arial",Font.PLAIN,11));
@@ -129,9 +136,9 @@ public class SecondPanel extends JPanel
         add (tabbedPane,BorderLayout.CENTER);
     }
 
-
-
-
+    public JPanel getThirdPanel () {
+        return thirdPanel;
+    }
 
     private class ComponentHandler extends KeyAdapter
         implements ActionListener, ItemListener
@@ -144,7 +151,11 @@ public class SecondPanel extends JPanel
 
         @Override
         public void actionPerformed (ActionEvent e) {
-
+            if (e.getSource () == send)
+            {
+                thirdPanel = new ThirdPanel ();
+                gui.setThirdPanel (thirdPanel);
+            }
         }
 
         @Override

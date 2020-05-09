@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.InputMismatchException;
 
 public class GUI
 {
@@ -82,6 +83,23 @@ public class GUI
             return null;
     }
 
+    public void setSecondPanel (JPanel secondPanel) {
+        if (secondPanel == null)
+            throw new InputMismatchException ("inValid input");
+        this.secondPanel = secondPanel;
+        secondPanel.setVisible (false);
+        secondPanel.setVisible (true);
+        splitPane2.setLeftComponent (secondPanel);
+    }
+
+    public void setThirdPanel (JPanel thirdPanel) {
+        if (thirdPanel == null)
+            throw new InputMismatchException ("inValid input");
+        this.thirdPanel = thirdPanel;
+        thirdPanel.setVisible (false);
+        thirdPanel.setVisible (true);
+        splitPane2.setRightComponent (thirdPanel);
+    }
 
     public void setBaseFrameVisible ()
     {

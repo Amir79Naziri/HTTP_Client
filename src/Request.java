@@ -9,16 +9,15 @@ public class Request extends JPanel
 {
     private JPanel chose;
     private final SecondPanel secondPanel;
-    private JMenuItem delete;
     private JPopupMenu popupMenu;
 
-    public Request (RequestType type, String name)
+    public Request (RequestType type, String name, GUI gui)
     {
         super();
 
         if (name == null || type == null)
             throw new InputMismatchException ("inValid input");
-        secondPanel = new SecondPanel ();
+        secondPanel = new SecondPanel (gui);
         setLayout (new FlowLayout (FlowLayout.LEFT));
         setBackground (new Color (45, 46, 42, 255));
 
@@ -36,11 +35,17 @@ public class Request extends JPanel
         JLabel nameLabel = new JLabel (name);
         nameLabel.setFont (new Font ("Arial",Font.PLAIN,13));
         nameLabel.setForeground (Color.LIGHT_GRAY);
-        delete = new JMenuItem ("Delete");
+        JMenuItem delete = new JMenuItem ("Delete");
         delete.addActionListener (new ActionListener () {
             @Override
             public void actionPerformed (ActionEvent e) {
                 setVisible (false);
+                if (chose.isVisible ())
+                {
+                    gui.setThirdPanel (new NullPanel (2));
+                    gui.setSecondPanel (new NullPanel (1));
+                }
+
             }
         });
         popupMenu = new JPopupMenu ();
@@ -55,6 +60,7 @@ public class Request extends JPanel
     public JPopupMenu getPopupMenu () {
         return popupMenu;
     }
+
 
     public void setChoseVisibly (boolean visibly) {
         chose.setVisible (visibly);
