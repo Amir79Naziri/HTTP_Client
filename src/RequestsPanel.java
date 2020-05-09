@@ -55,17 +55,20 @@ public class RequestsPanel extends JPanel
         @Override
         public void mouseClicked (MouseEvent e) {
 
-            if (e.getButton () == MouseEvent.BUTTON1)
-            {
-                for (Request request : requests)
-                {
-                    if (request == e.getComponent ())
-                    {
+            if (e.getButton () == MouseEvent.BUTTON1) {
+                for (Request request : requests) {
+                    if (request == e.getComponent ()) {
                         request.requestFocusInWindow ();
                         request.setChoseVisibly (true);
-                    }
-                    else
+                    } else
                         request.setChoseVisibly (false);
+                }
+            } else if (e.getButton () == MouseEvent.BUTTON3) {
+                for (Request request : requests) {
+                    if (request == e.getComponent ()) {
+                        request.getPopupMenu ().show (request, e.getX (),
+                                e.getY ());
+                    }
                 }
             }
         }

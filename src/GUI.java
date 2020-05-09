@@ -6,7 +6,6 @@ public class GUI
 {
 
     private JFrame baseFrame;
-    private AddRequestDialog addRequestDialog;
     private OptionDialog optionDialog;
     private FirstPanel firstPanel;
     private JPanel secondPanel;
@@ -30,8 +29,7 @@ public class GUI
         baseFrame.setSize (1350,670);
         baseFrame.setDefaultCloseOperation (WindowConstants.EXIT_ON_CLOSE);
         baseFrame.setLayout (new BorderLayout ());
-        addRequestDialog = new AddRequestDialog ();
-        optionDialog = new OptionDialog ();
+        optionDialog = new OptionDialog (this);
         firstPanel = new FirstPanel (this);
         secondPanel = new NullPanel (1);
         thirdPanel = new NullPanel (2);
@@ -53,9 +51,6 @@ public class GUI
         return optionDialog;
     }
 
-    public AddRequestDialog getAddRequestDialog () {
-        return addRequestDialog;
-    }
 
     public FirstPanel getFirstPanel () {
         return firstPanel;

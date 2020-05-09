@@ -8,9 +8,11 @@ public class DialogPanel extends JPanel {
     private GridBagLayout layout ;
     private GridBagConstraints constraints;
     private JPanel basePanel;
+    private GUI gui;
 
-    public DialogPanel () {
+    public DialogPanel (GUI gui) {
         super();
+        this.gui = gui;
         setLayout (new BorderLayout (5, 5));
         basePanel = new JPanel ();
         constraints = new GridBagConstraints ();
@@ -18,6 +20,9 @@ public class DialogPanel extends JPanel {
         addBasePanel ();
     }
 
+    public GUI getGui () {
+        return gui;
+    }
 
     public void addComponent (JComponent component, int row, int col, int width) {
         if (getLayout () == null || getConstraints () == null)

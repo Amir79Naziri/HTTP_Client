@@ -118,8 +118,9 @@ public class FirstPanel extends JPanel
             if (e.getSource () == addRequest)
             {
                 JOptionPane.showMessageDialog (gui.getBaseFrame (),
-                        gui.getAddRequestDialog (),"New Request",
+                        new AddRequestDialog (gui),"New Request",
                         JOptionPane.PLAIN_MESSAGE);
+
 
             } else if (e.getSource () == searchText)
             {

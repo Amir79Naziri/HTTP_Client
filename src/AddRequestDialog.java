@@ -4,6 +4,8 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 
 public class AddRequestDialog extends DialogPanel
@@ -12,13 +14,11 @@ public class AddRequestDialog extends DialogPanel
     private JComboBox<String> requestType;
     private JButton create;
     private JTextField textField;
-
-    private String name;
     private RequestType chosenRequestType;
 
 
-    public AddRequestDialog () {
-        super ();
+    public AddRequestDialog (GUI gui) {
+        super (gui);
         setSize (600, 200);
         addBasePanel ();
     }
@@ -27,6 +27,7 @@ public class AddRequestDialog extends DialogPanel
     public void addBasePanel () {
         super.addBasePanel ();
 
+        chosenRequestType = RequestType.GET;
         textField = new JTextField ("My Request");
         textField.setBackground (Color.WHITE);
         textField.setBorder (BorderFactory.createCompoundBorder (new LineBorder (Color.GRAY,
@@ -39,6 +40,29 @@ public class AddRequestDialog extends DialogPanel
         String[] type = {"GET", "POST", "PUT", "PATCH", "DELETE"};
         requestType = new JComboBox<> (type);
         requestType.setBackground (Color.WHITE);
+        requestType.addItemListener (new ItemListener () {
+            @Override
+            public void itemStateChanged (ItemEvent e) {
+                switch (requestType.getSelectedIndex ()) {
+                    case 0:
+                        chosenRequestType = RequestType.GET;
+                        break;
+                    case 1:
+                        chosenRequestType = RequestType.POST;
+                        break;
+                    case 2:
+                        chosenRequestType = RequestType.PUT;
+                        break;
+                    case 3:
+                        chosenRequestType = RequestType.PATCH;
+                        break;
+                    case 4:
+                        chosenRequestType = RequestType.DELETE;
+                        break;
+                }
+            }
+        });
+
 
         JLabel label = new JLabel ("Name");
         label.setFont (new Font ("Arial",Font.ITALIC,14));
@@ -48,7 +72,10 @@ public class AddRequestDialog extends DialogPanel
         create.addActionListener (new ActionListener () {
             @Override
             public void actionPerformed (ActionEvent e) {
-                update ();
+                repaint ();
+                System.out.println (textField.getText ());
+                getGui ().getFirstPanel ().addRequest (textField.getText ()
+                        ,chosenRequestType);
             }
         });
 
@@ -71,34 +98,6 @@ public class AddRequestDialog extends DialogPanel
         addComponent (new JSeparator (SwingConstants.HORIZONTAL),2,0,45);
         addComponent (hint,4,0,35);
         addComponent (create,4,35,4);
-    }
-
-
-    public String getChosenName () {
-        return name;
-    }
-
-    public RequestType getChosenRequestType () {
-        return chosenRequestType;
-    }
-
-    private void update ()
-    {
-        name = textField.getText ();
-        switch (requestType.getSelectedIndex ())
-        {
-            case 0 : chosenRequestType = RequestType.GET; break;
-            case 1 : chosenRequestType = RequestType.POST; break;
-            case 2 : chosenRequestType = RequestType.PUT; break;
-            case 3 : chosenRequestType = RequestType.PATCH; break;
-            case 4 : chosenRequestType = RequestType.DELETE; break;
-        }
-    }
-
-    private void clear ()
-    {
-        name = null;
-        chosenRequestType = null;
     }
 
 }

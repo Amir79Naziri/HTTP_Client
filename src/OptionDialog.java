@@ -12,9 +12,9 @@ public class OptionDialog extends DialogPanel
     private JComboBox<String> themeChoose;
 
 
-    public OptionDialog ()
+    public OptionDialog (GUI gui)
     {
-        super();
+        super(gui);
         setSize (400,200);
     }
 

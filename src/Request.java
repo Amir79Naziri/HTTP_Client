@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.InputMismatchException;
 
 
@@ -7,6 +9,8 @@ public class Request extends JPanel
 {
     private JPanel chose;
     private final SecondPanel secondPanel;
+    private JMenuItem delete;
+    private JPopupMenu popupMenu;
 
     public Request (RequestType type, String name)
     {
@@ -32,7 +36,15 @@ public class Request extends JPanel
         JLabel nameLabel = new JLabel (name);
         nameLabel.setFont (new Font ("Arial",Font.PLAIN,13));
         nameLabel.setForeground (Color.LIGHT_GRAY);
-
+        delete = new JMenuItem ("Delete");
+        delete.addActionListener (new ActionListener () {
+            @Override
+            public void actionPerformed (ActionEvent e) {
+                setVisible (false);
+            }
+        });
+        popupMenu = new JPopupMenu ();
+        popupMenu.add (delete);
 
         add (chose);
         add (typeLabel);
@@ -40,6 +52,9 @@ public class Request extends JPanel
     }
 
 
+    public JPopupMenu getPopupMenu () {
+        return popupMenu;
+    }
 
     public void setChoseVisibly (boolean visibly) {
         chose.setVisible (visibly);
