@@ -78,6 +78,4 @@ public class RequestsPanel extends JPanel
             }
         }
     }
-
-
 }

@@ -7,7 +7,7 @@ public class GUI
 {
 
     private JFrame baseFrame;
-    private OptionDialog optionDialog;
+    private OptionPanel optionPanel;
     private FirstPanel firstPanel;
     private JPanel secondPanel;
     private JPanel thirdPanel;
@@ -30,7 +30,7 @@ public class GUI
         baseFrame.setSize (1350,670);
         baseFrame.setDefaultCloseOperation (WindowConstants.EXIT_ON_CLOSE);
         baseFrame.setLayout (new BorderLayout ());
-        optionDialog = new OptionDialog (this);
+        optionPanel = new OptionPanel (this);
         firstPanel = new FirstPanel (this);
         secondPanel = new NullPanel (1);
         thirdPanel = new NullPanel (2);
@@ -48,8 +48,8 @@ public class GUI
         baseFrame.setJMenuBar (new MenuBar (this));
     }
 
-    public OptionDialog getOptionDialog () {
-        return optionDialog;
+    public OptionPanel getOptionPanel () {
+        return optionPanel;
     }
 
 

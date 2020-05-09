@@ -54,6 +54,7 @@ public class FirstPanel extends JPanel
         add(filterPanel);
 
         searchText = new JTextField ("filter");
+        searchText.addActionListener (new ButtonHandler ());
         searchText.setFont (new Font ("Arial",Font.PLAIN,15));
         searchText.setBackground (color);
         searchText.setForeground (Color.LIGHT_GRAY);
@@ -118,13 +119,11 @@ public class FirstPanel extends JPanel
             if (e.getSource () == addRequest)
             {
                 JOptionPane.showMessageDialog (gui.getBaseFrame (),
-                        new AddRequestDialog (gui),"New Request",
+                        new AddNewRequestPanel (gui),"New Request",
                         JOptionPane.PLAIN_MESSAGE);
-
-
             } else if (e.getSource () == searchText)
             {
-                // add filter to list
+                System.out.println (searchText.getText ());
             }
         }
     }
