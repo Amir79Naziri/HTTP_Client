@@ -4,7 +4,9 @@ import java.awt.*;
 
 public class GUI
 {
+
     private JFrame baseFrame;
+    private AddRequestDialog addRequestDialog;
     private OptionDialog optionDialog;
     private FirstPanel firstPanel;
     private SecondPanel secondPanel;
@@ -28,12 +30,13 @@ public class GUI
         baseFrame.setSize (1350,670);
         baseFrame.setDefaultCloseOperation (WindowConstants.EXIT_ON_CLOSE);
         baseFrame.setLayout (new BorderLayout ());
-        optionDialog = new OptionDialog (baseFrame,"Options");
-
-        firstPanel = new FirstPanel ();
+        addRequestDialog = new AddRequestDialog ();
+        optionDialog = new OptionDialog ();
+        firstPanel = new FirstPanel (this);
         secondPanel = new SecondPanel ();
         thirdPanel = new ThirdPanel ();
         addMenuBar ();
+
         splitPane2.setRightComponent (thirdPanel);
         splitPane2.setLeftComponent (secondPanel);
         splitPane.setLeftComponent (firstPanel);
@@ -48,6 +51,10 @@ public class GUI
 
     public OptionDialog getOptionDialog () {
         return optionDialog;
+    }
+
+    public AddRequestDialog getAddRequestDialog () {
+        return addRequestDialog;
     }
 
     public FirstPanel getFirstPanel () {

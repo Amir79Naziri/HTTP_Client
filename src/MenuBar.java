@@ -128,7 +128,8 @@ public class MenuBar extends JMenuBar
                 }
             } else if (e.getSource () == option)
             {
-                gui.getOptionDialog ().changeVisible ();
+                JOptionPane.showMessageDialog (null,
+                        gui.getOptionDialog (),"Option",JOptionPane.PLAIN_MESSAGE);
             }
         }
     }

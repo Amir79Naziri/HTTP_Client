@@ -1,6 +1,5 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,10 +11,12 @@ public class FirstPanel extends JPanel
     private JButton addRequest;
     private JTextField searchText;
     private RequestsPanel requestsPanel;
+    private GUI gui;
 
-    public FirstPanel ()
+    public FirstPanel (GUI gui)
     {
         super();
+        this.gui = gui;
         setLayout (new BoxLayout (this,BoxLayout.Y_AXIS));
         createHeaderPanel ();
         createFilterPanel ();
@@ -26,8 +27,9 @@ public class FirstPanel extends JPanel
     {
         Color color = new Color (122, 103,218);
         JPanel header = new JPanel (new BorderLayout (3,4));
-        header.setPreferredSize (new Dimension (350,55));
+        header.setPreferredSize (new Dimension (300,55));
         header.setMinimumSize ((new Dimension (300,55)));
+        header.setMaximumSize ((new Dimension (850,55)));
 
         JLabel label = new JLabel ("  HTTP client");
         label.setFont (new Font ("Arial",Font.PLAIN,20));
@@ -40,8 +42,11 @@ public class FirstPanel extends JPanel
 
     private void createFilterPanel ()
     {
+        ButtonHandler buttonHandler = new ButtonHandler ();
         Color color = new Color (45, 46, 42, 255);
         JPanel filterPanel = new JPanel ();
+        filterPanel.setMaximumSize (new Dimension (850,55));
+        filterPanel.setMinimumSize (new Dimension (350,55));
         GridBagLayout layout = new GridBagLayout ();
         GridBagConstraints constraints = new GridBagConstraints ();
         filterPanel.setBackground (color);
@@ -61,6 +66,7 @@ public class FirstPanel extends JPanel
         addRequest.setRolloverIcon (new ImageIcon ("./images/addR2.png"));
         addRequest.setRolloverEnabled (true);
         addRequest.setBackground (color);
+        addRequest.addActionListener (buttonHandler);
 
 
         constraints.gridx = 0;
@@ -96,24 +102,25 @@ public class FirstPanel extends JPanel
         scrollPane.setBorder (new LineBorder (new Color (16, 22, 30, 208),1));
         add (scrollPane);
 
-        for (int i = 0; i < 5; i++)
-        {
-            requestsPanel.addNewRequest (RequestType.GET,"Ammm");
-            requestsPanel.addNewRequest (RequestType.DELETE,"dfsfg");
-            requestsPanel.addNewRequest (RequestType.PATCH,"sdf");
-            requestsPanel.addNewRequest (RequestType.PUT,"kfj");
-            requestsPanel.addNewRequest (RequestType.POST,"eeee");
-        }
     }
 
-    private class buttonHandler implements ActionListener
+    public void addRequest (String name, RequestType type)
+    {
+        requestsPanel.addNewRequest (type,name);
+    }
+
+
+    private class ButtonHandler implements ActionListener
     {
         @Override
         public void actionPerformed (ActionEvent e) {
 
             if (e.getSource () == addRequest)
             {
-                // add a new request
+                JOptionPane.showMessageDialog (gui.getBaseFrame (),
+                        gui.getAddRequestDialog (),"New Request",
+                        JOptionPane.PLAIN_MESSAGE);
+
             } else if (e.getSource () == searchText)
             {
                 // add filter to list

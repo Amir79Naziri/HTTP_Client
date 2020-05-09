@@ -22,10 +22,12 @@ public class RequestsPanel extends JPanel
         Request request = new Request (type,name);
         request.addMouseListener (new MouseHandler ());
 
-
-
         requests.add (request);
         add(request);
+        request.setVisible (false);
+        request.setVisible (true);
+
+
     }
 
     public ArrayList<Request> getRequests () {

@@ -1,28 +1,104 @@
 import javax.swing.*;
-
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
+public class AddRequestDialog extends DialogPanel
+{
 
-public class AddRequestDialog extends JDialog {
+    private JComboBox<String> requestType;
+    private JButton create;
+    private JTextField textField;
+
+    private String name;
+    private RequestType chosenRequestType;
 
 
-    public AddRequestDialog (JFrame baseFrame, String title) {
-        super (baseFrame, title);
-        setBackground (Color.WHITE);
-        setLayout (new BorderLayout (5, 5));
+    public AddRequestDialog () {
+        super ();
         setSize (600, 200);
-        setLocationRelativeTo (baseFrame);
-        setDefaultCloseOperation (WindowConstants.HIDE_ON_CLOSE);
         addBasePanel ();
-        setResizable (false);
     }
 
 
-
     public void addBasePanel () {
+        super.addBasePanel ();
+
+        textField = new JTextField ("My Request");
+        textField.setBackground (Color.WHITE);
+        textField.setBorder (BorderFactory.createCompoundBorder (new LineBorder (Color.GRAY,
+                1,true),
+                new EmptyBorder (5,5,5,5)));
+        textField.setBackground (Color.WHITE);
+        textField.setFont (new Font ("Arial",Font.PLAIN,14));
 
 
+        String[] type = {"GET", "POST", "PUT", "PATCH", "DELETE"};
+        requestType = new JComboBox<> (type);
+        requestType.setBackground (Color.WHITE);
+
+        JLabel label = new JLabel ("Name");
+        label.setFont (new Font ("Arial",Font.ITALIC,14));
+
+        create = new JButton ("Create");
+        create.setBackground (Color.WHITE);
+        create.addActionListener (new ActionListener () {
+            @Override
+            public void actionPerformed (ActionEvent e) {
+                update ();
+            }
+        });
+
+
+        JLabel hint = new JLabel ("* Tip: paste Curl command into URL afterwards to" +
+                " import it ");
+        hint.setFont (new Font ("Arial",Font.ITALIC,9));
+
+
+
+        getConstraints ().fill = GridBagConstraints.BOTH;
+        getConstraints ().insets = new Insets (10,35,10,35);
+        addComponent (label,0,0,1);
+        getConstraints ().weightx = 0.5;
+        getConstraints ().insets = new Insets (0,35,10,35);
+        addComponent (textField,1,0,35);
+        getConstraints ().weightx = 0.0;
+        addComponent (requestType,1,35,4);
+        getConstraints ().insets = new Insets (10,35,10,35);
+        addComponent (new JSeparator (SwingConstants.HORIZONTAL),2,0,45);
+        addComponent (hint,4,0,35);
+        addComponent (create,4,35,4);
+    }
+
+
+    public String getChosenName () {
+        return name;
+    }
+
+    public RequestType getChosenRequestType () {
+        return chosenRequestType;
+    }
+
+    private void update ()
+    {
+        name = textField.getText ();
+        switch (requestType.getSelectedIndex ())
+        {
+            case 0 : chosenRequestType = RequestType.GET; break;
+            case 1 : chosenRequestType = RequestType.POST; break;
+            case 2 : chosenRequestType = RequestType.PUT; break;
+            case 3 : chosenRequestType = RequestType.PATCH; break;
+            case 4 : chosenRequestType = RequestType.DELETE; break;
+        }
+    }
+
+    private void clear ()
+    {
+        name = null;
+        chosenRequestType = null;
     }
 
 }

@@ -5,17 +5,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-public class OptionDialog extends DialogFrame
+public class OptionDialog extends DialogPanel
 {
     private JCheckBox followRedirect;
     private JCheckBox hideInSystemTray;
     private JComboBox<String> themeChoose;
-    private JButton ok;
 
 
-    public OptionDialog (JFrame baseFrame, String title)
+    public OptionDialog ()
     {
-        super(baseFrame,title);
+        super();
         setSize (400,200);
     }
 
@@ -31,15 +30,12 @@ public class OptionDialog extends DialogFrame
         hideInSystemTray.setBackground (Color.WHITE);
 
         JLabel label = new JLabel ("Theme :  ");
-        label.setBackground (Color.WHITE);
-        label.setOpaque (true);
 
         String[] themes = {"Dark", "White"};
         themeChoose = new JComboBox<> (themes);
         themeChoose.setBackground (Color.WHITE);
 
-        ok = new JButton ("Save Changes");
-        ok.setBackground (Color.WHITE);
+
 
         JSeparator separator = new JSeparator ();
 
@@ -51,9 +47,6 @@ public class OptionDialog extends DialogFrame
         addComponent (label,2,0,1);
         getConstraints ().ipadx = 40;
         addComponent (themeChoose,2,1,2);
-        getConstraints ().ipadx = 0;
-        addComponent (ok,3,3,1);
-
     }
 
 
