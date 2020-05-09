@@ -126,6 +126,9 @@ public class MenuBar extends JMenuBar
                     gui.getFirstPanel ().setVisible (true);
                     gui.getSplitPane ().setLeftComponent (gui.getFirstPanel ());
                 }
+            } else if (e.getSource () == option)
+            {
+                gui.getOptionDialog ().changeVisible ();
             }
         }
     }

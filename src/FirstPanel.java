@@ -11,7 +11,7 @@ public class FirstPanel extends JPanel
 
     private JButton addRequest;
     private JTextField searchText;
-
+    private RequestsPanel requestsPanel;
 
     public FirstPanel ()
     {
@@ -87,7 +87,7 @@ public class FirstPanel extends JPanel
 
     private void createRequestsPanel ()
     {
-        RequestsPanel requestsPanel = new RequestsPanel ();
+        requestsPanel = new RequestsPanel ();
         JScrollPane scrollPane = new JScrollPane
                 (requestsPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

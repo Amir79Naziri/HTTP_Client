@@ -1,15 +1,20 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.util.InputMismatchException;
 
 
 public class Request extends JPanel
 {
-    JPanel chose;
+    private JPanel chose;
+    private final SecondPanel secondPanel;
+
     public Request (RequestType type, String name)
     {
         super();
+
+        if (name == null || type == null)
+            throw new InputMismatchException ("inValid input");
+        secondPanel = new SecondPanel ();
         setLayout (new FlowLayout (FlowLayout.LEFT));
         setBackground (new Color (45, 46, 42, 255));
 
@@ -45,13 +50,18 @@ public class Request extends JPanel
         return new Dimension (300,38);
     }
 
-//    @Override
-//    public Dimension getMaximumSize () {
-//        return new Dimension (340,38);
-//    }
 
     @Override
     public Dimension getPreferredSize () {
         return new Dimension (340,38);
+    }
+
+    public boolean isSelected ()
+    {
+        return chose.isVisible ();
+    }
+
+    public SecondPanel getSecondPanel () {
+        return secondPanel;
     }
 }

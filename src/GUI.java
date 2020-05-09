@@ -5,6 +5,7 @@ import java.awt.*;
 public class GUI
 {
     private JFrame baseFrame;
+    private OptionDialog optionDialog;
     private FirstPanel firstPanel;
     private SecondPanel secondPanel;
     private ThirdPanel thirdPanel;
@@ -14,12 +15,11 @@ public class GUI
     public GUI ()
     {
         splitPane = new JSplitPane (JSplitPane.HORIZONTAL_SPLIT);
-        splitPane.setDividerSize (2);
+        splitPane.setDividerSize (3);
         splitPane.setBorder (new LineBorder (Color.DARK_GRAY,1));
         splitPane2 = new JSplitPane (JSplitPane.HORIZONTAL_SPLIT);
-        splitPane2.setDividerSize (2);
+        splitPane2.setDividerSize (3);
         splitPane2.setBorder (new LineBorder (Color.DARK_GRAY,1));
-
 
 
         baseFrame = new JFrame ("HTTP client");
@@ -28,6 +28,7 @@ public class GUI
         baseFrame.setSize (1350,670);
         baseFrame.setDefaultCloseOperation (WindowConstants.EXIT_ON_CLOSE);
         baseFrame.setLayout (new BorderLayout ());
+        optionDialog = new OptionDialog (baseFrame,"Options");
 
         firstPanel = new FirstPanel ();
         secondPanel = new SecondPanel ();
@@ -45,6 +46,9 @@ public class GUI
         baseFrame.setJMenuBar (new MenuBar (this));
     }
 
+    public OptionDialog getOptionDialog () {
+        return optionDialog;
+    }
 
     public FirstPanel getFirstPanel () {
         return firstPanel;
