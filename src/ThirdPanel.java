@@ -8,6 +8,7 @@ public class ThirdPanel extends JPanel
     private JLabel time;
     private JLabel size;
     private RawPanel rawPanel;
+    private VisualPreviewPanel visualPreviewPanel;
 
     public ThirdPanel ()
     {
@@ -61,8 +62,11 @@ public class ThirdPanel extends JPanel
     private void addBasePanel ()
     {
         rawPanel = new RawPanel ();
+        visualPreviewPanel = new VisualPreviewPanel (null);
         JTabbedPane tabbedPane = new JTabbedPane ();
         tabbedPane.addTab ("Raw",rawPanel);
+        tabbedPane.addTab ("Visual",visualPreviewPanel);
         add(tabbedPane);
     }
+
 }

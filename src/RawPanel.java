@@ -34,5 +34,7 @@ public class RawPanel extends JPanel
         add(scrollPane);
     }
 
-
+    public JTextArea getTextArea () {
+        return textArea;
+    }
 }
