@@ -7,12 +7,14 @@ public class ThirdPanel extends JPanel
     private JLabel statusMessage;
     private JLabel time;
     private JLabel size;
+    private RawPanel rawPanel;
 
     public ThirdPanel ()
     {
         super();
         setLayout (new BorderLayout ());
         addHeaderStatuses ();
+        addBasePanel ();
     }
 
     private void addHeaderStatuses ()
@@ -54,5 +56,13 @@ public class ThirdPanel extends JPanel
         label.setMaximumSize (new Dimension (width,25));
         label.setMinimumSize (new Dimension (width,25));
         label.setHorizontalAlignment (SwingConstants.CENTER);
+    }
+
+    private void addBasePanel ()
+    {
+        rawPanel = new RawPanel ();
+        JTabbedPane tabbedPane = new JTabbedPane ();
+        tabbedPane.addTab ("Raw",rawPanel);
+        add(tabbedPane);
     }
 }
