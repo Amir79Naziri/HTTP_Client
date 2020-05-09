@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class SecondPanel extends JPanel
 {
@@ -85,7 +86,9 @@ public class SecondPanel extends JPanel
 
     private void createBasePanel ()
     {
+
         JTabbedPane tabbedPane = new JTabbedPane ();
+        tabbedPane.setTabLayoutPolicy (JTabbedPane.SCROLL_TAB_LAYOUT);
 
 
         queryPanel = new QueryPanel ();
@@ -93,12 +96,36 @@ public class SecondPanel extends JPanel
         formUrlPanel = new FormUrlPanel ();
         jsonPanel = new JsonPanel ();
         bearerPanel = new BearerPanel ();
-        tabbedPane.addTab ("Body",formUrlPanel);
+
+        String[] bodyTypes = {"Form URL Encoded ","JSON "};
+        JComboBox<String> body = new JComboBox<> (bodyTypes);
+        body.addItemListener (new ItemListener () {
+            @Override
+            public void itemStateChanged (ItemEvent e) {
+                if (body.getSelectedIndex () == 0)
+                {
+                    tabbedPane.setComponentAt (0,formUrlPanel);
+                    tabbedPane.setSelectedIndex (0);
+                }
+                else if (body.getSelectedIndex () == 1)
+                {
+                    tabbedPane.setComponentAt (0,jsonPanel);
+                    tabbedPane.setSelectedIndex (0);
+                } else if (body.getSelectedIndex () == 2)
+                {
+                    // binary
+                }
+                repaint ();
+
+            }
+        });
+        body.setBackground (Color.WHITE);
+
+        tabbedPane.add (formUrlPanel);
+        tabbedPane.setTabComponentAt (0,body);
         tabbedPane.addTab ("Bearer",bearerPanel);
         tabbedPane.addTab ("Query",queryPanel);
         tabbedPane.addTab ("Header",headerPanel);
-
-
 
         add (tabbedPane,BorderLayout.CENTER);
     }

@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.InputMismatchException;
 
 public class ThirdPanel extends JPanel
@@ -64,9 +66,32 @@ public class ThirdPanel extends JPanel
         rawPanel = new RawPanel ();
         visualPreviewPanel = new VisualPreviewPanel (null);
         JTabbedPane tabbedPane = new JTabbedPane ();
-        tabbedPane.addTab ("Raw",rawPanel);
-        tabbedPane.addTab ("Visual",visualPreviewPanel);
+        tabbedPane.setTabLayoutPolicy (JTabbedPane.SCROLL_TAB_LAYOUT);
+
+        String[] bodyTypes = {"Raw ","Visual Preview "};
+        JComboBox<String> body = new JComboBox<> (bodyTypes);
+        body.setBackground (Color.WHITE);
+        body.addItemListener (new ItemListener () {
+            @Override
+            public void itemStateChanged (ItemEvent e) {
+                if (body.getSelectedIndex () == 0)
+                {
+                    tabbedPane.setComponentAt (0,rawPanel);
+                    tabbedPane.setSelectedIndex (0);
+                }
+                else if (body.getSelectedIndex () == 1)
+                {
+                    tabbedPane.setComponentAt (0,visualPreviewPanel);
+                    tabbedPane.setSelectedIndex (0);
+                }
+                repaint ();
+            }
+        });
         add(tabbedPane);
+
+        tabbedPane.add (rawPanel);
+        tabbedPane.setTabComponentAt (0,body);
+
     }
 
 }
