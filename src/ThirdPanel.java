@@ -11,6 +11,7 @@ public class ThirdPanel extends JPanel
     private JLabel size;
     private RawPanel rawPanel;
     private VisualPreviewPanel visualPreviewPanel;
+    private ResultHeaderPanel resultHeaderPanel;
 
     public ThirdPanel ()
     {
@@ -65,6 +66,7 @@ public class ThirdPanel extends JPanel
     {
         rawPanel = new RawPanel ();
         visualPreviewPanel = new VisualPreviewPanel (null);
+        resultHeaderPanel = new ResultHeaderPanel ();
         JTabbedPane tabbedPane = new JTabbedPane ();
         tabbedPane.setTabLayoutPolicy (JTabbedPane.SCROLL_TAB_LAYOUT);
 
@@ -91,6 +93,7 @@ public class ThirdPanel extends JPanel
 
         tabbedPane.add (rawPanel);
         tabbedPane.setTabComponentAt (0,body);
+        tabbedPane.addTab ("Header",resultHeaderPanel);
 
     }
 

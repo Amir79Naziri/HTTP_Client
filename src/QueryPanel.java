@@ -109,7 +109,7 @@ public class QueryPanel extends JPanel
     }
 
 
-    private JScrollPane fetchToJScrollPane (JPanel panel)
+    public static JScrollPane fetchToJScrollPane (JPanel panel)
     {
         if (panel == null)
             throw new InputMismatchException ("Input is not valid");

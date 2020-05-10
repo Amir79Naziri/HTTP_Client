@@ -132,11 +132,12 @@ public class FirstPanel extends JPanel
                         addNewRequestPanel,"New Request",
                         JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,null,
                         null,null);
-                if (res == 0)
+                if (res == 0) {
                     gui.getFirstPanel ().addRequest
                             (addNewRequestPanel.getNameOfNewRequest (),
                                     addNewRequestPanel.getChosenRequestType ()
                             );
+                }
             } else if (e.getSource () == searchText)
             {
                 System.out.println (searchText.getText ());

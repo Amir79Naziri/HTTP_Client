@@ -63,7 +63,7 @@ public class RequestsPanel extends JPanel
                         request.requestFocusInWindow ();
                         request.setChoseVisibly (true);
                         gui.setSecondPanel (request.getSecondPanel ());
-                        gui.setThirdPanel (request.getSecondPanel ().getThirdPanel ());
+                        gui.setThirdPanel (request.getSecondPanel ().getProgramThirdPanel ());
 
                     } else
                         request.setChoseVisibly (false);

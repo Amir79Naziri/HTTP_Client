@@ -14,15 +14,15 @@ public class KeyAndValue extends JPanel
     private JCheckBox active;
     private JButton delete;
     private JButton settings;
-    private boolean isEditable;
     private boolean showDescription;
     private GridBagLayout layout;
     private GridBagConstraints constraints;
+    private boolean isDeleted;
 
     public KeyAndValue (String keyName, String valueName, boolean isEditable,
                         boolean showDescription)
     {
-        this.isEditable = isEditable;
+        isDeleted = false;
         this.showDescription = showDescription;
         constraints = new GridBagConstraints ();
         layout = new GridBagLayout ();
@@ -37,6 +37,14 @@ public class KeyAndValue extends JPanel
 
     }
 
+    public boolean isDeleted () {
+        return isDeleted;
+    }
+
+    public void delete () {
+        isDeleted = true;
+    }
+
     private void createComponents (String keyName, String valueName)
     {
         Color color = new Color (40, 38, 37, 255);
@@ -49,22 +57,22 @@ public class KeyAndValue extends JPanel
         JPanel panelKey = new JPanel ();
         key = new JTextField (keyName);
         createTextPanel (color, panelKey, key);
-        if (isEditable)
-            key.addMouseListener (componentHandler);
+
+        key.addMouseListener (componentHandler);
 
 
         JPanel panelValue = new JPanel ();
         value = new JTextField (valueName);
         createTextPanel (color, panelValue, value);
-        if (isEditable)
-            value.addMouseListener (componentHandler);
+
+        value.addMouseListener (componentHandler);
 
         panelDesc = new JPanel ();
         describe = new JTextField ("description");
         createTextPanel (color,panelDesc,describe);
         panelDesc.setVisible (showDescription);
-        if (isEditable)
-            describe.addMouseListener (componentHandler);
+
+        describe.addMouseListener (componentHandler);
 
 
         active = new JCheckBox ("");
@@ -234,6 +242,7 @@ public class KeyAndValue extends JPanel
             if (e.getSource () == delete)
             {
                 setVisible (false);
+                delete ();
             }
         }
 

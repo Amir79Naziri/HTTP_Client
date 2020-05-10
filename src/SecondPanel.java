@@ -6,7 +6,8 @@ import java.awt.event.*;
 public class SecondPanel extends JPanel
 {
 
-    private JPanel thirdPanel;
+    private JPanel programThirdPanel;
+    private final JPanel mainThirdPanel = new ThirdPanel ();
 
     private JTextField url;
     private JComboBox<String> type;
@@ -19,13 +20,15 @@ public class SecondPanel extends JPanel
     private JsonPanel jsonPanel;
     private BearerPanel bearerPanel;
     private GUI gui;
+    private Request request;
 
 
-    public SecondPanel (GUI gui)
+    public SecondPanel (GUI gui,Request request)
     {
         super();
         this.gui = gui;
-        thirdPanel = new NullPanel (2);
+        this.request = request;
+        programThirdPanel = new NullPanel (2);
         setLayout (new BorderLayout ());
         createURLPanel ();
         createBasePanel ();
@@ -39,20 +42,23 @@ public class SecondPanel extends JPanel
         urlPanel.setLayout (layout);
         urlPanel.setBackground (Color.WHITE);
 
+        ComponentHandler componentHandler = new ComponentHandler ();
         String[] types = {"GET", "POST", "PUT", "PATCH", "DELETE"};
         type = new JComboBox<> (types);
         type.setFont (new Font ("Arial",Font.PLAIN,11));
         type.setBackground (Color.WHITE);
+        type.setSelectedItem (request.getRequestType ().toString ());
+        type.addItemListener (componentHandler);
 
         url = new JTextField ("https://api.myproduct.com/v1/users");
         url.setBorder (new LineBorder (Color.WHITE,1));
         url.setFont (new Font ("Arial",Font.PLAIN,12));
-        url.addKeyListener (new ComponentHandler ());
+        url.addKeyListener (componentHandler);
 
         send = new JButton ("Send");
         send.setFont (new Font ("Arial",Font.PLAIN,11));
         send.setBackground (Color.WHITE);
-        send.addActionListener (new ComponentHandler ());
+        send.addActionListener (componentHandler);
 
         save = new JButton ("Save");
         save.setFont (new Font ("Arial",Font.PLAIN,11));
@@ -136,8 +142,8 @@ public class SecondPanel extends JPanel
         add (tabbedPane,BorderLayout.CENTER);
     }
 
-    public JPanel getThirdPanel () {
-        return thirdPanel;
+    public JPanel getProgramThirdPanel () {
+        return programThirdPanel;
     }
 
     private class ComponentHandler extends KeyAdapter
@@ -153,14 +159,29 @@ public class SecondPanel extends JPanel
         public void actionPerformed (ActionEvent e) {
             if (e.getSource () == send)
             {
-                thirdPanel = new ThirdPanel ();
-                gui.setThirdPanel (thirdPanel);
+                gui.setThirdPanel (mainThirdPanel);
             }
         }
 
         @Override
         public void itemStateChanged (ItemEvent e) {
-
+            switch (type.getSelectedIndex ()) {
+                case 0:
+                    request.setRequestType (RequestType.GET);
+                    break;
+                case 1:
+                    request.setRequestType (RequestType.POST);
+                    break;
+                case 2:
+                    request.setRequestType (RequestType.PUT);
+                    break;
+                case 3:
+                    request.setRequestType (RequestType.PATCH);
+                    break;
+                case 4:
+                    request.setRequestType (RequestType.DELETE);
+                    break;
+            }
         }
     }
 

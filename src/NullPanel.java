@@ -29,7 +29,6 @@ public class NullPanel extends JPanel
         center.add (label,BorderLayout.CENTER);
         add(upper,BorderLayout.NORTH);
         add(center,BorderLayout.CENTER);
-
     }
 
 }

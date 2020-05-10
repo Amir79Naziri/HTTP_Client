@@ -13,7 +13,7 @@ public class FormUrlPanel extends JPanel
         setLayout (new BorderLayout ());
         setBackground (new Color (40, 38, 37, 255));
         keyAndValuePanel = new KeyAndValuePanel ("name", "value");
-        add(fetchToJScrollPane (keyAndValuePanel),BorderLayout.CENTER);
+        add(QueryPanel.fetchToJScrollPane (keyAndValuePanel),BorderLayout.CENTER);
     }
 
     public void addNewKeyAndValue ()
@@ -26,15 +26,4 @@ public class FormUrlPanel extends JPanel
     }
 
 
-    private JScrollPane fetchToJScrollPane (JPanel panel)
-    {
-        if (panel == null)
-            throw new InputMismatchException ("Input is not valid");
-        JScrollPane scrollPane = new JScrollPane
-                (panel,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                        ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setBorder (new LineBorder (new Color (40, 38, 37, 208),1));
-        scrollPane.getVerticalScrollBar ().setPreferredSize (new Dimension (10,8));
-        return scrollPane;
-    }
 }

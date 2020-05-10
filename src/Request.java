@@ -2,8 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.util.InputMismatchException;
 
 
@@ -14,16 +12,19 @@ public class Request extends JPanel
     private JPopupMenu popupMenu;
     private String requestName;
     private RequestType requestType;
+    private boolean isDeleted;
+    private JLabel typeLabel;
+    private JLabel nameLabel;
 
-    public Request (RequestType type, String name, GUI gui)
+    public Request (RequestType requestType, String name, GUI gui)
     {
         super();
 
-        if (name == null || type == null)
+        if (name == null || requestType == null)
             throw new InputMismatchException ("inValid input");
+        isDeleted = false;
         this.requestName = name;
-        this.requestType = type;
-        secondPanel = new SecondPanel (gui);
+        this.requestType = requestType;
         setLayout (new FlowLayout (FlowLayout.LEFT));
         setBackground (new Color (45, 46, 42, 255));
 
@@ -32,13 +33,14 @@ public class Request extends JPanel
         chose.setPreferredSize (new Dimension (2,29));
         chose.setVisible (false);
 
-        JLabel typeLabel = new JLabel (type.getName ());
+        typeLabel = new JLabel (requestType.getName ());
+        secondPanel = new SecondPanel (gui,this);
         typeLabel.setFont (new Font ("Arial",Font.PLAIN,10));
-        typeLabel.setForeground (type.getColor ());
+        typeLabel.setForeground (requestType.getColor ());
         typeLabel.setPreferredSize (new Dimension (40,29));
 
 
-        JLabel nameLabel = new JLabel (name);
+        nameLabel = new JLabel (name);
         nameLabel.setFont (new Font ("Arial",Font.PLAIN,13));
         nameLabel.setForeground (Color.LIGHT_GRAY);
         JMenuItem delete = new JMenuItem ("Delete");
@@ -46,12 +48,12 @@ public class Request extends JPanel
             @Override
             public void actionPerformed (ActionEvent e) {
                 setVisible (false);
+                delete();
                 if (chose.isVisible ())
                 {
                     gui.setThirdPanel (new NullPanel (2));
                     gui.setSecondPanel (new NullPanel (1));
                 }
-
             }
         });
         popupMenu = new JPopupMenu ();
@@ -62,6 +64,31 @@ public class Request extends JPanel
         add (nameLabel);
     }
 
+
+    public void setRequestType (RequestType requestType) {
+        if (requestType == null)
+            throw new InputMismatchException ("inValid input");
+        this.requestType = requestType;
+        typeLabel.setText (requestType.getName ());
+        typeLabel.setForeground (requestType.getColor ());
+        setVisible (false);
+        setVisible (true);
+    }
+
+    public void setRequestName (String requestName) {
+        this.requestName = requestName;
+        nameLabel.setText (requestName);
+        setVisible (false);
+        setVisible (true);
+    }
+
+    public boolean isDeleted () {
+        return isDeleted;
+    }
+
+    public void delete () {
+        isDeleted = true;
+    }
 
     public JPopupMenu getPopupMenu () {
         return popupMenu;
@@ -74,18 +101,19 @@ public class Request extends JPanel
 
     @Override
     public Dimension getMinimumSize () {
-        return new Dimension (300,38);
+        return new Dimension (350,38);
     }
 
     @Override
     public Dimension getMaximumSize () {
-        return new Dimension (340,38);
+        return new Dimension (800,38);
     }
 
     @Override
     public Dimension getPreferredSize () {
-        return new Dimension (340,38);
+        return new Dimension (350,38);
     }
+
 
     public boolean isSelected ()
     {
