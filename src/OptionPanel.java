@@ -1,10 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 
 
 public class OptionPanel extends JPanel
@@ -30,6 +27,7 @@ public class OptionPanel extends JPanel
     {
         GridBagConstraints constraints = new GridBagConstraints ();
         GridBagLayout layout = new GridBagLayout ();
+        ComponentHandler componentHandler = new ComponentHandler ();
         JPanel basePanel = new JPanel ();
         basePanel.setLayout (layout);
         basePanel.setBorder (new EmptyBorder (5, 5, 5, 5));
@@ -41,6 +39,7 @@ public class OptionPanel extends JPanel
 
         hideInSystemTray = new JCheckBox ("Hide in System Tray");
         hideInSystemTray.setBackground (Color.WHITE);
+        hideInSystemTray.addItemListener (componentHandler);
 
         JLabel label = new JLabel ("Theme :  ");
 
@@ -74,7 +73,14 @@ public class OptionPanel extends JPanel
 
         @Override
         public void itemStateChanged (ItemEvent e) {
-
+            if (e.getSource () == hideInSystemTray && hideInSystemTray.isSelected ())
+            {
+                gui.setShouldHideInSystemTray (true);
+            }
+            else if (e.getSource () == hideInSystemTray && !(hideInSystemTray.isSelected ()))
+            {
+                gui.setShouldHideInSystemTray (false);
+            }
         }
     }
 }

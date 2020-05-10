@@ -45,7 +45,6 @@ public class AddNewRequestPanel extends JPanel
         textField.setBorder (BorderFactory.createCompoundBorder (new LineBorder (Color.GRAY,
                 1,true),
                 new EmptyBorder (5,5,5,5)));
-        textField.setBackground (Color.WHITE);
         textField.setFont (new Font ("Arial",Font.PLAIN,14));
 
         String[] type = {"GET", "POST", "PUT", "PATCH", "DELETE"};

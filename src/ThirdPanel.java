@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.InputMismatchException;
@@ -79,14 +81,18 @@ public class ThirdPanel extends JPanel
                 if (body.getSelectedIndex () == 0)
                 {
                     tabbedPane.setComponentAt (0,rawPanel);
-                    tabbedPane.setSelectedIndex (0);
                 }
                 else if (body.getSelectedIndex () == 1)
                 {
                     tabbedPane.setComponentAt (0,visualPreviewPanel);
-                    tabbedPane.setSelectedIndex (0);
                 }
                 repaint ();
+            }
+        });
+        body.addActionListener (new ActionListener () {
+            @Override
+            public void actionPerformed (ActionEvent e) {
+                tabbedPane.setSelectedIndex (0);
             }
         });
         add(tabbedPane);

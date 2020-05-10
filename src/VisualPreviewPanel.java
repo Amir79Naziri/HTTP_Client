@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 
@@ -6,7 +7,6 @@ public class VisualPreviewPanel extends JPanel
 {
 
     private JLabel imageLabel;
-    private JTextArea textArea;
     private boolean hasError;
 
     public VisualPreviewPanel (ImageIcon imageIcon)
@@ -51,8 +51,9 @@ public class VisualPreviewPanel extends JPanel
     private void addTextArea ()
     {
         Color color = new Color (40, 38, 37, 255);
-        textArea = new JTextArea ("Error: URL using bad/illegal format or missing URL");
+        JTextArea textArea = new JTextArea ("Error: URL using bad/illegal format or missing URL");
         textArea.setEditable (false);
+        textArea.setBorder (new EmptyBorder (5,5,5,5));
         textArea.setForeground (Color.LIGHT_GRAY);
         textArea.setBackground (color);
         add (textArea,BorderLayout.NORTH);

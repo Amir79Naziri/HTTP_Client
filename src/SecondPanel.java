@@ -114,21 +114,27 @@ public class SecondPanel extends JPanel
         body.addItemListener (new ItemListener () {
             @Override
             public void itemStateChanged (ItemEvent e) {
+
                 if (body.getSelectedIndex () == 0)
                 {
                     tabbedPane.setComponentAt (0,formUrlPanel);
-                    tabbedPane.setSelectedIndex (0);
+
                 }
                 else if (body.getSelectedIndex () == 1)
                 {
                     tabbedPane.setComponentAt (0,jsonPanel);
-                    tabbedPane.setSelectedIndex (0);
+
                 } else if (body.getSelectedIndex () == 2)
                 {
                     // binary
                 }
                 repaint ();
-
+            }
+        });
+        body.addActionListener (new ActionListener () {
+            @Override
+            public void actionPerformed (ActionEvent e) {
+                tabbedPane.setSelectedIndex (0);
             }
         });
         body.setBackground (Color.GRAY);

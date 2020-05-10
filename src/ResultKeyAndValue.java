@@ -12,8 +12,6 @@ public class ResultKeyAndValue extends JPanel
 {
     private JTextArea key; // key text Area
     private JTextArea value; // value text Area
-    private GridBagConstraints constraints; // constrains
-    private GridBagLayout layout; // layout
     private Color colorThemeForForeGround; // color for foreGround in theme
 
     /**
@@ -26,8 +24,10 @@ public class ResultKeyAndValue extends JPanel
     public ResultKeyAndValue (String key, String value, Color backGround,
                               Color colorThemeForForeGround)
     {
-        constraints = new GridBagConstraints ();
-        layout = new GridBagLayout ();
+        // constrains
+        GridBagConstraints constraints = new GridBagConstraints ();
+        // layout
+        GridBagLayout layout = new GridBagLayout ();
         this.colorThemeForForeGround = colorThemeForForeGround;
         setBackground (backGround);
         setLayout (layout);
@@ -43,10 +43,10 @@ public class ResultKeyAndValue extends JPanel
         constraints.ipady = 0;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 0.5;
-        layout.setConstraints (this.key,constraints);
+        layout.setConstraints (this.key, constraints);
         add(this.key);
         constraints.gridx = 1;
-        layout.setConstraints (this.value,constraints);
+        layout.setConstraints (this.value, constraints);
         add(this.value);
     }
 
@@ -62,10 +62,11 @@ public class ResultKeyAndValue extends JPanel
         textArea.setBorder (new EmptyBorder (1,1,1,1));
         textArea.setBackground (color);
         textArea.setLineWrap (true);
+        textArea.setCursor (Cursor.getPredefinedCursor (Cursor.TEXT_CURSOR));
         textArea.setWrapStyleWord (true);
         textArea.setEditable (false);
         textArea.setForeground (colorThemeForForeGround);
-        textArea.setFont (new Font ("Arial",Font.PLAIN,12));
+        textArea.setFont (new Font ("Arial",Font.PLAIN,13));
     }
 
     /**

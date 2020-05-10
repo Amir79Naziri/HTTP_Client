@@ -1,5 +1,8 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Element;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,8 +24,9 @@ public class JsonPanel extends JPanel
 
     private void addTextAria ()
     {
+        Color color = new Color (40, 38, 37, 255);
         textArea = new JTextArea ("...");
-        textArea.setBackground (new Color (40, 38, 37, 255));
+        textArea.setBackground (color);
         textArea.setForeground (new Color (226, 156,0));
         textArea.setFont (new Font ("Arial",Font.PLAIN,12));
         textArea.setLineWrap (true);
@@ -34,8 +38,12 @@ public class JsonPanel extends JPanel
                         ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder (new LineBorder (Color.GRAY,1));
         scrollPane.getVerticalScrollBar ().setPreferredSize (new Dimension (10,8));
+
         add(scrollPane,BorderLayout.CENTER);
+
     }
+
+
 
     private void addBeautifyJSON ()
     {

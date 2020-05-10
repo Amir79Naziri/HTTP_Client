@@ -104,7 +104,7 @@ public class ResultHeaderPanel extends JPanel
         } else
         {
             ResultKeyAndValue resultKeyAndValue
-                    = new ResultKeyAndValue (key,value,Color.GRAY,
+                    = new ResultKeyAndValue (key,value,Color.LIGHT_GRAY,
                     colorThemeForForeGround);
             resultKeyAndValues.add (resultKeyAndValue);
             basePanel.add (resultKeyAndValue);
