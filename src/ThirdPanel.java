@@ -70,7 +70,7 @@ public class ThirdPanel extends JPanel
 
         String[] bodyTypes = {"Raw ","Visual Preview "};
         JComboBox<String> body = new JComboBox<> (bodyTypes);
-        body.setBackground (Color.WHITE);
+        body.setBackground (Color.GRAY);
         body.addItemListener (new ItemListener () {
             @Override
             public void itemStateChanged (ItemEvent e) {

@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.util.InputMismatchException;
 
 
@@ -10,6 +12,8 @@ public class Request extends JPanel
     private JPanel chose;
     private final SecondPanel secondPanel;
     private JPopupMenu popupMenu;
+    private String requestName;
+    private RequestType requestType;
 
     public Request (RequestType type, String name, GUI gui)
     {
@@ -17,6 +21,8 @@ public class Request extends JPanel
 
         if (name == null || type == null)
             throw new InputMismatchException ("inValid input");
+        this.requestName = name;
+        this.requestType = type;
         secondPanel = new SecondPanel (gui);
         setLayout (new FlowLayout (FlowLayout.LEFT));
         setBackground (new Color (45, 46, 42, 255));
@@ -88,5 +94,13 @@ public class Request extends JPanel
 
     public SecondPanel getSecondPanel () {
         return secondPanel;
+    }
+
+    public String getRequestName () {
+        return requestName;
+    }
+
+    public RequestType getRequestType () {
+        return requestType;
     }
 }

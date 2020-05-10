@@ -8,6 +8,13 @@ import java.awt.event.ActionListener;
 public class FirstPanel extends JPanel
 {
 
+    private JPanel header;
+    private JLabel title;
+    private JPanel filterPanel;
+
+
+
+
     private JButton addRequest;
     private JTextField searchText;
     private RequestsPanel requestsPanel;
@@ -26,17 +33,17 @@ public class FirstPanel extends JPanel
     private void createHeaderPanel ()
     {
         Color color = new Color (122, 103,218);
-        JPanel header = new JPanel (new BorderLayout (3,4));
+        header = new JPanel (new BorderLayout (3,4));
         header.setPreferredSize (new Dimension (300,55));
         header.setMinimumSize ((new Dimension (300,55)));
         header.setMaximumSize ((new Dimension (850,55)));
 
-        JLabel label = new JLabel ("  HTTP client");
-        label.setFont (new Font ("Arial",Font.PLAIN,20));
-        label.setForeground (Color.WHITE);
+        title = new JLabel ("  HTTP client");
+        title.setFont (new Font ("Arial",Font.PLAIN,20));
+        title.setForeground (Color.WHITE);
 
         header.setBackground (color);
-        header.add (label,BorderLayout.WEST);
+        header.add (title,BorderLayout.WEST);
         add(header);
     }
 
@@ -44,7 +51,7 @@ public class FirstPanel extends JPanel
     {
         ButtonHandler buttonHandler = new ButtonHandler ();
         Color color = new Color (45, 46, 42, 255);
-        JPanel filterPanel = new JPanel ();
+        filterPanel = new JPanel ();
         filterPanel.setMaximumSize (new Dimension (850,55));
         filterPanel.setMinimumSize (new Dimension (350,55));
         GridBagLayout layout = new GridBagLayout ();
@@ -107,7 +114,8 @@ public class FirstPanel extends JPanel
 
     public void addRequest (String name, RequestType type)
     {
-        requestsPanel.addNewRequest (type,name);
+        requestsPanel.
+                addNewRequest (type,name);
     }
 
 
@@ -118,13 +126,26 @@ public class FirstPanel extends JPanel
 
             if (e.getSource () == addRequest)
             {
-                JOptionPane.showMessageDialog (gui.getBaseFrame (),
-                        new AddNewRequestPanel (gui),"New Request",
-                        JOptionPane.PLAIN_MESSAGE);
+                AddNewRequestPanel addNewRequestPanel = new AddNewRequestPanel ();
+                int res =
+                        JOptionPane.showOptionDialog (gui.getBaseFrame (),
+                        addNewRequestPanel,"New Request",
+                        JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,null,
+                        null,null);
+                if (res == 0)
+                    gui.getFirstPanel ().addRequest
+                            (addNewRequestPanel.getNameOfNewRequest (),
+                                    addNewRequestPanel.getChosenRequestType ()
+                            );
             } else if (e.getSource () == searchText)
             {
                 System.out.println (searchText.getText ());
             }
         }
+    }
+
+    public void changeTheme ()
+    {
+
     }
 }

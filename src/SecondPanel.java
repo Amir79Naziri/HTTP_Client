@@ -125,7 +125,7 @@ public class SecondPanel extends JPanel
 
             }
         });
-        body.setBackground (Color.WHITE);
+        body.setBackground (Color.GRAY);
 
         tabbedPane.add (formUrlPanel);
         tabbedPane.setTabComponentAt (0,body);
@@ -163,4 +163,5 @@ public class SecondPanel extends JPanel
 
         }
     }
+
 }

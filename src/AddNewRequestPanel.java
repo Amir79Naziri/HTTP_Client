@@ -5,28 +5,33 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.InputMismatchException;
 
-
+/**
+ * this class Build for showing Add New Request Panel.
+ *
+ * @author Amir Naziri
+ */
 public class AddNewRequestPanel extends JPanel
 {
 
-    private JComboBox<String> requestType;
-    private JButton create;
-    private JTextField textField;
-    private RequestType chosenRequestType;
-    private GUI gui;
+    private JComboBox<String> requestType; // type's of RequestTypes
+    private JTextField textField; // name of request textField
+    private RequestType chosenRequestType; // chosen RequestType
 
-
-    public AddNewRequestPanel (GUI gui) {
+    /**
+     * creates a new Add New Request Panel
+     */
+    public AddNewRequestPanel () {
         super ();
-        this.gui = gui;
         setLayout (new BorderLayout (5, 5));
         setSize (600, 200);
         addBasePanel ();
     }
 
-
+    /**
+     * creating base Panel
+     */
     public void addBasePanel () {
-        ComponentHandler componentHandler = new ComponentHandler ();
+
         GridBagLayout layout = new GridBagLayout ();
         GridBagConstraints constraints = new GridBagConstraints ();
         JPanel basePanel = new JPanel ();
@@ -46,20 +51,37 @@ public class AddNewRequestPanel extends JPanel
         String[] type = {"GET", "POST", "PUT", "PATCH", "DELETE"};
         requestType = new JComboBox<> (type);
         requestType.setBackground (Color.WHITE);
-        requestType.addItemListener (componentHandler);
+        requestType.addItemListener (new ItemListener () {
+            @Override
+            public void itemStateChanged (ItemEvent e) {
+                switch (requestType.getSelectedIndex ()) {
+                    case 0:
+                        chosenRequestType = RequestType.GET;
+                        break;
+                    case 1:
+                        chosenRequestType = RequestType.POST;
+                        break;
+                    case 2:
+                        chosenRequestType = RequestType.PUT;
+                        break;
+                    case 3:
+                        chosenRequestType = RequestType.PATCH;
+                        break;
+                    case 4:
+                        chosenRequestType = RequestType.DELETE;
+                        break;
+                }
+            }
+        });
 
 
         JLabel label = new JLabel ("Name");
         label.setFont (new Font ("Arial",Font.ITALIC,14));
 
-        create = new JButton ("Create");
-        create.setBackground (Color.WHITE);
-        create.addActionListener (componentHandler);
 
         JLabel hint = new JLabel ("* Tip: paste Curl command into URL afterwards to" +
                 " import it ");
         hint.setFont (new Font ("Arial",Font.ITALIC,9));
-
 
 
         constraints.fill = GridBagConstraints.BOTH;
@@ -74,9 +96,20 @@ public class AddNewRequestPanel extends JPanel
         addComponent (new JSeparator (SwingConstants.HORIZONTAL),2,0,45
                 ,layout,constraints,basePanel);
         addComponent (hint,4,0,35,layout,constraints,basePanel);
-        addComponent (create,4,35,4,layout,constraints,basePanel);
+
     }
 
+    /**
+     * add a component to gridBag layout in base frame
+     * height is one
+     * @param component component
+     * @param row row
+     * @param col col
+     * @param width width
+     * @param layout layout
+     * @param constraints constrains for layout
+     * @param panel base panel
+     */
     public static void addComponent (JComponent component, int row, int col, int width,
                               GridBagLayout layout, GridBagConstraints constraints,
                               JPanel panel) {
@@ -91,38 +124,19 @@ public class AddNewRequestPanel extends JPanel
         panel.add (component);
     }
 
-
-
-    private class ComponentHandler implements ActionListener, ItemListener
+    /**
+     * @return Name of New request
+     */
+    public String getNameOfNewRequest ()
     {
-        @Override
-        public void actionPerformed (ActionEvent e) {
-           if (e.getSource () == create)
-           {
-               gui.getFirstPanel ().addRequest (textField.getText ()
-                       ,chosenRequestType);
-           }
-        }
+        return textField.getText ();
+    }
 
-        @Override
-        public void itemStateChanged (ItemEvent e) {
-            switch (requestType.getSelectedIndex ()) {
-                case 0:
-                    chosenRequestType = RequestType.GET;
-                    break;
-                case 1:
-                    chosenRequestType = RequestType.POST;
-                    break;
-                case 2:
-                    chosenRequestType = RequestType.PUT;
-                    break;
-                case 3:
-                    chosenRequestType = RequestType.PATCH;
-                    break;
-                case 4:
-                    chosenRequestType = RequestType.DELETE;
-                    break;
-            }
-        }
+    /**
+     * @return RequestType of New Request
+     */
+    public RequestType getChosenRequestType ()
+    {
+        return chosenRequestType;
     }
 }
