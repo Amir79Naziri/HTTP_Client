@@ -10,15 +10,18 @@ import java.awt.event.ActionListener;
 public class JsonPanel extends JPanel
 {
     private JTextArea textArea; // textArea in JSON panel
-
+    private Theme theme;
     /**
      * creates a new JSON panel
      */
-    public JsonPanel ()
+    public JsonPanel (Theme theme)
     {
         super();
+        if (theme == null)
+            throw new NullPointerException ("inValid input");
+        this.theme = theme;
         setLayout (new BorderLayout (15,15));
-        setBackground (new Color (40, 38, 37, 255));
+        setBackground (theme.getBackGroundColorV4 ());
         addTextAria ();
         addBeautifyJSON ();
     }
@@ -28,9 +31,8 @@ public class JsonPanel extends JPanel
      */
     private void addTextAria ()
     {
-        Color color = new Color (40, 38, 37, 255);
         textArea = new JTextArea ("...");
-        textArea.setBackground (color);
+        textArea.setBackground (theme.getBackGroundColorV4 ());
         textArea.setForeground (new Color (226, 156,0));
         textArea.setFont (new Font ("Arial",Font.PLAIN,12));
         textArea.setLineWrap (true);
@@ -51,9 +53,9 @@ public class JsonPanel extends JPanel
      */
     private void addBeautifyJSON ()
     {
-        Color color = new Color (40, 38, 37, 255);
+
         JPanel panel = new JPanel (new FlowLayout (FlowLayout.LEFT));
-        panel.setBackground (color);
+        panel.setBackground (theme.getBackGroundColorV4 ());
         panel.setPreferredSize (new Dimension (panel.getPreferredSize ().width,
                 50));
 
@@ -71,8 +73,8 @@ public class JsonPanel extends JPanel
                 textArea.setText (stringBuilder.toString ());
             }
         });
-        beautifyJSON.setForeground (Color.LIGHT_GRAY);
-        beautifyJSON.setBackground (color);
+        beautifyJSON.setForeground (theme.getForeGroundColorV2 ());
+        beautifyJSON.setBackground (theme.getBackGroundColorV4 ());
         beautifyJSON.setToolTipText ("Auto-Format request body whitespaces");
         panel.add (beautifyJSON);
         add (panel,BorderLayout.SOUTH);

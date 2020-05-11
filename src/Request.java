@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.InputMismatchException;
+
 
 
 public class Request extends JPanel
@@ -10,23 +10,20 @@ public class Request extends JPanel
     private JPanel chose;
     private final SecondPanel secondPanel;
     private JPopupMenu popupMenu;
-    private String requestName;
     private RequestType requestType;
     private boolean isDeleted;
     private JLabel typeLabel;
     private JLabel nameLabel;
 
-    public Request (RequestType requestType, String name, GUI gui)
+    public Request (RequestType requestType, String name, GUI gui, Theme theme)
     {
         super();
-
-        if (name == null || requestType == null)
-            throw new InputMismatchException ("inValid input");
+        if (name == null || requestType == null || gui == null || theme == null)
+            throw new NullPointerException ("inValid input");
         isDeleted = false;
-        this.requestName = name;
         this.requestType = requestType;
+        setBackground (theme.getBackGroundColorV2 ());
         setLayout (new FlowLayout (FlowLayout.LEFT));
-        setBackground (new Color (45, 46, 42, 255));
 
         chose = new JPanel ();
         chose.setBackground (new Color (122, 103,218));
@@ -34,15 +31,17 @@ public class Request extends JPanel
         chose.setVisible (false);
 
         typeLabel = new JLabel (requestType.getName ());
-        secondPanel = new SecondPanel (gui,this);
+        secondPanel = new SecondPanel (gui,this,theme);
         typeLabel.setFont (new Font ("Arial",Font.PLAIN,10));
         typeLabel.setForeground (requestType.getColor ());
         typeLabel.setPreferredSize (new Dimension (40,29));
 
-
-        nameLabel = new JLabel (name);
+        if (name.toCharArray ().length > 15)
+            name = name.substring (0,16);
+        nameLabel = new JLabel (name + " ");
         nameLabel.setFont (new Font ("Arial",Font.PLAIN,13));
-        nameLabel.setForeground (Color.LIGHT_GRAY);
+        nameLabel.setForeground (Color.GRAY);
+        nameLabel.setBackground (theme.getBackGroundColorV2 ());
         JMenuItem delete = new JMenuItem ("Delete");
         delete.addActionListener (new ActionListener () {
             @Override
@@ -51,12 +50,28 @@ public class Request extends JPanel
                 delete();
                 if (chose.isVisible ())
                 {
-                    gui.setThirdPanel (new NullPanel (2));
-                    gui.setSecondPanel (new NullPanel (1));
+                    gui.setThirdPanel (new NullPanel (2,theme));
+                    gui.setSecondPanel (new NullPanel (1,theme));
                 }
             }
         });
+
+        JMenuItem rename = new JMenuItem ("Rename");
+        rename.addActionListener (new ActionListener () {
+            @Override
+            public void actionPerformed (ActionEvent e) {
+
+                String name =
+                        JOptionPane.showInputDialog (gui.getBaseFrame (),"New Name ",
+                                nameLabel.getText ());
+                if (name.toCharArray ().length > 15)
+                    name = name.substring (0,16);
+                nameLabel.setText (name);
+            }
+        });
         popupMenu = new JPopupMenu ();
+        popupMenu.add(rename);
+        popupMenu.addSeparator ();
         popupMenu.add (delete);
 
         add (chose);
@@ -67,7 +82,7 @@ public class Request extends JPanel
 
     public void setRequestType (RequestType requestType) {
         if (requestType == null)
-            throw new InputMismatchException ("inValid input");
+            throw new NullPointerException ("inValid input");
         this.requestType = requestType;
         typeLabel.setText (requestType.getName ());
         typeLabel.setForeground (requestType.getColor ());
@@ -75,12 +90,6 @@ public class Request extends JPanel
         setVisible (true);
     }
 
-    public void setRequestName (String requestName) {
-        this.requestName = requestName;
-        nameLabel.setText (requestName);
-        setVisible (false);
-        setVisible (true);
-    }
 
     public boolean isDeleted () {
         return isDeleted;
@@ -114,20 +123,22 @@ public class Request extends JPanel
     }
 
 
-    public boolean isSelected ()
-    {
-        return chose.isVisible ();
-    }
+//    public boolean isSelected ()
+//    {
+//        return chose.isVisible ();
+//    }
 
     public SecondPanel getSecondPanel () {
         return secondPanel;
     }
 
-    public String getRequestName () {
-        return requestName;
+
+    public JLabel getNameLabel () {
+        return nameLabel;
     }
 
     public RequestType getRequestType () {
         return requestType;
     }
+
 }

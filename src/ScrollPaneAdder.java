@@ -13,15 +13,15 @@ public class ScrollPaneAdder
      * @param panel panel
      * @return scrollPane which has panel
      */
-    public static JScrollPane fetchToJScrollPane (JPanel panel)
+    public static JScrollPane fetchToJScrollPane (JPanel panel, Theme theme)
     {
-        if (panel == null)
-            throw new InputMismatchException ("Input is not valid");
+        if (panel == null || theme == null)
+            throw new NullPointerException ("inValid input");
         JScrollPane scrollPane = new JScrollPane
                 (panel,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                         ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder
-                (new LineBorder (new Color (40, 37, 38, 255),1));
+                (new LineBorder (theme.getBackGroundColorV4 (),1));
         scrollPane.getVerticalScrollBar ().setPreferredSize (new Dimension (10,8));
         return scrollPane;
     }

@@ -8,14 +8,17 @@ public class VisualPreviewPanel extends JPanel
 
     private JLabel imageLabel;
     private boolean hasError;
+    private Theme theme;
 
-    public VisualPreviewPanel (ImageIcon imageIcon)
+    public VisualPreviewPanel (ImageIcon imageIcon, Theme theme)
     {
         super();
+        if (theme == null)
+            throw new NullPointerException ("inValid input");
+        this.theme = theme;
         hasError = false;
         setLayout (new BorderLayout());
-        Color color = new Color (40, 38, 37, 255);
-        setBackground (color);
+        setBackground (theme.getBackGroundColorV4 ());
         addTextArea ();
         if (imageIcon == null)
             hasError = true;
@@ -50,12 +53,11 @@ public class VisualPreviewPanel extends JPanel
 
     private void addTextArea ()
     {
-        Color color = new Color (40, 38, 37, 255);
         JTextArea textArea = new JTextArea ("Error: URL using bad/illegal format or missing URL");
         textArea.setEditable (false);
         textArea.setBorder (new EmptyBorder (5,5,5,5));
-        textArea.setForeground (Color.LIGHT_GRAY);
-        textArea.setBackground (color);
+        textArea.setForeground (theme.getForeGroundColorV2 ());
+        textArea.setBackground (theme.getBackGroundColorV4 ());
         add (textArea,BorderLayout.NORTH);
     }
 

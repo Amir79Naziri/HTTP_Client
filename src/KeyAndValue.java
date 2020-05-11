@@ -18,16 +18,21 @@ public class KeyAndValue extends JPanel
     private GridBagLayout layout;
     private GridBagConstraints constraints;
     private boolean isDeleted;
+    private Theme theme;
 
     public KeyAndValue (String keyName, String valueName, boolean isEditable,
-                        boolean showDescription)
+                        boolean showDescription, Theme theme)
     {
+        super();
+        if (keyName == null || valueName == null || theme == null)
+            throw new NullPointerException ("inValid input");
+        this.theme = theme;
         isDeleted = false;
         this.showDescription = showDescription;
         constraints = new GridBagConstraints ();
         layout = new GridBagLayout ();
         setLayout (layout);
-        setBackground (new Color (40, 38, 37, 255));
+        setBackground (theme.getBackGroundColorV4 ());
 
 
         if (isEditable)
@@ -47,29 +52,32 @@ public class KeyAndValue extends JPanel
 
     private void createComponents (String keyName, String valueName)
     {
-        Color color = new Color (40, 38, 37, 255);
-
+        if (keyName == null || valueName == null)
+            throw new NullPointerException ("inValid input");
         settings = new JButton (new ImageIcon ("./images/data.png"));
-        settings.setBackground (Color.WHITE);
+        settings.setBackground (theme.getBackGroundColorV4 ());
         settings.setFocusable (false);
         settings.setFocusPainted (false);
         ComponentHandler componentHandler = new ComponentHandler ();
         JPanel panelKey = new JPanel ();
         key = new JTextField (keyName);
-        createTextPanel (color, panelKey, key);
+        createTextPanel (panelKey, key, theme);
 
         key.addMouseListener (componentHandler);
 
 
         JPanel panelValue = new JPanel ();
         value = new JTextField (valueName);
-        createTextPanel (color, panelValue, value);
+
+        createTextPanel (panelValue, value,theme);
 
         value.addMouseListener (componentHandler);
 
         panelDesc = new JPanel ();
+        panelDesc.setBackground (theme.getBackGroundColorV4 ());
         describe = new JTextField ("description");
-        createTextPanel (color,panelDesc,describe);
+
+        createTextPanel (panelDesc,describe,theme);
         panelDesc.setVisible (showDescription);
 
         describe.addMouseListener (componentHandler);
@@ -84,9 +92,10 @@ public class KeyAndValue extends JPanel
         delete.setRolloverIcon (new ImageIcon ("./images/trashR2.png"));
         delete.setRolloverEnabled (true);
         delete.setPreferredSize (new Dimension (16,16));
-        delete.setBackground (color);
+        delete.setBackground (theme.getBackGroundColorV4 ());
         delete.setFocusPainted (false);
         delete.addActionListener (new ComponentHandler ());
+        delete.setBackground (theme.getBackGroundColorV4 ());
 
 
         constraints.insets = new Insets (2,5,2,5);
@@ -111,35 +120,40 @@ public class KeyAndValue extends JPanel
 
     private void createComponentsV2 (String keyName, String valueName)
     {
-        Color color = new Color (40, 38, 37, 255);
+        if (keyName == null || valueName == null)
+            throw new NullPointerException ("inValid input");
+
 
         settings = new JButton ("a");
-        settings.setBackground (Color.WHITE);
+        settings.setBackground (theme.getBackGroundColorV4 ());
         settings.setFocusable (true);
         settings.setFocusPainted (true);
 
         JPanel panelKey = new JPanel ();
         key = new JTextField (keyName);
         key.setEditable (false);
+
         key.setCursor (Cursor.getPredefinedCursor (Cursor.TEXT_CURSOR));
-        createTextPanel (color, panelKey, key);
+        createTextPanel (panelKey, key,theme);
 
         JPanel panelValue = new JPanel ();
         value = new JTextField (valueName);
+
         value.setEditable (false);
         value.setCursor (Cursor.getPredefinedCursor (Cursor.TEXT_CURSOR));
-        createTextPanel (color, panelValue, value);
+        createTextPanel (panelValue, value,theme);
 
         panelDesc = new JPanel ();
         describe = new JTextField ("description");
         describe.setEditable (false);
+
         describe.setCursor (Cursor.getPredefinedCursor (Cursor.TEXT_CURSOR));
-        createTextPanel (color,panelDesc,describe);
+        createTextPanel (panelDesc,describe,theme);
         panelDesc.setVisible (showDescription);
 
         JLabel fake = new JLabel ("");
-        fake.setBackground (color);
         fake.setFocusable (false);
+
 
         constraints.insets = new Insets (2,5,2,5);
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -179,20 +193,21 @@ public class KeyAndValue extends JPanel
         return describe;
     }
 
-    public static void createTextPanel (Color color, JPanel panel, JTextField textField) {
+    public static void createTextPanel (JPanel panel, JTextField textField,
+                                        Theme theme) {
 
         if (panel == null || textField == null)
             throw new InputMismatchException ("input is not valid");
 
-        panel.setBackground (color);
+        panel.setBackground (theme.getBackGroundColorV4 ());
         GridBagConstraints constraints2 = new GridBagConstraints ();
         GridBagLayout layout2 = new GridBagLayout ();
         panel.setLayout (layout2);
 
-        textField.setBackground (color);
+        textField.setBackground (theme.getBackGroundColorV4 ());
         textField.setFont (new Font ("Arial",Font.PLAIN,11));
-        textField.setBorder (new LineBorder (color,1));
-        textField.setForeground (Color.GRAY);
+        textField.setBorder (new LineBorder (theme.getBackGroundColorV4 (),1));
+        textField.setForeground (theme.getForeGroundColorV2 ());
         JSeparator separator = new JSeparator (SwingConstants.HORIZONTAL);
 
 
@@ -231,15 +246,15 @@ public class KeyAndValue extends JPanel
 
             if (!active.isSelected ())
             {
-                key.setForeground (Color.DARK_GRAY);
-                value.setForeground (Color.DARK_GRAY);
-                describe.setForeground (Color.DARK_GRAY);
+                key.setForeground (theme.getForeGroundColorV3 ());
+                value.setForeground (theme.getForeGroundColorV3 ());
+                describe.setForeground (theme.getForeGroundColorV3 ());
 
             } else
             {
-                key.setForeground (Color.GRAY);
-                value.setForeground (Color.GRAY);
-                describe.setForeground (Color.GRAY);
+                key.setForeground (theme.getForeGroundColorV2 ());
+                value.setForeground (theme.getForeGroundColorV2 ());
+                describe.setForeground (theme.getForeGroundColorV2 ());
             }
             repaint ();
         }

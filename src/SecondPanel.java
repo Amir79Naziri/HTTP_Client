@@ -6,8 +6,7 @@ import java.awt.event.*;
 public class SecondPanel extends JPanel
 {
 
-    private JPanel programThirdPanel;
-    private final JPanel mainThirdPanel = new ThirdPanel ();
+
 
     private JTextField url;
     private JComboBox<String> type;
@@ -21,14 +20,19 @@ public class SecondPanel extends JPanel
     private BearerPanel bearerPanel;
     private GUI gui;
     private Request request;
+    private Theme theme;
 
+    private JPanel programThirdPanel;
+    private final JPanel mainThirdPanel;
 
-    public SecondPanel (GUI gui,Request request)
+    public SecondPanel (GUI gui,Request request, Theme theme)
     {
         super();
+        this.theme = theme;
+        mainThirdPanel = new ThirdPanel (theme);
         this.gui = gui;
         this.request = request;
-        programThirdPanel = new NullPanel (2);
+        programThirdPanel = new NullPanel (2,theme);
         setLayout (new BorderLayout ());
         createURLPanel ();
         createBasePanel ();
@@ -88,11 +92,11 @@ public class SecondPanel extends JPanel
         tabbedPane.setTabLayoutPolicy (JTabbedPane.SCROLL_TAB_LAYOUT);
 
 
-        queryPanel = new QueryPanel ();
-        headerPanel = new HeaderPanel ();
-        formUrlPanel = new FormUrlPanel ();
-        jsonPanel = new JsonPanel ();
-        bearerPanel = new BearerPanel ();
+        queryPanel = new QueryPanel (theme);
+        headerPanel = new HeaderPanel (theme);
+        formUrlPanel = new FormUrlPanel (theme);
+        jsonPanel = new JsonPanel (theme);
+        bearerPanel = new BearerPanel (theme);
 
         String[] bodyTypes = {"Form URL Encoded ","JSON "};
         JComboBox<String> body = new JComboBox<> (bodyTypes);

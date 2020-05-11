@@ -2,13 +2,13 @@ import java.io.Serializable;
 
 public class OptionData implements Serializable
 {
-    private int theme;
+    private Theme theme;
     private boolean isHideInSystemTray;
     private boolean isFollowRedirect;
 
     public OptionData ()
     {
-        theme = 0;
+        theme = Theme.DARK;
         isFollowRedirect = false;
         isHideInSystemTray = false;
     }
@@ -21,11 +21,11 @@ public class OptionData implements Serializable
         isHideInSystemTray = hideInSystemTray;
     }
 
-    public void setTheme (int theme) {
+    public void setTheme (Theme theme) {
         this.theme = theme;
     }
 
-    public int getTheme () {
+    public Theme getTheme () {
         return theme;
     }
 

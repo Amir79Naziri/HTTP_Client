@@ -7,17 +7,17 @@ import java.awt.*;
 public class FormUrlPanel extends JPanel
 {
     private KeyAndValuePanel keyAndValuePanel; // keyAndValue panel
-
+    private Theme theme;
     /**
      * create a new FormURL panel
      */
-    public FormUrlPanel ()
+    public FormUrlPanel (Theme theme)
     {
         super();
+        this.theme = theme;
         setLayout (new BorderLayout ());
-        setBackground (new Color (40, 38, 37, 255));
-        keyAndValuePanel = new KeyAndValuePanel ("name", "value");
-        add(ScrollPaneAdder.fetchToJScrollPane (keyAndValuePanel),BorderLayout.CENTER);
+        keyAndValuePanel = new KeyAndValuePanel ("name", "value",theme);
+        add(ScrollPaneAdder.fetchToJScrollPane (keyAndValuePanel,theme),BorderLayout.CENTER);
     }
 
     /**

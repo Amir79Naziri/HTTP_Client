@@ -8,16 +8,19 @@ import java.util.InputMismatchException;
 
 public class OptionPanel extends JPanel
 {
-    private transient JCheckBox followRedirect;
-    private transient JCheckBox hideInSystemTray;
-    private transient JComboBox<String> themeChoose;
-
-    OptionData data;
+    private  JCheckBox followRedirect;
+    private  JCheckBox hideInSystemTray;
+    private  JComboBox<String> themeChoose;
 
 
-    public OptionPanel (OptionData optionData)
+    private OptionData data;
+    private GUI gui;
+
+
+    public OptionPanel (OptionData optionData, GUI gui)
     {
         super();
+        this.gui = gui;
         if (optionData == null)
             throw new InputMismatchException ("inValid input");
         setLayout (new BorderLayout (5, 5));
@@ -58,7 +61,7 @@ public class OptionPanel extends JPanel
         themeChoose = new JComboBox<> (themes);
         themeChoose.addItemListener (componentHandler);
         themeChoose.setBackground (Color.WHITE);
-        if (data.getTheme () == 0)
+        if (data.getTheme () == Theme.DARK)
             themeChoose.setSelectedIndex (0);
         else
             themeChoose.setSelectedIndex (1);
@@ -89,12 +92,12 @@ public class OptionPanel extends JPanel
             if (e.getSource () == hideInSystemTray && hideInSystemTray.isSelected ())
             {
                 data.setHideInSystemTray (true);
-                System.out.println (data.isHideInSystemTray ());
+
             }
             else if (e.getSource () == hideInSystemTray && !(hideInSystemTray.isSelected ()))
             {
                 data.setHideInSystemTray (false);
-                System.out.println (data.isHideInSystemTray ());
+
             } else if (e.getSource () == followRedirect && followRedirect.isSelected ())
             {
                 data.setFollowRedirect (true);
@@ -102,15 +105,16 @@ public class OptionPanel extends JPanel
             } else if (e.getSource () == followRedirect && !(followRedirect.isSelected ()))
             {
                 data.setFollowRedirect (false);
-                System.out.println (data.isFollowRedirect ());
+
             } else if (e.getSource () == themeChoose)
             {
                 if (themeChoose.getSelectedIndex () == 0)
-                    data.setTheme (0);
+                    data.setTheme (Theme.DARK);
                 else
-                    data.setTheme (1);
-                System.out.println (data.getTheme ());
+                    data.setTheme (Theme.WHITE);
+
             }
+
 
         }
     }

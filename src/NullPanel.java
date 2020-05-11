@@ -1,3 +1,4 @@
+import javax.print.attribute.standard.MediaSize;
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,25 +8,29 @@ import java.awt.*;
  */
 public class NullPanel extends JPanel
 {
+    private Theme theme;
+
     /**
      * create a null panel
      * @param type 1 for secondPanel
      *             2 for thirdPanel
      */
-    public NullPanel (int type)
+    public NullPanel (int type, Theme theme)
     {
         super();
-        Color color = new Color (40, 37, 38, 255);
+        if (theme == null)
+            throw new NullPointerException ("inValid input");
+        this.theme = theme;
         setLayout (new BorderLayout ());
         JPanel upper = new JPanel ();
 
         upper.setPreferredSize (new Dimension (400,55));
         upper.setMinimumSize (new Dimension (350,55));
         upper.setMaximumSize ((new Dimension (600,55)));
-        upper.setBackground (Color.WHITE);
+        upper.setBackground (theme.getBackGroundColorV5 ());
         JPanel center = new JPanel (new BorderLayout ());
         JLabel label = new JLabel ();
-        center.setBackground (color);
+        center.setBackground (theme.getBackGroundColorV4 ());
         label.setHorizontalAlignment (SwingConstants.CENTER);
         if (type == 1)
             label.setText (" Click Or Add New Request ");
@@ -33,8 +38,8 @@ public class NullPanel extends JPanel
             label.setText (" Click Send Button for a Request ");
         label.setOpaque (true);
         label.setFont (new Font ("Arial",Font.PLAIN,15));
-        label.setForeground (Color.LIGHT_GRAY);
-        label.setBackground (color);
+        label.setForeground (theme.getForeGroundColorV2 ());
+        label.setBackground (theme.getBackGroundColorV4 ());
         center.add (label,BorderLayout.CENTER);
         add(upper,BorderLayout.NORTH);
         add(center,BorderLayout.CENTER);

@@ -15,29 +15,28 @@ public class ResultHeaderPanel extends JPanel
     private JPanel basePanel; // base panel for result key and values
     private ArrayList<ResultKeyAndValue> resultKeyAndValues; // list of key and values
     private int whichColor; // 1 means no color         2 means gray
-    private Color colorThemeForBackGround; // color theme for backGround
-    private Color colorThemeForForeGround; // color theme for foreGround
-
+    private Theme theme;
     /**
      * creates new result header panel
      */
-    public ResultHeaderPanel ()
+    public ResultHeaderPanel (Theme theme)
     {
         super();
+        if (theme == null)
+            throw new NullPointerException ("inValid input");
+        this.theme = theme;
         whichColor = 1;
         resultKeyAndValues = new ArrayList<> ();
-        colorThemeForBackGround = new Color (40, 38, 37, 255);
-        colorThemeForForeGround = Color.WHITE;
         setLayout (new BorderLayout ());
-        setBackground (colorThemeForBackGround);
+        setBackground (theme.getBackGroundColorV4 ());
         addBasePanel ();
 
         //
         JButton copy = new JButton ("Copy On ClipBoard");
-        copy.setBackground (colorThemeForBackGround);
-        copy.setForeground (colorThemeForForeGround);
+        copy.setBackground (theme.getBackGroundColorV4 ());
+        copy.setForeground (theme.getForeGroundColorV2 ());
         JPanel copyButtonPanel = new JPanel (new FlowLayout (FlowLayout.RIGHT));
-        copyButtonPanel.setBackground (colorThemeForBackGround);
+        copyButtonPanel.setBackground (theme.getBackGroundColorV4 ());
         copyButtonPanel.add (copy);
         add(copyButtonPanel,BorderLayout.SOUTH);
         copy.addActionListener (new ActionListener () {
@@ -72,13 +71,13 @@ public class ResultHeaderPanel extends JPanel
     private void addBasePanel ()
     {
         basePanel = new JPanel ();
-        basePanel.setBackground (colorThemeForBackGround);
+        basePanel.setBackground (theme.getBackGroundColorV4 ());
         basePanel.setLayout (new BoxLayout (basePanel,BoxLayout.Y_AXIS));
         ResultKeyAndValue fixedResultKeyAndValue =
-                new ResultKeyAndValue ("NAME","VALUE",colorThemeForBackGround,
-                        Color.GRAY);
+                new ResultKeyAndValue ("NAME","VALUE",theme.getBackGroundColorV4 (),
+                        theme.getForeGroundColorV2 ());
         basePanel.add(fixedResultKeyAndValue);
-        add(ScrollPaneAdder.fetchToJScrollPane (basePanel));
+        add(ScrollPaneAdder.fetchToJScrollPane (basePanel,theme));
         for (int i = 0; i < 14; i++)
             addResultKeyAndValue ("sdfsadfasdf","dsfas");
         for (int i = 0; i < 14; i++)
@@ -96,16 +95,16 @@ public class ResultHeaderPanel extends JPanel
         if (whichColor == 1)
         {
             ResultKeyAndValue resultKeyAndValue
-                    = new ResultKeyAndValue (key,value,colorThemeForBackGround,
-                    colorThemeForForeGround);
+                    = new ResultKeyAndValue (key,value,theme.getBackGroundColorV4 (),
+                    theme.getForeGroundColorV2 ());
             resultKeyAndValues.add (resultKeyAndValue);
             basePanel.add (resultKeyAndValue);
             whichColor = 2;
         } else
         {
             ResultKeyAndValue resultKeyAndValue
-                    = new ResultKeyAndValue (key,value,Color.LIGHT_GRAY,
-                    colorThemeForForeGround);
+                    = new ResultKeyAndValue (key,value,theme.getBackGroundColorV5 (),
+                    theme.getForeGroundColorV2 ());
             resultKeyAndValues.add (resultKeyAndValue);
             basePanel.add (resultKeyAndValue);
             whichColor = 1;

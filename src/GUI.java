@@ -29,7 +29,7 @@ public class GUI
     private final SystemTray systemTray = SystemTray.getSystemTray ();
     private boolean isFullScreen;
     private OptionData optionData;
-
+    private Theme theme ;
     private TrayIcon trayIcon;
 
     public GUI ()
@@ -55,10 +55,11 @@ public class GUI
         baseFrame.setLayout (new BorderLayout ());
         optionData = new OptionData ();
         loadOptionData ();
-        optionPanel = new OptionPanel (optionData);
-        firstPanel = new FirstPanel (this);
-        secondPanel = new NullPanel (1);
-        thirdPanel = new NullPanel (2);
+        theme = optionData.getTheme ();
+        optionPanel = new OptionPanel (optionData, this);
+        firstPanel = new FirstPanel (this,theme);
+        secondPanel = new NullPanel (1,theme);
+        thirdPanel = new NullPanel (2,theme);
         addMenuBar ();
         splitPane2.setRightComponent (thirdPanel);
         splitPane2.setLeftComponent (secondPanel);
@@ -248,6 +249,8 @@ public class GUI
     {
         baseFrame.setVisible (true);
     }
+
+
 
     private class ComponentHandler extends WindowAdapter
             implements ActionListener

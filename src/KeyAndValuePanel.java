@@ -18,17 +18,21 @@ public class KeyAndValuePanel extends JPanel
     private JMenuItem deleteAll;
     private String key;
     private String value;
+    private Theme theme;
 
-    public KeyAndValuePanel (String key, String value)
+    public KeyAndValuePanel (String key, String value, Theme theme)
     {
         super();
+        if (key == null || value == null || theme == null)
+            throw new NullPointerException ("inValid input");
+        this.theme = theme;
         keyAndValues = new ArrayList<> ();
         this.key = key;
         this.value = value;
         setLayout (new BoxLayout (this,BoxLayout.Y_AXIS));
-        setBackground (new Color (40, 38, 37, 255));
+        setBackground (theme.getBackGroundColorV4 ());
         fixedKeyAndValue = new KeyAndValue ("New " + key, "New " + value,
-                false,false);
+                false,false,theme);
         add(fixedKeyAndValue);
         ComponentHandler componentHandler = new ComponentHandler ();
         fixedKeyAndValue.getKey ().addMouseListener (componentHandler);
@@ -52,7 +56,7 @@ public class KeyAndValuePanel extends JPanel
     public void addNewKeyAndValue ()
     {
         KeyAndValue keyAndValue = new KeyAndValue (key, value,true,
-                fixedKeyAndValue.getPanelDesc ().isVisible ());
+                fixedKeyAndValue.getPanelDesc ().isVisible (),theme);
         getKeyAndValues ().add (keyAndValue);
         add (keyAndValue,keyAndValues.size () - 1);
         JSeparator separator = new JSeparator ();
@@ -73,6 +77,7 @@ public class KeyAndValuePanel extends JPanel
         for (KeyAndValue keyAndValue : keyAndValues)
         {
             keyAndValue.setVisible (false);
+            keyAndValue.delete ();
 //            keyAndValues.remove (keyAndValue);
         }
     }

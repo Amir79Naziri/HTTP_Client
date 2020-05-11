@@ -9,20 +9,28 @@ public class RequestsPanel extends JPanel
 {
     private ArrayList<Request> requests;
     private GUI gui;
+    private Theme theme;
 
-    public RequestsPanel (GUI gui)
+    public RequestsPanel (GUI gui, Theme theme)
     {
         super();
+        if (theme == null || gui == null)
+            throw new NullPointerException ("inValid input");
         this.gui = gui;
+        this.theme = theme;
         setLayout (new BoxLayout (this,BoxLayout.Y_AXIS));
-        setBackground (new Color (45, 46, 42, 255));
+        setBackground (theme.getBackGroundColorV2 ());
         requests = new ArrayList<> ();
     }
 
     public void addNewRequest (RequestType type, String name)
     {
-        Request request = new Request (type,name,gui);
-        request.addMouseListener (new MouseHandler ());
+        if (type == null || name == null)
+            throw new NullPointerException ("inValid input");
+        Request request = new Request (type,name,gui,theme);
+        MouseHandler mouseHandler = new MouseHandler ();
+        request.addMouseListener (mouseHandler);
+
 
         requests.add (request);
         add(request);
@@ -41,14 +49,14 @@ public class RequestsPanel extends JPanel
         @Override
         public void mouseEntered (MouseEvent e) {
 
-            e.getComponent ().setBackground (new Color (60, 62, 63, 255));
+            e.getComponent ().setBackground (theme.getBackGroundColorV3 ());
 
         }
 
         @Override
         public void mouseExited (MouseEvent e) {
 
-            e.getComponent ().setBackground (new Color (45, 46, 42, 255));
+            e.getComponent ().setBackground (theme.getBackGroundColorV2 ());
 
         }
 
@@ -59,13 +67,18 @@ public class RequestsPanel extends JPanel
             {
                 for (Request request : requests) {
                     if (request == e.getComponent ()) {
-                        request.requestFocusInWindow ();
                         request.setChoseVisibly (true);
+                        request.getNameLabel ().setFont (
+                                new Font ("Arial",Font.BOLD + Font.ITALIC,13));
                         gui.setSecondPanel (request.getSecondPanel ());
                         gui.setThirdPanel (request.getSecondPanel ().getProgramThirdPanel ());
 
                     } else
+                    {
+                        request.getNameLabel ().setFont (new Font
+                                ("Arial",Font.PLAIN,13));
                         request.setChoseVisibly (false);
+                    }
                 }
             }
             else if (e.getButton () == MouseEvent.BUTTON3) {

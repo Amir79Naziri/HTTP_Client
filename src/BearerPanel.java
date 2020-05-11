@@ -12,16 +12,20 @@ public class BearerPanel extends JPanel
     private JTextField tokenText; // token text
     private JTextField prefixText; // prefix text
     private JCheckBox enabled; // enable button
+    private Theme theme;
 
     /**
      * creates a BearerPanel
      */
-    public BearerPanel ()
+    public BearerPanel (Theme theme)
     {
         super();
+        if (theme == null)
+            throw new NullPointerException ("inValid input");
+        this.theme = theme;
         setLayout (new BorderLayout (15,5));
         addBaseComponents ();
-        setBackground (new Color (40, 38, 37, 255));
+        setBackground (theme.getBackGroundColorV4 ());
     }
 
     /**
@@ -32,43 +36,42 @@ public class BearerPanel extends JPanel
         GridBagConstraints constraints = new GridBagConstraints ();
         GridBagLayout layout = new GridBagLayout ();
 
-        Color color = new Color (40, 38, 37, 255);
         JPanel basePanel = new JPanel (layout);
-        basePanel.setBackground (color);
+        basePanel.setBackground (theme.getBackGroundColorV4 ());
 
 
         JLabel token = new JLabel ("TOKEN ");
         token.setFont (new Font ("Arial",Font.PLAIN,10));
-        token.setForeground (Color.GRAY);
-        token.setBackground (color);
+        token.setForeground (theme.getForeGroundColorV2 ());
+        token.setBackground (theme.getBackGroundColorV4 ());
 
         JLabel prefix = new JLabel ("PREFIX ");
         prefix.setFont (new Font ("Arial",Font.PLAIN,10));
-        prefix.setForeground (Color.GRAY);
-        prefix.setBackground (color);
+        prefix.setForeground (theme.getForeGroundColorV2 ());
+        prefix.setBackground (theme.getBackGroundColorV4 ());
 
         ComponentHandler componentHandler = new ComponentHandler ();
         JPanel prefixPanel = new JPanel ();
         prefixText = new JTextField ("");
-        KeyAndValue.createTextPanel (color,prefixPanel,prefixText);
+        KeyAndValue.createTextPanel (prefixPanel,prefixText,theme);
         prefixText.setFont (new Font ("Arial",Font.PLAIN,12));
         prefixText.addMouseListener (componentHandler);
 
         JPanel tokenPanel = new JPanel ();
         tokenText = new JTextField ("");
-        KeyAndValue.createTextPanel (color,tokenPanel,tokenText);
+        KeyAndValue.createTextPanel (tokenPanel,tokenText,theme);
         tokenText.setFont (new Font ("Arial",Font.PLAIN,12));
         tokenText.addMouseListener (componentHandler);
 
         enabled = new JCheckBox ("ENABLED");
         enabled.setSelected (true);
-        enabled.setBackground (color);
-        enabled.setForeground (Color.GRAY);
+        enabled.setBackground (theme.getBackGroundColorV4 ());
+        enabled.setForeground (theme.getForeGroundColorV2 ());
         enabled.setFont (new Font ("Arial",Font.PLAIN,10));
         enabled.addItemListener (componentHandler);
 
         JLabel fake = new JLabel ("");
-        fake.setBackground (color);
+        fake.setBackground (theme.getBackGroundColorV4 ());
 
         constraints.insets = new Insets (7,15,7,15);
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -104,13 +107,13 @@ public class BearerPanel extends JPanel
         public void itemStateChanged (ItemEvent e) {
 
             if (!enabled.isSelected ()) {
-                prefixText.setForeground (Color.DARK_GRAY);
-                tokenText.setForeground (Color.DARK_GRAY);
+                prefixText.setForeground (theme.getForeGroundColorV3 ());
+                tokenText.setForeground (theme.getForeGroundColorV3 ());
 
 
             } else {
-                prefixText.setForeground (Color.GRAY);
-               tokenText.setForeground (Color.GRAY);
+                prefixText.setForeground (theme.getForeGroundColorV2 ());
+               tokenText.setForeground (theme.getForeGroundColorV2 ());
 
             }
             repaint ();

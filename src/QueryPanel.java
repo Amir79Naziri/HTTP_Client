@@ -16,18 +16,22 @@ public class QueryPanel extends JPanel
     private JTextField previewURLText; // preview textField
     private KeyAndValuePanel keyAndValuePanel; // keyAndValue panel
     private JButton importFromURL; // import form button
+    private Theme theme;
+
 
     /**
      * creates a QueryPanel
      */
-    public QueryPanel ()
+    public QueryPanel (Theme theme)
     {
         super();
+        if (theme == null)
+            throw new NullPointerException ("inValid input");
+        this.theme = theme;
         setLayout (new BorderLayout ());
-        setBackground (new Color (40, 38, 37, 255));
         addURLPreview ();
-        keyAndValuePanel = new KeyAndValuePanel ("name", "value");
-        add (ScrollPaneAdder.fetchToJScrollPane (keyAndValuePanel),BorderLayout.CENTER);
+        keyAndValuePanel = new KeyAndValuePanel ("name", "value",theme);
+        add (ScrollPaneAdder.fetchToJScrollPane (keyAndValuePanel,theme),BorderLayout.CENTER);
         addImportFromPanel ();
     }
 
@@ -36,28 +40,27 @@ public class QueryPanel extends JPanel
      */
     private void addURLPreview ()
     {
-        Color color = new Color (40, 38, 37, 255);
         GridBagConstraints constraints = new GridBagConstraints ();
         GridBagLayout layout = new GridBagLayout ();
         JPanel panel = new JPanel (layout);
-        panel.setBackground (color);
+        panel.setBackground (theme.getBackGroundColorV4 ());
         JLabel label = new JLabel ("URL PREVIEW ");
         label.setFont (new Font ("Arial",Font.PLAIN,9));
-        label.setForeground (Color.LIGHT_GRAY);
-        label.setBackground (color);
+        label.setForeground (theme.getForeGroundColorV2 ());
+        label.setBackground (theme.getBackGroundColorV4 ());
         previewURLText = new JTextField ();
         previewURLText.setEditable (false);
 
 
-        previewURLText.setForeground (Color.LIGHT_GRAY);
-        previewURLText.setBackground (new Color (50, 48, 47, 255));
+        previewURLText.setForeground (theme.getForeGroundColorV2 ());
+        previewURLText.setBackground (Color.GRAY);
         previewURLText.setBorder (BorderFactory.createCompoundBorder (
-                new LineBorder (Color.GRAY.darker (),1,true),
+                new LineBorder (Color.GRAY,1,true),
                 new EmptyBorder (1,5,1,5)));
 
         JButton copy = new JButton ("Copy");
-        copy.setBackground (color);
-        copy.setForeground (Color.LIGHT_GRAY);
+        copy.setBackground (theme.getBackGroundColorV4 ());
+        copy.setForeground (theme.getForeGroundColorV2 ());
         copy.addActionListener (new ActionListener () {
             @Override
             public void actionPerformed (ActionEvent e) {
@@ -90,13 +93,13 @@ public class QueryPanel extends JPanel
      */
     private void addImportFromPanel ()
     {
-        Color color = new Color (40, 38, 37, 255);
+
         JPanel panel = new JPanel (new FlowLayout (FlowLayout.RIGHT));
-        panel.setBackground (color);
+        panel.setBackground (theme.getBackGroundColorV4 ());
 
         importFromURL = new JButton ("Import From URL");
-        importFromURL.setForeground (Color.LIGHT_GRAY);
-        importFromURL.setBackground (color);
+        importFromURL.setForeground (theme.getForeGroundColorV2 ());
+        importFromURL.setBackground (theme.getBackGroundColorV4 ());
         panel.add (importFromURL);
         add (panel,BorderLayout.SOUTH);
     }

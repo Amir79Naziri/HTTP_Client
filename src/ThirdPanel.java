@@ -14,10 +14,12 @@ public class ThirdPanel extends JPanel
     private RawPanel rawPanel;
     private VisualPreviewPanel visualPreviewPanel;
     private ResultHeaderPanel resultHeaderPanel;
+    private Theme theme;
 
-    public ThirdPanel ()
+    public ThirdPanel (Theme theme)
     {
         super();
+        this.theme = theme;
         setLayout (new BorderLayout ());
         addHeaderStatuses ();
         addBasePanel ();
@@ -66,9 +68,9 @@ public class ThirdPanel extends JPanel
 
     private void addBasePanel ()
     {
-        rawPanel = new RawPanel ();
-        visualPreviewPanel = new VisualPreviewPanel (null);
-        resultHeaderPanel = new ResultHeaderPanel ();
+        rawPanel = new RawPanel (theme);
+        visualPreviewPanel = new VisualPreviewPanel (null,theme);
+        resultHeaderPanel = new ResultHeaderPanel (theme);
         JTabbedPane tabbedPane = new JTabbedPane ();
         tabbedPane.setTabLayoutPolicy (JTabbedPane.SCROLL_TAB_LAYOUT);
 
