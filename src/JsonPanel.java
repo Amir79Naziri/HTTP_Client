@@ -44,7 +44,6 @@ public class JsonPanel extends JPanel
         scrollPane.getVerticalScrollBar ().setPreferredSize (new Dimension (10,8));
 
         add(scrollPane,BorderLayout.CENTER);
-
     }
 
     /**

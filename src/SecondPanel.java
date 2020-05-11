@@ -64,35 +64,20 @@ public class SecondPanel extends JPanel
         save.setFont (new Font ("Arial",Font.PLAIN,11));
         save.setBackground (Color.WHITE);
 
-
-        constraints.gridx = 0;
-        constraints.gridy = 0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
         constraints.insets = new Insets (10,10,10,10);
         constraints.ipady = 10;
-        layout.setConstraints (type,constraints);
-        urlPanel.add (type);
+        GridBagAdder.addComponent (type,0,0,1,layout,constraints,urlPanel);
 
-        constraints.gridx = 1;
-        constraints.gridwidth = 10;
         constraints.weightx = 0.5;
-        layout.setConstraints (url,constraints);
-        urlPanel.add (url);
+        GridBagAdder.addComponent (url,0,1,10,layout,constraints,urlPanel);
 
-        constraints.gridx = 11;
-        constraints.gridwidth = 1;
         constraints.weightx = 0.0;
-        layout.setConstraints (send,constraints);
-        urlPanel.add (send);
+        GridBagAdder.addComponent (send,0,11,1,layout,constraints,urlPanel);
 
-        constraints.gridx = 12;
-        layout.setConstraints (save,constraints);
-        urlPanel.add (save);
+        GridBagAdder.addComponent (save,0,12,1,layout,constraints,urlPanel);
 
         add(urlPanel,BorderLayout.NORTH);
-
     }
 
 
@@ -166,6 +151,7 @@ public class SecondPanel extends JPanel
             if (e.getSource () == send)
             {
                 gui.setThirdPanel (mainThirdPanel);
+                programThirdPanel = mainThirdPanel;
             }
         }
 

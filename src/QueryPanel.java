@@ -68,29 +68,19 @@ public class QueryPanel extends JPanel
             }
         });
 
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
+
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.insets = new Insets (5,5,5,5);
-        layout.setConstraints (label,constraints);
-        panel.add (label);
+        GridBagAdder.addComponent (label,0,0,1,layout,constraints,panel);
 
-        constraints.gridx = 1;
-        constraints.gridwidth = 6;
         constraints.weightx = 0.5;
         constraints.ipady = 15;
-        layout.setConstraints (previewURLText,constraints);
-        panel.add(previewURLText);
+        GridBagAdder.addComponent (previewURLText,0,1,6,layout,constraints,panel);
 
-        constraints.gridx = 7;
-        constraints.gridwidth = 1;
+
         constraints.weightx = 0.0;
         constraints.ipady = 0;
-        layout.setConstraints (copy,constraints);
-        panel.add (copy);
-
+        GridBagAdder.addComponent (copy,0,7,1,layout,constraints,panel);
 
         add(panel,BorderLayout.NORTH);
     }

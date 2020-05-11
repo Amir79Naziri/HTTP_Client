@@ -11,7 +11,7 @@ public class FirstPanel extends JPanel
     private JPanel header;
     private JLabel title;
     private JPanel filterPanel;
-
+    private Theme theme;
 
 
 
@@ -20,10 +20,11 @@ public class FirstPanel extends JPanel
     private RequestsPanel requestsPanel;
     private GUI gui;
 
-    public FirstPanel (GUI gui)
+    public FirstPanel (GUI gui, Theme theme)
     {
         super();
         this.gui = gui;
+        this.theme = theme;
         setLayout (new BoxLayout (this,BoxLayout.Y_AXIS));
         createHeaderPanel ();
         createFilterPanel ();
@@ -42,7 +43,7 @@ public class FirstPanel extends JPanel
         title.setFont (new Font ("Arial",Font.PLAIN,20));
         title.setForeground (Color.WHITE);
 
-        header.setBackground (color);
+        header.setBackground (theme.getBackGroundColorV1 ());
         header.add (title,BorderLayout.WEST);
         add(header);
     }
@@ -107,7 +108,7 @@ public class FirstPanel extends JPanel
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setAutoscrolls (true);
         scrollPane.getVerticalScrollBar ().setPreferredSize (new Dimension (10,8));
-        scrollPane.setBorder (new LineBorder (new Color (16, 22, 30, 208),1));
+        scrollPane.setBorder (new LineBorder (new Color (45, 46, 42, 255),1));
         add (scrollPane);
 
     }
@@ -145,8 +146,5 @@ public class FirstPanel extends JPanel
         }
     }
 
-    public void changeTheme ()
-    {
 
-    }
 }

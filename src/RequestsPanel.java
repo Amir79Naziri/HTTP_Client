@@ -28,8 +28,6 @@ public class RequestsPanel extends JPanel
         add(request);
         request.setVisible (false);
         request.setVisible (true);
-
-
     }
 
     public ArrayList<Request> getRequests () {
@@ -57,7 +55,8 @@ public class RequestsPanel extends JPanel
         @Override
         public void mouseClicked (MouseEvent e) {
 
-            if (e.getButton () == MouseEvent.BUTTON1) {
+            if (e.getButton () == MouseEvent.BUTTON1)
+            {
                 for (Request request : requests) {
                     if (request == e.getComponent ()) {
                         request.requestFocusInWindow ();
@@ -68,7 +67,8 @@ public class RequestsPanel extends JPanel
                     } else
                         request.setChoseVisibly (false);
                 }
-            } else if (e.getButton () == MouseEvent.BUTTON3) {
+            }
+            else if (e.getButton () == MouseEvent.BUTTON3) {
                 for (Request request : requests) {
                     if (request == e.getComponent ()) {
                         request.getPopupMenu ().show (request, e.getX (),

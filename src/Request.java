@@ -94,7 +94,6 @@ public class Request extends JPanel
         return popupMenu;
     }
 
-
     public void setChoseVisibly (boolean visibly) {
         chose.setVisible (visibly);
     }

@@ -93,20 +93,20 @@ public class KeyAndValue extends JPanel
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.ipady = -15;
         constraints.ipadx = -30;
-        addComponent (settings,0,1);
+        GridBagAdder.addComponent (settings,0,0,1,layout,constraints,this);
         constraints.ipady = 32;
         constraints.weightx = 0.5;
         constraints.ipadx = 0;
-        addComponent (panelKey,1,10);
-        addComponent (panelValue,11,10);
-        addComponent (panelDesc,21,10);
+        GridBagAdder.addComponent (panelKey,0,1,10,layout,constraints,this);
+        GridBagAdder.addComponent (panelValue,0,11,10,layout,constraints,this);
+        GridBagAdder.addComponent (panelDesc,0,21,10,layout,constraints,this);
         constraints.weightx = 0.0;
         constraints.ipady = 0;
         constraints.ipadx = 0;
-        addComponent (active,31,1);
+        GridBagAdder.addComponent (active,0,31,1,layout,constraints,this);
         constraints.ipady = -13;
         constraints.ipadx = -30;
-        addComponent (delete,32,1);
+        GridBagAdder.addComponent (delete,0,32,1,layout,constraints,this);
     }
 
     private void createComponentsV2 (String keyName, String valueName)
@@ -145,30 +145,18 @@ public class KeyAndValue extends JPanel
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.ipady = -13;
         constraints.ipadx = -17;
-        addComponent (settings,0,1);
+        GridBagAdder.addComponent (settings,0,0,1,layout,constraints,this);
         constraints.weightx = 0.5;
         constraints.ipady = 32;
-        addComponent (panelKey,1,10);
-        addComponent (panelValue,11,10);
-        addComponent (panelDesc,21,10);
+        GridBagAdder.addComponent (panelKey,0,1,10,layout,constraints,this);
+        GridBagAdder.addComponent (panelValue,0,11,10,layout,constraints,this);
+        GridBagAdder.addComponent (panelDesc,0,21,10,layout,constraints,this);
         constraints.ipadx = 40;
         constraints.weightx = 0.0;
         constraints.ipady = 0;
-        addComponent (fake,31,1);
-
+        GridBagAdder.addComponent (fake,0,31,1,layout,constraints,this);
     }
 
-    private void addComponent (JComponent component, int col, int width)
-    {
-        if (component == null)
-            throw new InputMismatchException ("inValid input");
-        constraints.gridx = col;
-        constraints.gridy = 0;
-        constraints.gridwidth = width;
-        constraints.gridheight = 1;
-        layout.setConstraints (component,constraints);
-        add (component);
-    }
 
 
     public JButton getSettings () {
@@ -201,27 +189,19 @@ public class KeyAndValue extends JPanel
         GridBagLayout layout2 = new GridBagLayout ();
         panel.setLayout (layout2);
 
-
-
         textField.setBackground (color);
         textField.setFont (new Font ("Arial",Font.PLAIN,11));
         textField.setBorder (new LineBorder (color,1));
         textField.setForeground (Color.GRAY);
         JSeparator separator = new JSeparator (SwingConstants.HORIZONTAL);
 
-        constraints2.gridx = 0;
-        constraints2.gridy = 0;
-        constraints2.gridwidth = 10;
-        constraints2.gridheight = 1;
+
         constraints2.fill = GridBagConstraints.HORIZONTAL;
         constraints2.weightx = 0.5;
         constraints2.insets = new Insets (4,0,4,0);
-        layout2.setConstraints (textField,constraints2);
-        panel.add (textField);
+        GridBagAdder.addComponent (textField,0,0,10,layout2,constraints2,panel);
 
-        constraints2.gridy = 1;
-        layout2.setConstraints (separator,constraints2);
-        panel.add (separator);
+        GridBagAdder.addComponent (separator,1,0,10,layout2,constraints2,panel);
     }
 
 
