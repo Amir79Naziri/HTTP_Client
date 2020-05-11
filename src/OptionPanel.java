@@ -67,16 +67,16 @@ public class OptionPanel extends JPanel
 
         constraints.insets = new Insets (15,15,0,20);
         constraints.fill = GridBagConstraints.BOTH;
-        AddNewRequestPanel.addComponent (followRedirect,0,0,2,layout,constraints,
+        GridBagAdder.addComponent (followRedirect,0,0,2,layout,constraints,
                 basePanel);
-        AddNewRequestPanel.addComponent (hideInSystemTray,0,2,2,layout,constraints,
+        GridBagAdder.addComponent (hideInSystemTray,0,2,2,layout,constraints,
                 basePanel);
-        AddNewRequestPanel.addComponent (new JSeparator (),1,0,4,layout,constraints,
+        GridBagAdder.addComponent (new JSeparator (),1,0,4,layout,constraints,
                 basePanel);
-        AddNewRequestPanel.addComponent (label,2,0,1,layout,constraints,
+        GridBagAdder.addComponent (label,2,0,1,layout,constraints,
                 basePanel);
         constraints.ipadx = 40;
-        AddNewRequestPanel.addComponent (themeChoose,2,1,2,layout,constraints,
+        GridBagAdder.addComponent (themeChoose,2,1,2,layout,constraints,
                 basePanel);
     }
 

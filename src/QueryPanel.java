@@ -5,14 +5,21 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.InputMismatchException;
 
+/**
+ * this class represents QueryPanel in second panel
+ *
+ * @author Amir Naziri
+ */
 public class QueryPanel extends JPanel
 {
-    private JTextField previewURLText;
-    private KeyAndValuePanel keyAndValuePanel;
-    private JButton importFromURL;
+    private JTextField previewURLText; // preview textField
+    private KeyAndValuePanel keyAndValuePanel; // keyAndValue panel
+    private JButton importFromURL; // import form button
 
+    /**
+     * creates a QueryPanel
+     */
     public QueryPanel ()
     {
         super();
@@ -20,10 +27,13 @@ public class QueryPanel extends JPanel
         setBackground (new Color (40, 38, 37, 255));
         addURLPreview ();
         keyAndValuePanel = new KeyAndValuePanel ("name", "value");
-        add (fetchToJScrollPane (keyAndValuePanel),BorderLayout.CENTER);
+        add (ScrollPaneAdder.fetchToJScrollPane (keyAndValuePanel),BorderLayout.CENTER);
         addImportFromPanel ();
     }
 
+    /**
+     * add url preview panel
+     */
     private void addURLPreview ()
     {
         Color color = new Color (40, 38, 37, 255);
@@ -85,7 +95,9 @@ public class QueryPanel extends JPanel
         add(panel,BorderLayout.NORTH);
     }
 
-
+    /**
+     * add importFormPanel button
+     */
     private void addImportFromPanel ()
     {
         Color color = new Color (40, 38, 37, 255);
@@ -99,29 +111,24 @@ public class QueryPanel extends JPanel
         add (panel,BorderLayout.SOUTH);
     }
 
+    /**
+     * @return preview URL text
+     */
     public JTextField getPreviewURLText () {
         return previewURLText;
     }
 
+    /**
+     * add new key And Value to Query
+     */
     public void addNewKeyAndValue ()
     {
         keyAndValuePanel.addNewKeyAndValue ();
     }
 
-
-    public static JScrollPane fetchToJScrollPane (JPanel panel)
-    {
-        if (panel == null)
-            throw new InputMismatchException ("Input is not valid");
-        JScrollPane scrollPane = new JScrollPane
-                (panel,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setBorder
-                (new LineBorder (new Color (40, 37, 38, 255),1));
-        scrollPane.getVerticalScrollBar ().setPreferredSize (new Dimension (10,8));
-        return scrollPane;
-    }
-
+    /**
+     * @return keyAndValuePanel
+     */
     public KeyAndValuePanel getKeyAndValuePanel () {
         return keyAndValuePanel;
     }

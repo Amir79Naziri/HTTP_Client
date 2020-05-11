@@ -1,18 +1,19 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.Element;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
+/**
+ * this class build for representing JSON panel in second panel
+ */
 public class JsonPanel extends JPanel
 {
-    private JTextArea textArea;
-    private JButton beautifyJSON;
+    private JTextArea textArea; // textArea in JSON panel
 
+    /**
+     * creates a new JSON panel
+     */
     public JsonPanel ()
     {
         super();
@@ -22,6 +23,9 @@ public class JsonPanel extends JPanel
         addBeautifyJSON ();
     }
 
+    /**
+     * adds text Area to panel
+     */
     private void addTextAria ()
     {
         Color color = new Color (40, 38, 37, 255);
@@ -43,8 +47,9 @@ public class JsonPanel extends JPanel
 
     }
 
-
-
+    /**
+     * add beatify button
+     */
     private void addBeautifyJSON ()
     {
         Color color = new Color (40, 38, 37, 255);
@@ -53,7 +58,7 @@ public class JsonPanel extends JPanel
         panel.setPreferredSize (new Dimension (panel.getPreferredSize ().width,
                 50));
 
-        beautifyJSON = new JButton ("Beautify JSON");
+        JButton beautifyJSON = new JButton ("Beautify JSON");
         beautifyJSON.addActionListener (new ActionListener () {
             @Override
             public void actionPerformed (ActionEvent e) {

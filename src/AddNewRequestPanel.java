@@ -85,43 +85,23 @@ public class AddNewRequestPanel extends JPanel
 
         constraints.fill = GridBagConstraints.BOTH;
         constraints.insets = new Insets (10,35,10,35);
-        addComponent (label,0,0,1,layout,constraints,basePanel);
+        GridBagAdder.addComponent (label,0,0,1,layout,constraints,basePanel);
         constraints.weightx = 0.5;
         constraints.insets = new Insets (0,35,10,35);
-        addComponent (textField,1,0,35,layout,constraints,basePanel);
+        GridBagAdder.addComponent
+                (textField,1,0,35,layout,constraints,basePanel);
         constraints.weightx = 0.0;
-        addComponent (requestType,1,35,4,layout,constraints,basePanel);
+        GridBagAdder.addComponent
+                (requestType,1,35,4,layout,constraints,basePanel);
         constraints.insets = new Insets (10,35,10,35);
-        addComponent (new JSeparator (SwingConstants.HORIZONTAL),2,0,45
+        GridBagAdder.addComponent
+                (new JSeparator (SwingConstants.HORIZONTAL),2,0,45
                 ,layout,constraints,basePanel);
-        addComponent (hint,4,0,35,layout,constraints,basePanel);
+        GridBagAdder.addComponent (hint,4,0,35,layout,constraints,basePanel);
 
     }
 
-    /**
-     * add a component to gridBag layout in base frame
-     * height is one
-     * @param component component
-     * @param row row
-     * @param col col
-     * @param width width
-     * @param layout layout
-     * @param constraints constrains for layout
-     * @param panel base panel
-     */
-    public static void addComponent (JComponent component, int row, int col, int width,
-                              GridBagLayout layout, GridBagConstraints constraints,
-                              JPanel panel) {
-        if (layout == null || constraints  == null)
-            throw new InputMismatchException ("inValid input");
-        constraints.gridy = row;
-        constraints.gridx = col;
-        constraints.gridheight = 1;
-        constraints.gridwidth = width;
 
-        layout.setConstraints (component, constraints);
-        panel.add (component);
-    }
 
     /**
      * @return Name of New request

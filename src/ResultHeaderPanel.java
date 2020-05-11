@@ -78,7 +78,7 @@ public class ResultHeaderPanel extends JPanel
                 new ResultKeyAndValue ("NAME","VALUE",colorThemeForBackGround,
                         Color.GRAY);
         basePanel.add(fixedResultKeyAndValue);
-        add(QueryPanel.fetchToJScrollPane (basePanel));
+        add(ScrollPaneAdder.fetchToJScrollPane (basePanel));
         for (int i = 0; i < 14; i++)
             addResultKeyAndValue ("sdfsadfasdf","dsfas");
         for (int i = 0; i < 14; i++)

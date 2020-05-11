@@ -1,15 +1,21 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.InputMismatchException;
 
+/**
+ * this class represents Bearer panel in body types in second Panel
+ *
+ * @author Amir Naziri
+ */
 public class BearerPanel extends JPanel
 {
-    private JTextField tokenText;
-    private JTextField prefixText;
-    private JCheckBox enabled;
+    private JTextField tokenText; // token text
+    private JTextField prefixText; // prefix text
+    private JCheckBox enabled; // enable button
 
-
+    /**
+     * creates a BearerPanel
+     */
     public BearerPanel ()
     {
         super();
@@ -18,6 +24,9 @@ public class BearerPanel extends JPanel
         setBackground (new Color (40, 38, 37, 255));
     }
 
+    /**
+     * create basePanel which has component init
+     */
     private void addBaseComponents ()
     {
         GridBagConstraints constraints = new GridBagConstraints ();
@@ -64,37 +73,30 @@ public class BearerPanel extends JPanel
         constraints.insets = new Insets (7,15,7,15);
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridy = 20;
-        addComponent (fake,0,0,21,constraints,layout,basePanel);
+        GridBagAdder.addComponent (fake,0,0,21,layout,constraints,basePanel);
 
-        addComponent (token,1,0,1,constraints,layout,basePanel);
+        GridBagAdder.addComponent (token,1,0,1,layout,constraints,basePanel);
 
         constraints.weightx = 0.5;
-        addComponent (tokenPanel,1,1,20,constraints,layout,basePanel);
+        GridBagAdder.addComponent
+                (tokenPanel,1,1,20,layout,constraints,basePanel);
 
-        addComponent (prefixPanel,2,1,20,constraints,layout,basePanel);
+        GridBagAdder.addComponent
+                (prefixPanel,2,1,20,layout,constraints,basePanel);
 
         constraints.weightx = 0.0;
-        addComponent (prefix,2,0,1,constraints,layout,basePanel);
+        GridBagAdder.addComponent
+                (prefix,2,0,1,layout,constraints,basePanel);
 
-        addComponent (enabled,3,0,2,constraints,layout,basePanel);
+        GridBagAdder.addComponent
+                (enabled,3,0,2,layout,constraints,basePanel);
         add(basePanel,BorderLayout.NORTH);
 
     }
 
-    private void addComponent (JComponent component, int row, int col, int width,
-                               GridBagConstraints constraints, GridBagLayout layout,
-                               JPanel panel)
-    {
-        if (constraints == null || layout == null || panel == null)
-            throw new InputMismatchException ("inValid input");
-        constraints.gridx = col;
-        constraints.gridy = row;
-        constraints.gridwidth = width;
-        constraints.gridheight = 1;
-        layout.setConstraints (component,constraints);
-        panel.add(component);
-    }
-
+    /**
+     * this class handles all components in this panel
+     */
     private class ComponentHandler extends MouseAdapter
         implements ItemListener {
 

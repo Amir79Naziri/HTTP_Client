@@ -1,8 +1,17 @@
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * this class represents a null panel which is a empty panel for when there is n't
+ * any Data
+ */
 public class NullPanel extends JPanel
 {
+    /**
+     * create a null panel
+     * @param type 1 for secondPanel
+     *             2 for thirdPanel
+     */
     public NullPanel (int type)
     {
         super();
@@ -30,5 +39,4 @@ public class NullPanel extends JPanel
         add(upper,BorderLayout.NORTH);
         add(center,BorderLayout.CENTER);
     }
-
 }
