@@ -54,7 +54,7 @@ public class KeyAndValue extends JPanel
     {
         if (keyName == null || valueName == null)
             throw new NullPointerException ("inValid input");
-        settings = new JButton (new ImageIcon ("./images/data.png"));
+        settings = new JButton (theme.getData ());
         settings.setBackground (theme.getBackGroundColorV4 ());
         settings.setFocusable (false);
         settings.setFocusPainted (false);
@@ -88,8 +88,8 @@ public class KeyAndValue extends JPanel
         active.addItemListener (componentHandler);
 
 
-        delete = new JButton (new ImageIcon ("./images/trashR1.png"));
-        delete.setRolloverIcon (new ImageIcon ("./images/trashR2.png"));
+        delete = new JButton (theme.getTrashR1 ());
+        delete.setRolloverIcon (theme.getTrashR2 ());
         delete.setRolloverEnabled (true);
         delete.setPreferredSize (new Dimension (16,16));
         delete.setBackground (theme.getBackGroundColorV4 ());
@@ -114,7 +114,7 @@ public class KeyAndValue extends JPanel
         constraints.ipadx = 0;
         GridBagAdder.addComponent (active,0,31,1,layout,constraints,this);
         constraints.ipady = -13;
-        constraints.ipadx = -30;
+        constraints.ipadx = -31;
         GridBagAdder.addComponent (delete,0,32,1,layout,constraints,this);
     }
 
@@ -124,10 +124,9 @@ public class KeyAndValue extends JPanel
             throw new NullPointerException ("inValid input");
 
 
-        settings = new JButton ("a");
-        settings.setBackground (theme.getBackGroundColorV4 ());
-        settings.setFocusable (true);
-        settings.setFocusPainted (true);
+        settings = new JButton (theme.getGear ());
+        settings.setFocusable (false);
+
 
         JPanel panelKey = new JPanel ();
         key = new JTextField (keyName);
@@ -157,8 +156,8 @@ public class KeyAndValue extends JPanel
 
         constraints.insets = new Insets (2,5,2,5);
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.ipady = -13;
-        constraints.ipadx = -17;
+        constraints.ipady = -16;
+        constraints.ipadx = -30;
         GridBagAdder.addComponent (settings,0,0,1,layout,constraints,this);
         constraints.weightx = 0.5;
         constraints.ipady = 32;

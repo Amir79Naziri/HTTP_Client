@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.*;
 import java.io.Serializable;
 
@@ -8,13 +9,26 @@ public enum Theme implements Serializable
             new Color (45, 46, 42, 255),
             new Color (60, 62, 63, 255),
             new Color (40, 38, 37, 255),
-            new Color (109, 109, 109))
+            new Color (109, 109, 109),
+            new ImageIcon ("./images/trashR1.png"),
+            new ImageIcon ("./images/trashR2.png"),
+            new ImageIcon ("./images/data.png"),
+            new ImageIcon ("./images/addR1.png"),
+            new ImageIcon ("./images/addR2.png"),
+            new ImageIcon ("./images/gear.png")
+            )
     , WHITE (Color.DARK_GRAY,Color.DARK_GRAY,Color.LIGHT_GRAY,
             new Color (221, 221, 221),
             new Color (221, 221, 221),
             new Color (192, 194, 195, 255),
             Color.WHITE,
-            Color.GRAY);
+            Color.GRAY,
+        new ImageIcon ("./images/trashwR1.png"),
+        new ImageIcon ("./images/trashwR2.png"),
+        new ImageIcon ("./images/dataw.png"),
+        new ImageIcon ("./images/addwR1.png"),
+        new ImageIcon ("./images/addwR2.png"),
+        new ImageIcon ("./images/gearw.png"));
 
     private Color foreGroundColorV1;
     private Color foreGroundColorV2;
@@ -24,10 +38,18 @@ public enum Theme implements Serializable
     private Color backGroundColorV3; // request Hover
     private Color backGroundColorV4; // secondPanel and third panels backGround
     private Color backGroundColorV5; // background for resultHeaderKeyAndValue
+    private ImageIcon trashR1;
+    private ImageIcon trashR2;
+    private ImageIcon addR1;
+    private ImageIcon addR2;
+    private ImageIcon data;
+    private ImageIcon gear;
 
     Theme (Color foreGroundColorV1, Color foreGroundColorV2, Color foreGroundColorV3,
            Color backGroundColorV1, Color backGroundColorV2, Color backGroundColorV3,
-           Color backGroundColorV4, Color backGroundColorV5)
+           Color backGroundColorV4, Color backGroundColorV5, ImageIcon trashR1,
+           ImageIcon trashR2, ImageIcon data, ImageIcon addR1, ImageIcon addR2,
+           ImageIcon gear)
     {
         this.foreGroundColorV1 = foreGroundColorV1;
         this.foreGroundColorV2 = foreGroundColorV2;
@@ -37,6 +59,12 @@ public enum Theme implements Serializable
         this.backGroundColorV3 = backGroundColorV3;
         this.backGroundColorV4 = backGroundColorV4;
         this.backGroundColorV5 = backGroundColorV5;
+        this.addR1 = addR1;
+        this.addR2 = addR2;
+        this.data = data;
+        this.trashR1 = trashR1;
+        this.trashR2 = trashR2;
+        this.gear = gear;
     }
 
     public Color getBackGroundColorV1 () {
@@ -69,5 +97,29 @@ public enum Theme implements Serializable
 
     public Color getBackGroundColorV5 () {
         return backGroundColorV5;
+    }
+
+    public ImageIcon getAddR1 () {
+        return addR1;
+    }
+
+    public ImageIcon getAddR2 () {
+        return addR2;
+    }
+
+    public ImageIcon getData () {
+        return data;
+    }
+
+    public ImageIcon getTrashR1 () {
+        return trashR1;
+    }
+
+    public ImageIcon getTrashR2 () {
+        return trashR2;
+    }
+
+    public ImageIcon getGear () {
+        return gear;
     }
 }

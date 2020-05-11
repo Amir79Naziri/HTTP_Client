@@ -112,10 +112,7 @@ public class OptionPanel extends JPanel
                     data.setTheme (Theme.DARK);
                 else
                     data.setTheme (Theme.WHITE);
-
             }
-
-
         }
     }
 }

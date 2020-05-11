@@ -72,8 +72,8 @@ public class FirstPanel extends JPanel
                 new EmptyBorder (1,5,1,5)));
 
         addRequest = new JButton ();
-        addRequest.setIcon (new ImageIcon ("./images/addR1.png"));
-        addRequest.setRolloverIcon (new ImageIcon ("./images/addR2.png"));
+        addRequest.setIcon (theme.getAddR1 ());
+        addRequest.setRolloverIcon (theme.getAddR2 ());
         addRequest.setRolloverEnabled (true);
         addRequest.setBackground (theme.getBackGroundColorV2 ());
         addRequest.addActionListener (buttonHandler);
@@ -94,8 +94,8 @@ public class FirstPanel extends JPanel
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
         constraints.weightx = 0.0;
-        constraints.ipady = -15;
-        constraints.ipadx = -30;
+        constraints.ipady = -19;
+        constraints.ipadx = -32;
 
         layout.setConstraints (addRequest,constraints);
         filterPanel.add(addRequest);
