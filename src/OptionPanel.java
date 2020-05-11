@@ -2,22 +2,27 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import java.util.InputMismatchException;
 
 
 public class OptionPanel extends JPanel
 {
-    private JCheckBox followRedirect;
-    private JCheckBox hideInSystemTray;
-    private JComboBox<String> themeChoose;
-    private GUI gui;
+    private transient JCheckBox followRedirect;
+    private transient JCheckBox hideInSystemTray;
+    private transient JComboBox<String> themeChoose;
+
+    OptionData data;
 
 
-    public OptionPanel (GUI gui)
+    public OptionPanel (OptionData optionData)
     {
         super();
-        this.gui = gui;
+        if (optionData == null)
+            throw new InputMismatchException ("inValid input");
         setLayout (new BorderLayout (5, 5));
         setSize (400,200);
+        data = optionData;
         addBasePanel ();
     }
 
@@ -36,16 +41,28 @@ public class OptionPanel extends JPanel
 
         followRedirect = new JCheckBox ("Follow Redirect");
         followRedirect.setBackground (Color.WHITE);
+        followRedirect.addItemListener (componentHandler);
+        if (data.isFollowRedirect ())
+            followRedirect.setSelected (true);
 
         hideInSystemTray = new JCheckBox ("Hide in System Tray");
         hideInSystemTray.setBackground (Color.WHITE);
         hideInSystemTray.addItemListener (componentHandler);
+        if (data.isHideInSystemTray ())
+            hideInSystemTray.setSelected (true);
+
 
         JLabel label = new JLabel ("Theme :  ");
 
         String[] themes = {"Dark", "White"};
         themeChoose = new JComboBox<> (themes);
+        themeChoose.addItemListener (componentHandler);
         themeChoose.setBackground (Color.WHITE);
+        if (data.getTheme () == 0)
+            themeChoose.setSelectedIndex (0);
+        else
+            themeChoose.setSelectedIndex (1);
+
 
 
         constraints.insets = new Insets (15,15,0,20);
@@ -64,23 +81,37 @@ public class OptionPanel extends JPanel
     }
 
 
-    private class ComponentHandler implements ActionListener, ItemListener
+    private class ComponentHandler implements ItemListener
     {
-        @Override
-        public void actionPerformed (ActionEvent e) {
-
-        }
 
         @Override
         public void itemStateChanged (ItemEvent e) {
             if (e.getSource () == hideInSystemTray && hideInSystemTray.isSelected ())
             {
-                gui.setShouldHideInSystemTray (true);
+                data.setHideInSystemTray (true);
+                System.out.println (data.isHideInSystemTray ());
             }
             else if (e.getSource () == hideInSystemTray && !(hideInSystemTray.isSelected ()))
             {
-                gui.setShouldHideInSystemTray (false);
+                data.setHideInSystemTray (false);
+                System.out.println (data.isHideInSystemTray ());
+            } else if (e.getSource () == followRedirect && followRedirect.isSelected ())
+            {
+                data.setFollowRedirect (true);
+                System.out.println (data.isFollowRedirect ());
+            } else if (e.getSource () == followRedirect && !(followRedirect.isSelected ()))
+            {
+                data.setFollowRedirect (false);
+                System.out.println (data.isFollowRedirect ());
+            } else if (e.getSource () == themeChoose)
+            {
+                if (themeChoose.getSelectedIndex () == 0)
+                    data.setTheme (0);
+                else
+                    data.setTheme (1);
+                System.out.println (data.getTheme ());
             }
+
         }
     }
 }

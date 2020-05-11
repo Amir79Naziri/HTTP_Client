@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.InputMismatchException;
 
 public class GUI
@@ -25,9 +26,9 @@ public class GUI
     private MenuItem trayAbout;
     private MenuItem trayHelp;
     private JMenuItem help;
-    private boolean shouldHideInSystemTray;
     private final SystemTray systemTray = SystemTray.getSystemTray ();
     private boolean isFullScreen;
+    private OptionData optionData;
 
     private TrayIcon trayIcon;
 
@@ -52,7 +53,9 @@ public class GUI
         baseFrame.setSize (1350,670);
         baseFrame.addWindowListener (new ComponentHandler ());
         baseFrame.setLayout (new BorderLayout ());
-        optionPanel = new OptionPanel (this);
+        optionData = new OptionData ();
+        loadOptionData ();
+        optionPanel = new OptionPanel (optionData);
         firstPanel = new FirstPanel (this);
         secondPanel = new NullPanel (1);
         thirdPanel = new NullPanel (2);
@@ -62,11 +65,36 @@ public class GUI
         splitPane.setLeftComponent (firstPanel);
         splitPane.setRightComponent (splitPane2);
         baseFrame.add (splitPane);
+
     }
 
-    public void setShouldHideInSystemTray (boolean shouldHideInSystemTray) {
-        this.shouldHideInSystemTray = shouldHideInSystemTray;
+    private void saveOptionData ()
+    {
+        try(ObjectOutputStream out = new ObjectOutputStream (new FileOutputStream (
+                new File ("./data/optionData.ser"))))
+        {
+            out.writeObject (optionData);
+        } catch (IOException e)
+        {
+            e.printStackTrace ();
+        }
     }
+
+    private void loadOptionData ()
+    {
+        try(ObjectInputStream in = new ObjectInputStream (new FileInputStream (
+                new File ("./data/optionData.ser"))))
+        {
+            optionData = (OptionData)in.readObject ();
+        } catch (FileNotFoundException ignore)
+        {
+        } catch (IOException | ClassNotFoundException e)
+        {
+            e.printStackTrace ();
+        }
+    }
+
+
 
     private void createTrayIcon ()
     {
@@ -257,7 +285,8 @@ public class GUI
                         getOptionPanel (),"Option",JOptionPane.PLAIN_MESSAGE);
             } else if (e.getSource () == exit)
             {
-                if (shouldHideInSystemTray && SystemTray.isSupported ()) {
+                saveOptionData ();
+                if (optionData.isHideInSystemTray () && SystemTray.isSupported ()) {
                     try {
                         systemTray.add (trayIcon);
                         baseFrame.setVisible (false);
@@ -269,6 +298,7 @@ public class GUI
                     System.exit (0);
             } else if (e.getSource () == instantlyExit)
             {
+                saveOptionData ();
                 System.exit (0);
             } else if (e.getSource () == toggleFullScreen)
             {
@@ -297,7 +327,8 @@ public class GUI
 
         @Override
         public void windowClosing (WindowEvent e) {
-            if (shouldHideInSystemTray && SystemTray.isSupported ()) {
+            saveOptionData ();
+            if (optionData.isHideInSystemTray () && SystemTray.isSupported ()) {
                 try {
                     systemTray.add (trayIcon);
                     baseFrame.setVisible (false);
@@ -309,6 +340,4 @@ public class GUI
                 System.exit (0);
         }
     }
-
-
 }
