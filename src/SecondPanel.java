@@ -3,32 +3,44 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * this class represents secondPanel in program
+ *
+ * @author Amir Naziri
+ */
 public class SecondPanel extends JPanel
 {
+    private JTextField url; // url text
+    private JComboBox<String> type; // type of request
+    private JButton send; // send button
+    private JButton save; // save button
 
-
-
-    private JTextField url;
-    private JComboBox<String> type;
-    private JButton send;
-    private JButton save;
-
+    // panel's in second Panel
     private QueryPanel queryPanel;
     private HeaderPanel headerPanel;
     private FormUrlPanel formUrlPanel;
     private JsonPanel jsonPanel;
     private BearerPanel bearerPanel;
     private BinaryFilePanel binaryFilePanel;
-    private GUI gui;
-    private Request request;
-    private Theme theme;
 
-    private JPanel programThirdPanel;
-    private final JPanel mainThirdPanel;
+    private GUI gui; // gui
+    private Request request; // request which has this panel
+    private Theme theme; // theme
 
+    private JPanel programThirdPanel; // third panel which user will see , it is null panel at first
+    private final JPanel mainThirdPanel; // main third panel for  request
+
+    /**
+     * creates a new SecondPanel
+     * @param gui gui
+     * @param request owner request
+     * @param theme theme
+     */
     public SecondPanel (GUI gui,Request request, Theme theme)
     {
         super();
+        if (gui == null || request == null || theme == null)
+            throw new NullPointerException ("inValid input");
         this.theme = theme;
         mainThirdPanel = new ThirdPanel (theme);
         this.gui = gui;
@@ -39,6 +51,9 @@ public class SecondPanel extends JPanel
         createBasePanel ();
     }
 
+    /**
+     * creates url panel in second panel
+     */
     private void createURLPanel ()
     {
         GridBagConstraints constraints = new GridBagConstraints ();
@@ -85,7 +100,9 @@ public class SecondPanel extends JPanel
         add(urlPanel,BorderLayout.NORTH);
     }
 
-
+    /**
+     * create base panel in second panel
+     */
     private void createBasePanel ()
     {
 
@@ -139,10 +156,17 @@ public class SecondPanel extends JPanel
         add (tabbedPane,BorderLayout.CENTER);
     }
 
+    /**
+     * @return program third panel
+     */
     public JPanel getProgramThirdPanel () {
         return programThirdPanel;
     }
 
+
+    /**
+     * this class handles components in this panel
+     */
     private class ComponentHandler extends KeyAdapter
         implements ActionListener, ItemListener
     {

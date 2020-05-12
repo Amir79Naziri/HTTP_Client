@@ -2,14 +2,23 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-
+/**
+ * this class represents visual preview panel in third panel
+ *
+ * @author Amir Naziri
+ */
 public class VisualPreviewPanel extends JPanel
 {
 
-    private JLabel imageLabel;
-    private boolean hasError;
-    private Theme theme;
+//    private JLabel imageLabel;
+    private boolean hasError; // has error to load image
+    private Theme theme; // theme
 
+    /**
+     * creates a new visual panel
+     * @param imageIcon imageIcon
+     * @param theme theme
+     */
     public VisualPreviewPanel (ImageIcon imageIcon, Theme theme)
     {
         super();
@@ -50,7 +59,9 @@ public class VisualPreviewPanel extends JPanel
 //        add(imagePanel);
 //    }
 
-
+    /**
+     * adds text message to panel
+     */
     private void addTextArea ()
     {
         JTextArea textArea = new JTextArea ("Error: URL using bad/illegal format or missing URL");
@@ -60,6 +71,4 @@ public class VisualPreviewPanel extends JPanel
         textArea.setBackground (theme.getBackGroundColorV4 ());
         add (textArea,BorderLayout.NORTH);
     }
-
-
 }

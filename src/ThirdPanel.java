@@ -4,27 +4,42 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.InputMismatchException;
 
+
+/**
+ * this class represents third panel in program
+ *
+ * @author Amir Naziri
+ */
 public class ThirdPanel extends JPanel
 {
-    private JLabel statusMessage;
-    private JLabel time;
-    private JLabel size;
+    private JLabel statusMessage; // status message
+    private JLabel time; // time
+    private JLabel size; // size
+    // third panel base panel's
     private RawPanel rawPanel;
     private VisualPreviewPanel visualPreviewPanel;
     private ResultHeaderPanel resultHeaderPanel;
-    private Theme theme;
+    private Theme theme; // theme
 
+    /**
+     * creates new Third panel
+     * @param theme theme
+     */
     public ThirdPanel (Theme theme)
     {
         super();
+        if (theme == null)
+            throw new NullPointerException ("inValid input");
         this.theme = theme;
         setLayout (new BorderLayout ());
         addHeaderStatuses ();
         addBasePanel ();
     }
 
+    /**
+     * add header for statuses
+     */
     private void addHeaderStatuses ()
     {
         JPanel headerStatus = new JPanel ();
@@ -55,9 +70,14 @@ public class ThirdPanel extends JPanel
         add(headerStatus,BorderLayout.NORTH);
     }
 
+    /**
+     * create label for status
+     * @param label label
+     * @param width width of label
+     */
     private void createLabel (JLabel label, int width) {
         if (label == null)
-            throw new InputMismatchException ("inValid input");
+            throw new NullPointerException ("inValid input");
         label.setForeground (Color.WHITE);
         label.setOpaque (true);
         label.setPreferredSize (new Dimension (width,25));
@@ -66,6 +86,9 @@ public class ThirdPanel extends JPanel
         label.setHorizontalAlignment (SwingConstants.CENTER);
     }
 
+    /**
+     * add base panel
+     */
     private void addBasePanel ()
     {
         rawPanel = new RawPanel (theme);
@@ -104,5 +127,4 @@ public class ThirdPanel extends JPanel
         tabbedPane.addTab ("Header",resultHeaderPanel);
 
     }
-
 }

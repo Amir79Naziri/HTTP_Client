@@ -1,10 +1,12 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.util.InputMismatchException;
+
 
 /**
  * this class build for adding a scrollPane to panel
+ *
+ * @author Amir Naziri
  */
 public class ScrollPaneAdder
 {

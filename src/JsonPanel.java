@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 
 /**
  * this class build for representing JSON panel in second panel
+ *
+ * @author Amir Naziri
  */
 public class JsonPanel extends JPanel
 {

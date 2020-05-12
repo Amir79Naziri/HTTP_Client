@@ -92,6 +92,8 @@ public class ResultHeaderPanel extends JPanel
      */
     public void addResultKeyAndValue (String key, String value)
     {
+        if (key == null || value == null)
+            throw new NullPointerException ("inValid input");
         if (whichColor == 1)
         {
             ResultKeyAndValue resultKeyAndValue

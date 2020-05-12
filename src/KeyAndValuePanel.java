@@ -1,25 +1,33 @@
 import javax.swing.*;
 import java.awt.*;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-
-
+/**
+ * this class represents a key and value panel
+ *
+ * @author Amir Naziri
+ */
 public class KeyAndValuePanel extends JPanel
 {
-    private ArrayList<KeyAndValue> keyAndValues;
-    private KeyAndValue fixedKeyAndValue;
-    private JPopupMenu popupMenu;
-    private JMenuItem toggleDescription;
-    private JMenuItem deleteAll;
-    private String key;
-    private String value;
-    private Theme theme;
+    private ArrayList<KeyAndValue> keyAndValues; // list of key and values
+    private KeyAndValue fixedKeyAndValue; // fixed key and values
+    private JPopupMenu popupMenu; // pop up menu for setting
+    private JMenuItem toggleDescription; // toggle description
+    private JMenuItem deleteAll; // delete all
+    private String key; // key
+    private String value; // value
+    private Theme theme; // theme
 
+    /**
+     * creates a new keyAndValue panel
+     * @param key key
+     * @param value value
+     * @param theme theme
+     */
     public KeyAndValuePanel (String key, String value, Theme theme)
     {
         super();
@@ -49,14 +57,20 @@ public class KeyAndValuePanel extends JPanel
         popupMenu.add (toggleDescription);
     }
 
+    /**
+     * @return keyAndValue list
+     */
     public ArrayList<KeyAndValue> getKeyAndValues () {
         return keyAndValues;
     }
 
+    /**
+     * add a new key and value
+     */
     public void addNewKeyAndValue ()
     {
         KeyAndValue keyAndValue = new KeyAndValue (key, value,true,
-                fixedKeyAndValue.getPanelDesc ().isVisible (),theme);
+                fixedKeyAndValue.isPanelDescVisible (),theme);
         getKeyAndValues ().add (keyAndValue);
         add (keyAndValue,keyAndValues.size () - 1);
         JSeparator separator = new JSeparator ();
@@ -65,6 +79,9 @@ public class KeyAndValuePanel extends JPanel
         keyAndValue.setVisible (true);
     }
 
+    /**
+     * toggle description for keyAndValues
+     */
     public void toggleAllDescription ()
     {
         for (KeyAndValue keyAndValue : keyAndValues)
@@ -72,6 +89,9 @@ public class KeyAndValuePanel extends JPanel
         fixedKeyAndValue.toggleDescription ();
     }
 
+    /**
+     * delete all keyAndValues
+     */
     public void deleteAll ()
     {
         for (KeyAndValue keyAndValue : keyAndValues)
@@ -81,6 +101,10 @@ public class KeyAndValuePanel extends JPanel
 //            keyAndValues.remove (keyAndValue);
         }
     }
+
+    /**
+     * this class handles components in this panel
+     */
     private class ComponentHandler extends MouseAdapter
             implements ActionListener
     {

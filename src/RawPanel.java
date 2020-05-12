@@ -2,11 +2,20 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
+/**
+ * this class represents Raw panel in third panel
+ *
+ * @author Amir Naziri
+ */
 public class RawPanel extends JPanel
 {
-    private JTextArea textArea;
-    private Theme theme;
+    private JTextArea textArea; // text
+    private Theme theme; // theme
 
+    /**
+     * create a new Raw panel
+     * @param theme theme
+     */
     public RawPanel (Theme theme)
     {
         super();
@@ -18,6 +27,9 @@ public class RawPanel extends JPanel
 
     }
 
+    /**
+     * adds the textArea to basePanel
+     */
     private void addTextArea ()
     {
         textArea = new JTextArea ("Error: URL using bad/illegal format or missing URL");
@@ -37,6 +49,9 @@ public class RawPanel extends JPanel
         add(scrollPane);
     }
 
+    /**
+     * @return textArea
+     */
     public JTextArea getTextArea () {
         return textArea;
     }

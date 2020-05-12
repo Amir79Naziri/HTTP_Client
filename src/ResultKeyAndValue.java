@@ -24,6 +24,9 @@ public class ResultKeyAndValue extends JPanel
     public ResultKeyAndValue (String key, String value, Color backGround,
                               Color colorThemeForForeGround)
     {
+        super();
+        if (key == null || value == null || backGround == null || colorThemeForForeGround == null)
+            throw new NullPointerException ("inValid input");
         // constrains
         GridBagConstraints constraints = new GridBagConstraints ();
         // layout

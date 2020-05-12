@@ -3,18 +3,28 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
-
+/**
+ * this class represents a request in firstPanel
+ *
+ * @author Amir Naziri
+ */
 public class Request extends JPanel
 {
-    private JPanel chose;
-    private final SecondPanel secondPanel;
-    private JPopupMenu popupMenu;
-    private RequestType requestType;
-    private boolean isDeleted;
-    private JLabel typeLabel;
-    private JLabel nameLabel;
+    private JPanel chose; // chose mark
+    private final SecondPanel secondPanel; // secondPanel belong to request
+    private JPopupMenu popupMenu; // popUpMenu for delete or rename
+    private RequestType requestType; // requestType
+    private boolean isDeleted; // is Deleted
+    private JLabel typeLabel; // type label
+    private JLabel nameLabel; // name label
 
+    /**
+     * create a new request
+     * @param requestType request type
+     * @param name name of request
+     * @param gui gui
+     * @param theme theme
+     */
     public Request (RequestType requestType, String name, GUI gui, Theme theme)
     {
         super();
@@ -79,7 +89,10 @@ public class Request extends JPanel
         add (nameLabel);
     }
 
-
+    /**
+     * set a type for request
+     * @param requestType request type
+     */
     public void setRequestType (RequestType requestType) {
         if (requestType == null)
             throw new NullPointerException ("inValid input");
@@ -90,19 +103,32 @@ public class Request extends JPanel
         setVisible (true);
     }
 
-
+    /**
+     * is request deleted
+     * @return isDeleted
+     */
     public boolean isDeleted () {
         return isDeleted;
     }
 
+    /**
+     * setIsDelete true
+     */
     public void delete () {
         isDeleted = true;
     }
 
+    /**
+     * @return popUpMenu
+     */
     public JPopupMenu getPopupMenu () {
         return popupMenu;
     }
 
+    /**
+     * set chose panel visibility
+     * @param visibly visibly
+     */
     public void setChoseVisibly (boolean visibly) {
         chose.setVisible (visibly);
     }
@@ -122,21 +148,33 @@ public class Request extends JPanel
         return new Dimension (350,38);
     }
 
+    /**
+     * is requestSelected
+     * @return is Selected
+     */
+    public boolean isSelected ()
+    {
+        return chose.isVisible ();
+    }
 
-//    public boolean isSelected ()
-//    {
-//        return chose.isVisible ();
-//    }
-
+    /**
+     * @return getSecond panel
+     */
     public SecondPanel getSecondPanel () {
         return secondPanel;
     }
 
-
+    /**
+     * @return name Label
+     */
     public JLabel getNameLabel () {
         return nameLabel;
     }
 
+    /**
+     * gets requestType
+     * @return request type
+     */
     public RequestType getRequestType () {
         return requestType;
     }

@@ -8,16 +8,22 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * this class represents a binary file panel in secondPanel
+ *
+ * @author Amir Naziri
+ */
 public class BinaryFilePanel extends JPanel
 {
-    private JTextField fileAddress;
-    private JButton chooseFile;
-    private JButton resetFile;
-    private JFileChooser fileChooser;
-    private Theme theme;
+    private JTextField fileAddress; // fileAddress
+    private JButton chooseFile; // chooseFileButton
+    private JButton resetFile; // reset file
+    private Theme theme; // theme
 
-
-
+    /**
+     * creates a new binary file panel
+     * @param theme theme
+     */
     public BinaryFilePanel (Theme theme)
     {
         super();
@@ -29,6 +35,9 @@ public class BinaryFilePanel extends JPanel
         addComponent ();
     }
 
+    /**
+     * add components to base Panel
+     */
     private void addComponent ()
     {
         GridBagConstraints constraints = new GridBagConstraints ();
@@ -78,9 +87,13 @@ public class BinaryFilePanel extends JPanel
         add(basePanel,BorderLayout.NORTH);
     }
 
+    /**
+     * use filChooser to choose file
+     * @return path of file
+     */
     private Path useFileChooser ()
     {
-        fileChooser = new JFileChooser ();
+        JFileChooser fileChooser = new JFileChooser ();
         fileChooser.setFileSelectionMode (JFileChooser.FILES_ONLY);
         int res = fileChooser.showOpenDialog (this);
 
@@ -90,6 +103,11 @@ public class BinaryFilePanel extends JPanel
         return fileChooser.getSelectedFile ().toPath ();
     }
 
+    /**
+     * change the the data size to humanReadable form
+     * @param size input size
+     * @return humanReadable form
+     */
     private String makeSizeReadable (long size)
     {
         if (size < 1024)
@@ -107,7 +125,9 @@ public class BinaryFilePanel extends JPanel
 
     }
 
-
+    /**
+     * do task on path
+     */
     private void pathHandler ()
     {
         Path path = useFileChooser ();
@@ -127,6 +147,9 @@ public class BinaryFilePanel extends JPanel
 
     }
 
+    /**
+     * class for button handling
+     */
     private class ButtonHandler implements ActionListener
     {
         @Override
@@ -137,6 +160,4 @@ public class BinaryFilePanel extends JPanel
                 fileAddress.setText ("No file selected");
         }
     }
-
-
 }

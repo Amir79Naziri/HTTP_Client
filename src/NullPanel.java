@@ -1,14 +1,14 @@
-import javax.print.attribute.standard.MediaSize;
 import javax.swing.*;
 import java.awt.*;
 
 /**
  * this class represents a null panel which is a empty panel for when there is n't
  * any Data
+ *
+ * @author Amir Naziri
  */
 public class NullPanel extends JPanel
 {
-    private Theme theme;
 
     /**
      * create a null panel
@@ -20,7 +20,6 @@ public class NullPanel extends JPanel
         super();
         if (theme == null)
             throw new NullPointerException ("inValid input");
-        this.theme = theme;
         setLayout (new BorderLayout ());
         JPanel upper = new JPanel ();
 

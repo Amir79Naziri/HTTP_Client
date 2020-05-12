@@ -5,21 +5,25 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * this class represents firstPanel in frame
+ *
+ * @author Amir Naziri
+ */
 public class FirstPanel extends JPanel
 {
 
-    private JPanel header;
-    private JLabel title;
-    private JPanel filterPanel;
-    private Theme theme;
+    private Theme theme; // theme
+    private JButton addRequest; // add requestButton
+    private JTextField searchText; // filter text
+    private RequestsPanel requestsPanel; // request's panel
+    private GUI gui; // gui
 
-
-
-    private JButton addRequest;
-    private JTextField searchText;
-    private RequestsPanel requestsPanel;
-    private GUI gui;
-
+    /**
+     * creates a new first class
+     * @param gui gui
+     * @param theme theme
+     */
     public FirstPanel (GUI gui, Theme theme)
     {
         super();
@@ -33,14 +37,17 @@ public class FirstPanel extends JPanel
         createRequestsPanel (gui);
     }
 
+    /**
+     * creates headerPanel
+     */
     private void createHeaderPanel ()
     {
-        header = new JPanel (new BorderLayout (3,4));
+        JPanel header = new JPanel (new BorderLayout (3, 4));
         header.setPreferredSize (new Dimension (300,55));
         header.setMinimumSize ((new Dimension (200,55)));
         header.setMaximumSize ((new Dimension (850,55)));
 
-        title = new JLabel ("  HTTP client");
+        JLabel title = new JLabel ("  HTTP client");
         title.setFont (new Font ("Arial",Font.PLAIN,20));
         title.setForeground (theme.getForeGroundColorV1 ());
 
@@ -49,11 +56,14 @@ public class FirstPanel extends JPanel
         add(header);
     }
 
+    /**
+     * creates filter panel
+     */
     private void createFilterPanel ()
     {
         ButtonHandler buttonHandler = new ButtonHandler ();
 
-        filterPanel = new JPanel ();
+        JPanel filterPanel = new JPanel ();
         filterPanel.setMaximumSize (new Dimension (850,55));
         filterPanel.setPreferredSize (new Dimension (350,55));
         filterPanel.setMinimumSize (new Dimension (250,55));
@@ -104,6 +114,10 @@ public class FirstPanel extends JPanel
         filterPanel.add(addRequest);
     }
 
+    /**
+     * creates requests panel
+     * @param gui gui
+     */
     private void createRequestsPanel (GUI gui)
     {
         if (gui == null)
@@ -119,6 +133,11 @@ public class FirstPanel extends JPanel
 
     }
 
+    /**
+     * add a new request
+     * @param name name of request
+     * @param type type of request
+     */
     public void addRequest (String name, RequestType type)
     {
         if (name == null || type == null)
@@ -127,8 +146,9 @@ public class FirstPanel extends JPanel
                 addNewRequest (type,name);
     }
 
-
-
+    /**
+     * class for button Handling
+     */
     private class ButtonHandler implements ActionListener
     {
         @Override

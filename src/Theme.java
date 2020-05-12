@@ -2,6 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.Serializable;
 
+/**
+ * this class has theme init
+ *
+ * @author Amir naziri
+ */
 public enum Theme implements Serializable
 {
     DARK (Color.WHITE, Color.LIGHT_GRAY,Color.DARK_GRAY,
@@ -45,6 +50,23 @@ public enum Theme implements Serializable
     private ImageIcon data;
     private ImageIcon gear;
 
+    /**
+     * create new Theme
+     * @param foreGroundColorV1 foreGroundColorVersion1
+     * @param foreGroundColorV2 foreGroundColorVersion2
+     * @param foreGroundColorV3 foreGroundColorVersion3
+     * @param backGroundColorV1 backGroundColorVersion1
+     * @param backGroundColorV2 backGroundColorVersion2
+     * @param backGroundColorV3 backGroundColorVersion3
+     * @param backGroundColorV4 backGroundColorVersion4
+     * @param backGroundColorV5 backGroundColorVersion5
+     * @param trashR1 trash icon
+     * @param trashR2 rollover trash icon
+     * @param data data icon
+     * @param addR1 add new request icon
+     * @param addR2 rollover add new request icon
+     * @param gear gear icon
+     */
     Theme (Color foreGroundColorV1, Color foreGroundColorV2, Color foreGroundColorV3,
            Color backGroundColorV1, Color backGroundColorV2, Color backGroundColorV3,
            Color backGroundColorV4, Color backGroundColorV5, ImageIcon trashR1,
@@ -67,58 +89,100 @@ public enum Theme implements Serializable
         this.gear = gear;
     }
 
+    /**
+     * @return backGroundColorV1
+     */
     public Color getBackGroundColorV1 () {
         return backGroundColorV1;
     }
 
+    /**
+     * @return backGroundColorV2
+     */
     public Color getBackGroundColorV2 () {
         return backGroundColorV2;
     }
 
+    /**
+     * @return backGroundColorV3
+     */
     public Color getBackGroundColorV3 () {
         return backGroundColorV3;
     }
 
+    /**
+     * @return backGroundColorV4
+     */
     public Color getBackGroundColorV4 () {
         return backGroundColorV4;
     }
 
+    /**
+     * @return foreGroundColorV1
+     */
     public Color getForeGroundColorV1 () {
         return foreGroundColorV1;
     }
 
+    /**
+     * @return foreGroundColorV2
+     */
     public Color getForeGroundColorV2 () {
         return foreGroundColorV2;
     }
 
+    /**
+     * @return foreGroundColorV3
+     */
     public Color getForeGroundColorV3 () {
         return foreGroundColorV3;
     }
 
+    /**
+     * @return backGroundColorV5
+     */
     public Color getBackGroundColorV5 () {
         return backGroundColorV5;
     }
 
+    /**
+     * @return addR1
+     */
     public ImageIcon getAddR1 () {
         return addR1;
     }
 
+    /**
+     * @return addR2
+     */
     public ImageIcon getAddR2 () {
         return addR2;
     }
 
+    /**
+     * @return data
+     */
     public ImageIcon getData () {
         return data;
     }
 
+    /**
+     * @return trashR1
+     */
     public ImageIcon getTrashR1 () {
         return trashR1;
     }
 
+    /**
+     * @return trashR2
+     */
     public ImageIcon getTrashR2 () {
         return trashR2;
     }
 
+    /**
+     * @return gear
+     */
     public ImageIcon getGear () {
         return gear;
     }

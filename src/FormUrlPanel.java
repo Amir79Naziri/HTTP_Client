@@ -3,18 +3,21 @@ import java.awt.*;
 
 /**
  * this class represents FormURLPanel
+ *
+ * @author Amir Naziri
  */
 public class FormUrlPanel extends JPanel
 {
     private KeyAndValuePanel keyAndValuePanel; // keyAndValue panel
-    private Theme theme;
+
     /**
      * create a new FormURL panel
      */
     public FormUrlPanel (Theme theme)
     {
         super();
-        this.theme = theme;
+        if (theme == null)
+            throw new NullPointerException ("inValid input");
         setLayout (new BorderLayout ());
         keyAndValuePanel = new KeyAndValuePanel ("name", "value",theme);
         add(ScrollPaneAdder.fetchToJScrollPane (keyAndValuePanel,theme),BorderLayout.CENTER);

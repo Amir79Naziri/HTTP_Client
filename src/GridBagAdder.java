@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.InputMismatchException;
 
 /**
  * this class made for adding a component to gridBagLayout
@@ -23,8 +22,8 @@ public class GridBagAdder
     public static void addComponent (JComponent component, int row, int col, int width,
                                      GridBagLayout layout, GridBagConstraints constraints,
                                      JPanel panel) {
-        if (layout == null || constraints  == null)
-            throw new InputMismatchException ("inValid input");
+        if (layout == null || constraints  == null || component == null || panel == null)
+            throw new NullPointerException ("inValid input");
         constraints.gridy = row;
         constraints.gridx = col;
         constraints.gridheight = 1;

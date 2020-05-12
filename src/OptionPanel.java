@@ -2,35 +2,40 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
-import java.util.InputMismatchException;
 
-
+/**
+ * this class build for optionPanel
+ *
+ * @author Amir Naziri
+ */
 public class OptionPanel extends JPanel
 {
-    private  JCheckBox followRedirect;
-    private  JCheckBox hideInSystemTray;
-    private  JComboBox<String> themeChoose;
+    private  JCheckBox followRedirect; // follow Redirect panel
+    private  JCheckBox hideInSystemTray; // hide is System tray
+    private  JComboBox<String> themeChoose; // theme choose
+    private OptionData data; // option data
+    private GUI gui; // gui
 
-
-    private OptionData data;
-    private GUI gui;
-
-
+    /**
+     * creates a new optionPanel
+     * @param optionData optionData
+     * @param gui gui
+     */
     public OptionPanel (OptionData optionData, GUI gui)
     {
         super();
+        if (gui == null || optionData == null)
+            throw new NullPointerException ("inValid input");
         this.gui = gui;
-        if (optionData == null)
-            throw new InputMismatchException ("inValid input");
         setLayout (new BorderLayout (5, 5));
         setSize (400,200);
         data = optionData;
         addBasePanel ();
     }
 
-
-
+    /**
+     * create baseComponent in base Panel
+     */
     public void addBasePanel ()
     {
         GridBagConstraints constraints = new GridBagConstraints ();
@@ -83,7 +88,9 @@ public class OptionPanel extends JPanel
                 basePanel);
     }
 
-
+    /**
+     * class for componentHandling
+     */
     private class ComponentHandler implements ItemListener
     {
 
@@ -108,6 +115,14 @@ public class OptionPanel extends JPanel
 
             } else if (e.getSource () == themeChoose)
             {
+//                int res = 0;
+//                if (e.getStateChange () == ItemEvent.SELECTED)
+//                {
+//                    res = JOptionPane.showOptionDialog (gui.getBaseFrame (),
+//                            "You should restart the program for see the change",
+//                            "Warning",JOptionPane.OK_CANCEL_OPTION,
+//                            JOptionPane.WARNING_MESSAGE,null,null,null);
+//                }
                 if (themeChoose.getSelectedIndex () == 0)
                     data.setTheme (Theme.DARK);
                 else

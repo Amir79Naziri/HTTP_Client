@@ -2,24 +2,35 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.InputMismatchException;
-
+/**
+ * this class represents a key and value type
+ *
+ * @author Amir Naziri
+ */
 public class KeyAndValue extends JPanel
 {
 
-    private JTextField key;
-    private JTextField value;
-    private JTextField describe;
-    private JPanel panelDesc;
-    private JCheckBox active;
-    private JButton delete;
-    private JButton settings;
-    private boolean showDescription;
-    private GridBagLayout layout;
-    private GridBagConstraints constraints;
-    private boolean isDeleted;
-    private Theme theme;
+    private JTextField key; // key
+    private JTextField value; // value
+    private JTextField describe; // describe
+    private JPanel panelDesc; // describe panel
+    private JCheckBox active; // active button
+    private JButton delete; // delete button
+    private JButton settings; // setting button
+    private boolean showDescription; // show description for new keyAndValue
+    private GridBagLayout layout;  // layout
+    private GridBagConstraints constraints; // constrains
+    private boolean isDeleted; // is Deleted
+    private Theme theme; // theme
 
+    /**
+     * creates a new Key and Value
+     * @param keyName keyName
+     * @param valueName valueName
+     * @param isEditable isEditable
+     * @param showDescription  should show description
+     * @param theme  theme
+     */
     public KeyAndValue (String keyName, String valueName, boolean isEditable,
                         boolean showDescription, Theme theme)
     {
@@ -42,14 +53,26 @@ public class KeyAndValue extends JPanel
 
     }
 
+    /**
+     * is deleted
+     * @return is Deleted
+     */
     public boolean isDeleted () {
         return isDeleted;
     }
 
+    /**
+     * sets IsDeleted true
+     */
     public void delete () {
         isDeleted = true;
     }
 
+    /**
+     * create components of base Panel if is editable
+     * @param keyName keyName
+     * @param valueName value Name
+     */
     private void createComponents (String keyName, String valueName)
     {
         if (keyName == null || valueName == null)
@@ -118,6 +141,11 @@ public class KeyAndValue extends JPanel
         GridBagAdder.addComponent (delete,0,32,1,layout,constraints,this);
     }
 
+    /**
+     * create components of base Panel if is not editable
+     * @param keyName keyName
+     * @param valueName value Name
+     */
     private void createComponentsV2 (String keyName, String valueName)
     {
         if (keyName == null || valueName == null)
@@ -170,33 +198,53 @@ public class KeyAndValue extends JPanel
         GridBagAdder.addComponent (fake,0,31,1,layout,constraints,this);
     }
 
-
-
+    /**
+     * @return setting button
+     */
     public JButton getSettings () {
         return settings;
     }
 
+    /**
+     * @return key textField
+     */
     public JTextField getKey () {
         return key;
     }
 
+    /**
+     * @return value textField
+     */
     public JTextField getValue () {
         return value;
     }
 
-    public JPanel getPanelDesc () {
-        return panelDesc;
+    /**
+     * @return isPanelDescVisible
+     */
+    public boolean isPanelDescVisible ()
+    {
+        return panelDesc.isVisible ();
     }
 
+    /**
+     * @return describeTextField
+     */
     public JTextField getDescribe () {
         return describe;
     }
 
+    /**
+     * creates a text panel with a underLine
+     * @param panel panel
+     * @param textField textField
+     * @param theme theme
+     */
     public static void createTextPanel (JPanel panel, JTextField textField,
                                         Theme theme) {
 
-        if (panel == null || textField == null)
-            throw new InputMismatchException ("input is not valid");
+        if (panel == null || textField == null || theme == null)
+            throw new NullPointerException ("input is not valid");
 
         panel.setBackground (theme.getBackGroundColorV4 ());
         GridBagConstraints constraints2 = new GridBagConstraints ();
@@ -218,7 +266,9 @@ public class KeyAndValue extends JPanel
         GridBagAdder.addComponent (separator,1,0,10,layout2,constraints2,panel);
     }
 
-
+    /**
+     * toggle description
+     */
     public void toggleDescription ()
     {
         if (panelDesc.isVisible ())
@@ -227,7 +277,9 @@ public class KeyAndValue extends JPanel
             panelDesc.setVisible (true);
     }
 
-
+    /**
+     * class for handling all components
+     */
     private class ComponentHandler extends MouseAdapter
             implements ActionListener, ItemListener
     {
@@ -277,7 +329,6 @@ public class KeyAndValue extends JPanel
             }
         }
     }
-
 
 
     @Override

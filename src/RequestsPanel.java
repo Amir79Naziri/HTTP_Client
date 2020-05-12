@@ -4,13 +4,22 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-
+/**
+ * this class represents requestPanel
+ *
+ * @author Amir Naziri
+ */
 public class RequestsPanel extends JPanel
 {
-    private ArrayList<Request> requests;
-    private GUI gui;
-    private Theme theme;
+    private ArrayList<Request> requests; // list of requests
+    private GUI gui; // gui
+    private Theme theme; // theme
 
+    /**
+     * creates a new requestPanel
+     * @param gui gui
+     * @param theme theme
+     */
     public RequestsPanel (GUI gui, Theme theme)
     {
         super();
@@ -23,6 +32,11 @@ public class RequestsPanel extends JPanel
         requests = new ArrayList<> ();
     }
 
+    /**
+     * adds new request
+     * @param type type of request
+     * @param name name of request
+     */
     public void addNewRequest (RequestType type, String name)
     {
         if (type == null || name == null)
@@ -38,11 +52,16 @@ public class RequestsPanel extends JPanel
         request.setVisible (true);
     }
 
+    /**
+     * @return list of requests
+     */
     public ArrayList<Request> getRequests () {
         return requests;
     }
 
-
+    /**
+     * this class handles mouse for components in this panel
+     */
     private class MouseHandler extends MouseAdapter
     {
 
