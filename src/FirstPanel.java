@@ -45,7 +45,7 @@ public class FirstPanel extends JPanel
         JPanel header = new JPanel (new BorderLayout (3, 4));
         header.setPreferredSize (new Dimension (300,55));
         header.setMinimumSize ((new Dimension (200,55)));
-        header.setMaximumSize ((new Dimension (1000,55)));
+        header.setMaximumSize ((new Dimension (1100,55)));
 
         JLabel title = new JLabel ("  HTTP client");
         title.setFont (new Font ("Arial",Font.PLAIN,20));
@@ -64,7 +64,7 @@ public class FirstPanel extends JPanel
         ButtonHandler buttonHandler = new ButtonHandler ();
 
         JPanel filterPanel = new JPanel ();
-        filterPanel.setMaximumSize (new Dimension (850,55));
+        filterPanel.setMaximumSize (new Dimension (1100,55));
         filterPanel.setPreferredSize (new Dimension (350,55));
         filterPanel.setMinimumSize (new Dimension (250,55));
         GridBagLayout layout = new GridBagLayout ();
