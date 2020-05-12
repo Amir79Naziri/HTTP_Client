@@ -5,33 +5,40 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.InputMismatchException;
 
+/**
+ * this class has the main frame in this program , splitPanes, all panels , ....
+ *
+ * @author Amir Naziri
+ */
 public class GUI
 {
 
-    private JFrame baseFrame;
-    private OptionPanel optionPanel;
-    private FirstPanel firstPanel;
-    private JPanel secondPanel;
-    private JPanel thirdPanel;
-    private JSplitPane splitPane;
-    private JSplitPane splitPane2;
-    private PopupMenu popupMenu;
-    private JMenuBar bar;
-    private JMenuItem option;
-    private JMenuItem exit;
-    private MenuItem instantlyExit;
-    private JMenuItem toggleFullScreen;
-    private JMenuItem toggleSideBar;
-    private JMenuItem about;
-    private MenuItem trayAbout;
-    private MenuItem trayHelp;
-    private JMenuItem help;
-    private final SystemTray systemTray = SystemTray.getSystemTray ();
-    private boolean isFullScreen;
-    private OptionData optionData;
-    private Theme theme ;
-    private TrayIcon trayIcon;
+    private JFrame baseFrame; // baseFrame
+    private OptionPanel optionPanel; // optionPanel
+    private FirstPanel firstPanel; // firstPanel
+    private JPanel secondPanel; // secondPanel
+    private JPanel thirdPanel; // third panel
+    private JSplitPane splitPane; // splitPane for firstPanel and splitPane2
+    private JSplitPane splitPane2; // splitPane for secondPanel and ThirdPanel
+    private PopupMenu popupMenu; // popMenu for IconTray
+    private JMenuBar bar; // menuBar
+    private JMenuItem option; // option menuItem
+    private JMenuItem exit; // exit menuItem
+    private MenuItem instantlyExit; // instantly Exit menuItem
+    private JMenuItem toggleFullScreen; // toggleFullScreen menuItem
+    private JMenuItem toggleSideBar; // toggle sideBar menuItem
+    private JMenuItem about; // about menuItem
+    private MenuItem trayAbout; // about menuItem for iconTray
+    private MenuItem trayHelp; // help menuItem for iconTray
+    private JMenuItem help; // about menuItem for iconTray
+    private final SystemTray systemTray = SystemTray.getSystemTray (); // systemTray
+    private boolean isFullScreen; // isInFullScreen
+    private OptionData optionData; // optionData
+    private TrayIcon trayIcon; // trayIcon
 
+    /**
+     * creates a new GUI
+     */
     public GUI ()
     {
 
@@ -55,11 +62,12 @@ public class GUI
         baseFrame.setLayout (new BorderLayout ());
         optionData = new OptionData ();
         loadOptionData ();
-        theme = optionData.getTheme ();
+        // theme
+        Theme theme = optionData.getTheme ();
         optionPanel = new OptionPanel (optionData, this);
-        firstPanel = new FirstPanel (this,theme);
-        secondPanel = new NullPanel (1,theme);
-        thirdPanel = new NullPanel (2,theme);
+        firstPanel = new FirstPanel (this, theme);
+        secondPanel = new NullPanel (1, theme);
+        thirdPanel = new NullPanel (2, theme);
         addMenuBar ();
         splitPane2.setRightComponent (thirdPanel);
         splitPane2.setLeftComponent (secondPanel);
@@ -69,6 +77,9 @@ public class GUI
 
     }
 
+    /**
+     * save optionData
+     */
     private void saveOptionData ()
     {
         try(ObjectOutputStream out = new ObjectOutputStream (new FileOutputStream (
@@ -81,6 +92,9 @@ public class GUI
         }
     }
 
+    /**
+     * load optionData
+     */
     private void loadOptionData ()
     {
         try(ObjectInputStream in = new ObjectInputStream (new FileInputStream (
@@ -95,8 +109,9 @@ public class GUI
         }
     }
 
-
-
+    /**
+     * create TrayIcon
+     */
     private void createTrayIcon ()
     {
         trayIcon = new TrayIcon (Toolkit.getDefaultToolkit ().getImage
@@ -114,6 +129,9 @@ public class GUI
         });
     }
 
+    /**
+     * add popUpMenu
+     */
     private void addPopUpMenu ()
     {
         popupMenu = new PopupMenu ();
@@ -130,6 +148,9 @@ public class GUI
         popupMenu.add (instantlyExit);
     }
 
+    /**
+     * add MenuBar
+     */
     private void addMenuBar ()
     {
         bar = new JMenuBar ();
@@ -139,6 +160,9 @@ public class GUI
         createHelpMenu ();
     }
 
+    /**
+     * create ApplicationMenu
+     */
     private void createApplicationMenu ()
     {
         ComponentHandler componentHandler = new ComponentHandler ();
@@ -162,6 +186,9 @@ public class GUI
         bar.add (application);
     }
 
+    /**
+     * create view menu
+     */
     private void createViewMenu ()
     {
         ComponentHandler componentHandler = new ComponentHandler ();
@@ -184,6 +211,9 @@ public class GUI
         bar.add (view);
     }
 
+    /**
+     * create help menu
+     */
     private void createHelpMenu ()
     {
         ComponentHandler componentHandler = new ComponentHandler ();
@@ -207,26 +237,38 @@ public class GUI
         bar.add (helpMenu);
     }
 
-
-
+    /**
+     * @return optionPanel
+     */
     public OptionPanel getOptionPanel () {
         return optionPanel;
     }
 
-
+    /**
+     * @return firstPanel
+     */
     public FirstPanel getFirstPanel () {
         return firstPanel;
     }
 
+    /**
+     * @return baseFrame
+     */
     public JFrame getBaseFrame () {
         return baseFrame;
     }
 
+    /**
+     * @return splitPane
+     */
     public JSplitPane getSplitPane () {
         return splitPane;
     }
 
-
+    /**
+     * set Second Panel
+     * @param secondPanel secondPanel
+     */
     public void setSecondPanel (JPanel secondPanel) {
         if (secondPanel == null)
             throw new InputMismatchException ("inValid input");
@@ -236,6 +278,10 @@ public class GUI
         splitPane2.setLeftComponent (secondPanel);
     }
 
+    /**
+     * sets thirdPanel
+     * @param thirdPanel thirdPanel
+     */
     public void setThirdPanel (JPanel thirdPanel) {
         if (thirdPanel == null)
             throw new InputMismatchException ("inValid input");
@@ -245,13 +291,17 @@ public class GUI
         splitPane2.setRightComponent (thirdPanel);
     }
 
+    /**
+     * sets Base Frame visible
+     */
     public void setBaseFrameVisible ()
     {
         baseFrame.setVisible (true);
     }
 
-
-
+    /**
+     * this class handles components in this panel
+     */
     private class ComponentHandler extends WindowAdapter
             implements ActionListener
     {
