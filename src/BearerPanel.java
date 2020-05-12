@@ -49,6 +49,8 @@ public class BearerPanel extends JPanel
         prefix.setFont (new Font ("Arial",Font.PLAIN,10));
         prefix.setForeground (theme.getForeGroundColorV2 ());
         prefix.setBackground (theme.getBackGroundColorV4 ());
+        prefix.setToolTipText ("Prefix to use when sending the Authorization \n\t\t" +
+                "header.Default to Bearer");
 
         ComponentHandler componentHandler = new ComponentHandler ();
         JPanel prefixPanel = new JPanel ();

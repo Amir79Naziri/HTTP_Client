@@ -45,7 +45,7 @@ public class FirstPanel extends JPanel
         JPanel header = new JPanel (new BorderLayout (3, 4));
         header.setPreferredSize (new Dimension (300,55));
         header.setMinimumSize ((new Dimension (200,55)));
-        header.setMaximumSize ((new Dimension (850,55)));
+        header.setMaximumSize ((new Dimension (1000,55)));
 
         JLabel title = new JLabel ("  HTTP client");
         title.setFont (new Font ("Arial",Font.PLAIN,20));
