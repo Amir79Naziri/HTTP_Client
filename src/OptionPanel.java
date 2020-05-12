@@ -15,6 +15,7 @@ public class OptionPanel extends JPanel
     private  JComboBox<String> themeChoose; // theme choose
     private OptionData data; // option data
     private GUI gui; // gui
+    private boolean darkIsDefault; // true if dark theme is the first theme
 
     /**
      * creates a new optionPanel
@@ -63,15 +64,20 @@ public class OptionPanel extends JPanel
         JLabel label = new JLabel ("Theme :  ");
 
         String[] themes = {"Dark", "White"};
-        themeChoose = new JComboBox<> (themes);
+        String[] themes2 = {"White", "Dark"};
+        if (data.getTheme () == Theme.DARK)
+        {
+            themeChoose = new JComboBox<> (themes);
+            darkIsDefault = true;
+
+        }
+        else
+        {
+            themeChoose = new JComboBox<> (themes2);
+            darkIsDefault = false;
+        }
         themeChoose.addItemListener (componentHandler);
         themeChoose.setBackground (Color.WHITE);
-        if (data.getTheme () == Theme.DARK)
-            themeChoose.setSelectedIndex (0);
-        else
-            themeChoose.setSelectedIndex (1);
-
-
 
         constraints.insets = new Insets (15,15,0,20);
         constraints.fill = GridBagConstraints.BOTH;
@@ -93,7 +99,6 @@ public class OptionPanel extends JPanel
      */
     private class ComponentHandler implements ItemListener
     {
-
         @Override
         public void itemStateChanged (ItemEvent e) {
             if (e.getSource () == hideInSystemTray && hideInSystemTray.isSelected ())
@@ -115,18 +120,25 @@ public class OptionPanel extends JPanel
 
             } else if (e.getSource () == themeChoose)
             {
-//                int res = 0;
-//                if (e.getStateChange () == ItemEvent.SELECTED)
-//                {
-//                    res = JOptionPane.showOptionDialog (gui.getBaseFrame (),
-//                            "You should restart the program for see the change",
-//                            "Warning",JOptionPane.OK_CANCEL_OPTION,
-//                            JOptionPane.WARNING_MESSAGE,null,null,null);
-//                }
-                if (themeChoose.getSelectedIndex () == 0)
-                    data.setTheme (Theme.DARK);
-                else
-                    data.setTheme (Theme.WHITE);
+                if (e.getStateChange () == ItemEvent.SELECTED)
+                {
+                    JOptionPane.showMessageDialog (gui.getBaseFrame (),"You should" +
+                            " restart program to see result.","Warning",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+                if (darkIsDefault)
+                {
+                    if (themeChoose.getSelectedIndex () == 0)
+                        data.setTheme (Theme.DARK);
+                    else
+                        data.setTheme (Theme.WHITE);
+                } else
+                {
+                    if (themeChoose.getSelectedIndex () == 0)
+                        data.setTheme (Theme.WHITE);
+                    else
+                        data.setTheme (Theme.DARK);
+                }
             }
         }
     }
