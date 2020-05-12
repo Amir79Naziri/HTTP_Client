@@ -113,7 +113,7 @@ public class OptionPanel extends JPanel
             } else if (e.getSource () == followRedirect && followRedirect.isSelected ())
             {
                 data.setFollowRedirect (true);
-                System.out.println (data.isFollowRedirect ());
+
             } else if (e.getSource () == followRedirect && !(followRedirect.isSelected ()))
             {
                 data.setFollowRedirect (false);
