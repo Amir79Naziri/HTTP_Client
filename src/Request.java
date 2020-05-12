@@ -47,7 +47,7 @@ public class Request extends JPanel
         typeLabel.setPreferredSize (new Dimension (40,29));
 
         if (name.toCharArray ().length > 15)
-            name = name.substring (0,16);
+            name = name.substring (0,15);
         nameLabel = new JLabel (name + " ");
         nameLabel.setFont (new Font ("Arial",Font.PLAIN,13));
         nameLabel.setForeground (Color.GRAY);
@@ -75,7 +75,7 @@ public class Request extends JPanel
                         JOptionPane.showInputDialog (gui.getBaseFrame (),"New Name ",
                                 nameLabel.getText ());
                 if (name.toCharArray ().length > 15)
-                    name = name.substring (0,16);
+                    name = name.substring (0,15);
                 nameLabel.setText (name);
             }
         });
