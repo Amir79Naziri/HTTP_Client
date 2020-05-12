@@ -18,6 +18,7 @@ public class SecondPanel extends JPanel
     private FormUrlPanel formUrlPanel;
     private JsonPanel jsonPanel;
     private BearerPanel bearerPanel;
+    private BinaryFilePanel binaryFilePanel;
     private GUI gui;
     private Request request;
     private Theme theme;
@@ -97,8 +98,9 @@ public class SecondPanel extends JPanel
         formUrlPanel = new FormUrlPanel (theme);
         jsonPanel = new JsonPanel (theme);
         bearerPanel = new BearerPanel (theme);
+        binaryFilePanel = new BinaryFilePanel (theme);
 
-        String[] bodyTypes = {"Form URL Encoded ","JSON "};
+        String[] bodyTypes = {"Form URL Encoded ","JSON ", "Binary File"};
         JComboBox<String> body = new JComboBox<> (bodyTypes);
         body.addItemListener (new ItemListener () {
             @Override
@@ -115,7 +117,7 @@ public class SecondPanel extends JPanel
 
                 } else if (body.getSelectedIndex () == 2)
                 {
-                    // binary
+                    tabbedPane.setComponentAt (0,binaryFilePanel);
                 }
                 repaint ();
             }

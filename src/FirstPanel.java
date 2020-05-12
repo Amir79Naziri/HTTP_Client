@@ -37,7 +37,7 @@ public class FirstPanel extends JPanel
     {
         header = new JPanel (new BorderLayout (3,4));
         header.setPreferredSize (new Dimension (300,55));
-        header.setMinimumSize ((new Dimension (300,55)));
+        header.setMinimumSize ((new Dimension (200,55)));
         header.setMaximumSize ((new Dimension (850,55)));
 
         title = new JLabel ("  HTTP client");
@@ -55,7 +55,8 @@ public class FirstPanel extends JPanel
 
         filterPanel = new JPanel ();
         filterPanel.setMaximumSize (new Dimension (850,55));
-        filterPanel.setMinimumSize (new Dimension (350,55));
+        filterPanel.setPreferredSize (new Dimension (350,55));
+        filterPanel.setMinimumSize (new Dimension (250,55));
         GridBagLayout layout = new GridBagLayout ();
         GridBagConstraints constraints = new GridBagConstraints ();
         filterPanel.setBackground (theme.getBackGroundColorV2 ());
@@ -77,6 +78,8 @@ public class FirstPanel extends JPanel
         addRequest.setRolloverEnabled (true);
         addRequest.setBackground (theme.getBackGroundColorV2 ());
         addRequest.addActionListener (buttonHandler);
+        addRequest.setFocusable (false);
+        addRequest.setToolTipText ("Adds New Request");
 
 
         constraints.gridx = 0;
@@ -124,11 +127,7 @@ public class FirstPanel extends JPanel
                 addNewRequest (type,name);
     }
 
-    public void changeTheme ()
-    {
-        title.setForeground (theme.getForeGroundColorV1 ());
-        header.setBackground (theme.getBackGroundColorV1 ());
-    }
+
 
     private class ButtonHandler implements ActionListener
     {
