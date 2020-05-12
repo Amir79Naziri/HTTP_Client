@@ -13,6 +13,7 @@ public class ScrollPaneAdder
     /**
      * adds a scroll pane to panel
      * @param panel panel
+     * @param theme theme
      * @return scrollPane which has panel
      */
     public static JScrollPane fetchToJScrollPane (JPanel panel, Theme theme)

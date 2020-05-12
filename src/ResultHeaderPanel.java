@@ -18,6 +18,7 @@ public class ResultHeaderPanel extends JPanel
     private Theme theme;
     /**
      * creates new result header panel
+     * @param theme theme
      */
     public ResultHeaderPanel (Theme theme)
     {

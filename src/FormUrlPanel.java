@@ -12,6 +12,7 @@ public class FormUrlPanel extends JPanel
 
     /**
      * create a new FormURL panel
+     * @param theme theme
      */
     public FormUrlPanel (Theme theme)
     {

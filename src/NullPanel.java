@@ -14,6 +14,7 @@ public class NullPanel extends JPanel
      * create a null panel
      * @param type 1 for secondPanel
      *             2 for thirdPanel
+     * @param theme theme
      */
     public NullPanel (int type, Theme theme)
     {

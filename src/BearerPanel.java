@@ -16,6 +16,7 @@ public class BearerPanel extends JPanel
 
     /**
      * creates a BearerPanel
+     * @param theme theme
      */
     public BearerPanel (Theme theme)
     {

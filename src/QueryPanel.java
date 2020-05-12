@@ -21,6 +21,7 @@ public class QueryPanel extends JPanel
 
     /**
      * creates a QueryPanel
+     * @param theme theme
      */
     public QueryPanel (Theme theme)
     {

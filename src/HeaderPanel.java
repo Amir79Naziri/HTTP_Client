@@ -12,6 +12,7 @@ public class HeaderPanel extends JPanel
 
     /**
      * create a new Header Panel
+     * @param theme theme
      */
     public HeaderPanel (Theme theme)
     {

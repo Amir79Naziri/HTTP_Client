@@ -15,6 +15,7 @@ public class JsonPanel extends JPanel
     private Theme theme;
     /**
      * creates a new JSON panel
+     * @param theme theme
      */
     public JsonPanel (Theme theme)
     {
