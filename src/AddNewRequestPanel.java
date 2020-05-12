@@ -40,6 +40,7 @@ public class AddNewRequestPanel extends JPanel
 
         chosenRequestType = RequestType.GET;
         textField = new JTextField ("My Request");
+        textField.setToolTipText ("Name of Request should be less than 15 characters");
         textField.setBackground (Color.WHITE);
         textField.setBorder (BorderFactory.createCompoundBorder (new LineBorder (Color.GRAY,
                 1,true),

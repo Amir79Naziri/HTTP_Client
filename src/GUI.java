@@ -28,6 +28,7 @@ public class GUI
     private JMenuItem toggleFullScreen; // toggleFullScreen menuItem
     private JMenuItem toggleSideBar; // toggle sideBar menuItem
     private JMenuItem about; // about menuItem
+    private JMenuItem addNew; // add new request
     private MenuItem trayAbout; // about menuItem for iconTray
     private MenuItem trayHelp; // help menuItem for iconTray
     private JMenuItem help; // about menuItem for iconTray
@@ -168,8 +169,12 @@ public class GUI
         ComponentHandler componentHandler = new ComponentHandler ();
         JMenu application = new JMenu ("Application");
         application.setMnemonic ('A');
-        application.getPopupMenu ().setPreferredSize (new Dimension (170,65));
+        application.getPopupMenu ().setPreferredSize (new Dimension (170,85));
 
+        addNew = new JMenuItem ("Add NewRequest");
+        addNew.setMnemonic ('N');
+        addNew.setAccelerator (KeyStroke.getKeyStroke ("control N"));
+        addNew.addActionListener (componentHandler);
         option = new JMenuItem ("Option");
         option.setMnemonic ('O');
         option.setAccelerator (KeyStroke.getKeyStroke ("control O"));
@@ -181,6 +186,7 @@ public class GUI
         exit.addActionListener (componentHandler);
 
         application.add (option);
+        application.add (addNew);
         application.addSeparator ();
         application.add (exit);
         bar.add (application);
@@ -374,6 +380,20 @@ public class GUI
                     baseFrame.setMinimumSize (new Dimension (1000,650));
                     baseFrame.setSize (1350,670);
                     isFullScreen = false;
+                }
+            } else if (e.getSource () == addNew)
+            {
+                AddNewRequestPanel addNewRequestPanel = new AddNewRequestPanel ();
+                int res =
+                        JOptionPane.showOptionDialog (baseFrame,
+                                addNewRequestPanel,"New Request",
+                                JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,null,
+                                null,null);
+                if (res == 0) {
+                    getFirstPanel ().addRequest
+                            (addNewRequestPanel.getNameOfNewRequest (),
+                                    addNewRequestPanel.getChosenRequestType ()
+                            );
                 }
             }
         }

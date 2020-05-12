@@ -4,6 +4,8 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 /**
  * this class represents firstPanel in frame
@@ -61,7 +63,7 @@ public class FirstPanel extends JPanel
      */
     private void createFilterPanel ()
     {
-        ButtonHandler buttonHandler = new ButtonHandler ();
+        ComponentHandler componentHandler = new ComponentHandler ();
 
         JPanel filterPanel = new JPanel ();
         filterPanel.setMaximumSize (new Dimension (1100,55));
@@ -74,8 +76,8 @@ public class FirstPanel extends JPanel
         add(filterPanel);
 
         searchText = new JTextField ("filter");
-        searchText.addActionListener (new ButtonHandler ());
         searchText.setFont (new Font ("Arial",Font.PLAIN,15));
+        searchText.addKeyListener (componentHandler);
         searchText.setBackground (theme.getBackGroundColorV2 ());
         searchText.setForeground (theme.getForeGroundColorV1 ());
         searchText.setBorder (BorderFactory.createCompoundBorder (
@@ -87,7 +89,7 @@ public class FirstPanel extends JPanel
         addRequest.setRolloverIcon (theme.getAddR2 ());
         addRequest.setRolloverEnabled (true);
         addRequest.setBackground (theme.getBackGroundColorV2 ());
-        addRequest.addActionListener (buttonHandler);
+        addRequest.addActionListener (componentHandler);
         addRequest.setFocusable (false);
         addRequest.setToolTipText ("Adds New Request");
 
@@ -147,9 +149,40 @@ public class FirstPanel extends JPanel
     }
 
     /**
+     * filters list by given string
+     * @param filter given String
+     */
+    private void doFilter (String filter)
+    {
+        if (filter == null)
+            return;
+        String l = filter.toLowerCase ().trim ().replaceAll ("\\s+","");
+
+        for (Request request : requestsPanel.getRequests ())
+        {
+            if (!(request.isDeleted ()))
+                request.setVisible (true);
+        }
+        for (Request request : requestsPanel.getRequests ())
+        {
+            String a = request.getRequestType ().getName ().toLowerCase ().trim ().
+                    replaceAll ("\\s+","") +
+                    "" +request.getRequestType ().toString ().toLowerCase ().trim ().
+                    replaceAll ("\\s+","")
+                    + "" +
+                    request.getNameLabel ().getText ().toLowerCase ().trim ().
+                            replaceAll ("\\s+","");
+
+                    if (!(a.contains (l)))
+                        request.setVisible (false);
+        }
+    }
+
+    /**
      * class for button Handling
      */
-    private class ButtonHandler implements ActionListener
+    private class ComponentHandler extends KeyAdapter
+            implements ActionListener
     {
         @Override
         public void actionPerformed (ActionEvent e) {
@@ -168,10 +201,12 @@ public class FirstPanel extends JPanel
                                     addNewRequestPanel.getChosenRequestType ()
                             );
                 }
-            } else if (e.getSource () == searchText)
-            {
-                System.out.println (searchText.getText ());
             }
+        }
+
+        @Override
+        public void keyReleased (KeyEvent e) {
+            doFilter (searchText.getText ());
         }
     }
 }
