@@ -1,4 +1,7 @@
 import javax.swing.*;
+import java.net.MalformedURLException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * this class build for test
@@ -14,7 +17,17 @@ public class Run
         {
             e.printStackTrace ();
         }
-        GUI gui = new GUI ();
-        gui.setBaseFrameVisible ();
+//        GUI gui = new GUI ();
+//        gui.setBaseFrameVisible ();
+
+        ExecutorService pool = Executors.newCachedThreadPool ();
+
+
+        ClientRequest clientRequest = new ClientRequest ("https://www.p30Download.com",
+                RequestType.GET);
+        clientRequest.addQueryHeaders ("a","g");
+        clientRequest.addQueryHeaders ("sfg","qwe");
+        pool.execute (clientRequest);
+
     }
 }
