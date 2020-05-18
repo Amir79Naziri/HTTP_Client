@@ -31,6 +31,14 @@ public class ClientRequest implements Runnable , Serializable
         queryHeadersString = new StringBuilder ();
     }
 
+    public void setName (String name) {
+        this.name = name;
+    }
+
+    public void setRequestType (RequestType requestType) {
+        this.requestType = requestType;
+    }
+
     public void setUrl (String url) {
         try {
             this.url = new URL (url + "/");

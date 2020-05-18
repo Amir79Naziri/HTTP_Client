@@ -1,4 +1,4 @@
-public enum ReservedWords
+public enum ReservedWord
 {
 
     HELP_v1("-h"),
@@ -20,13 +20,14 @@ public enum ReservedWords
     UPLOAD("--upload"),
     LIST("list"),
     FIRE("fire"),
-    NAME("--name");
+    NAME("--name"),
+    CLOSE ("--close");
 
 
     private String commandString;
 
 
-    ReservedWords (String commandString)
+    ReservedWord (String commandString)
     {
         this.commandString = commandString;
     }
