@@ -13,18 +13,9 @@ public class StorageUnit implements Serializable
     }
 
 
-    public void addRequest (String name, RequestType requestType) // means add in app
+    public void addRequest (ClientRequest clientRequest) // means add in app
     {
-        if (name == null)
-            name = "MyRequest";
-        if (requestType != RequestType.GET && requestType != RequestType.PUT
-        && requestType != RequestType.DELETE && requestType != RequestType.PATCH &&
-                requestType != RequestType.POST)
-        {
-            requestType = RequestType.GET;
-        }
-
-        requestsStorage.add (new ClientRequest (name,requestType));
+        requestsStorage.add (clientRequest);
         save ();
     }
 
@@ -75,6 +66,16 @@ public class StorageUnit implements Serializable
     public int size ()
     {
         return requestsStorage.size ();
+    }
+
+    public void printList ()
+    {
+        int count = 1;
+        for (ClientRequest request : requestsStorage.getClientRequests ())
+        {
+            System.out.println (count + " . " + request.toString ());
+            count++;
+        }
     }
 
 }

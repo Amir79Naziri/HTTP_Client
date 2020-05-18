@@ -32,5 +32,7 @@ public class RequestsStorage implements Serializable
         return clientRequests.size ();
     }
 
-
+    public ArrayList<ClientRequest> getClientRequests () {
+        return clientRequests;
+    }
 }

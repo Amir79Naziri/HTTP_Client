@@ -19,13 +19,11 @@ public enum ReservedWords
     JSON_V2("--json"),
     UPLOAD("--upload"),
     LIST("list"),
-    FIRE("fire");
+    FIRE("fire"),
+    NAME("--name");
 
 
-
-
-
-    String commandString;
+    private String commandString;
 
 
     ReservedWords (String commandString)
