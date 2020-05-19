@@ -6,7 +6,6 @@ public class InputProcessor
     private String[] commands;
     private TreeMap<ReservedWord,ArrayList<String>> tasks;
     private String url;
-    private int inputType;
 
 
     public InputProcessor ()
@@ -17,11 +16,11 @@ public class InputProcessor
 
     public void getLine ()
     {
+        System.out.print ("> ");
         commands = systemInput.nextLine ().trim ().
                 replaceAll ("\\s+"," ").trim ().split (" ");
         tasks = new TreeMap<> ();
         url = null;
-        inputType = 0;
         process ();
     }
 
@@ -31,11 +30,13 @@ public class InputProcessor
         {
             System.out.println ("jurl: try 'jurl --help' / 'jurl -h' for more information");
             getLine ();
+            return;
         }
         if (!(commands[0].equals ("jurl")))
         {
             System.out.println ("jurl: try 'jurl --help' / 'jurl -h' for more information");
             getLine ();
+            return;
         }
 
         ReservedWord reservedWordStart;
@@ -46,13 +47,18 @@ public class InputProcessor
             {
                 System.out.println ("jurl: try 'jurl --help' / 'jurl -h' for more information");
                 getLine ();
+                return;
             }
-            inputType = 1;
-            tasks.put (reservedWordStart,new ArrayList<> ());
+            ArrayList<String> args = findArgumentForReserveWord (reservedWordStart,2);
+            if (args == null)
+            {
+                getLine ();
+                return;
+            }
+            tasks.put (reservedWordStart,findArgumentForReserveWord (reservedWordStart,2));
         }
         else
         {
-            inputType = 2;
             url = commands[1];
             for (int i = 2; i < commands.length; i++)
             {
@@ -62,7 +68,14 @@ public class InputProcessor
                     if (reservedWord != ReservedWord.FIRE && reservedWord != ReservedWord.LIST &&
                             reservedWord != ReservedWord.CLOSE)
                     {
-                        tasks.put (reservedWord,findArgumentForReserveWord (reservedWord,i + 1));
+                        ArrayList<String> args = findArgumentForReserveWord (reservedWord,i + 1);
+                        if (args == null)
+                        {
+                            getLine ();
+                            return;
+                        }
+
+                        tasks.put (reservedWord,args);
                     }
 
                 }
@@ -96,8 +109,9 @@ public class InputProcessor
                 command.equals (ReservedWord.FORM_DATA_V2.getCommandString ()))
             return ReservedWord.FORM_DATA_V2;
 
-        else if (command.equals (ReservedWord.SHOW_HEADER_ARG.getCommandString ()))
-            return ReservedWord.SHOW_HEADER_ARG;
+        else if (command.equals (ReservedWord.SHOW_HEADER_ARG_V2.getCommandString ()) ||
+                command.equals (ReservedWord.SHOW_HEADER_ARG_v1.getCommandString ()))
+            return ReservedWord.SHOW_HEADER_ARG_V2;
 
         else if (command.equals (ReservedWord.LIST.getCommandString ()))
             return ReservedWord.LIST;
@@ -134,18 +148,27 @@ public class InputProcessor
         ArrayList<String> args = new ArrayList<> ();
         switch (reservedWord)
         {
+            case UPLOAD:
+                if (nextIndex < commands.length && isReserveWord (commands[nextIndex]) == null)
+                    args.add (commands[nextIndex]);
+                break;
             case JSON_V2:
             case NAME:
-            case UPLOAD:
             case HEADER_V2:
             case METHOD_V2:
             case OUTPUT_V2:
-            case FORM_DATA_V2: args.add (commands[nextIndex]);
+            case FORM_DATA_V2:
+                if (nextIndex < commands.length && isReserveWord (commands[nextIndex]) == null)
+                    args.add (commands[nextIndex]);
+                else
+                {
+                    System.out.println ("jurl: try 'jurl --help' / 'jurl -h' for more information");
+                    return null;
+                }
                 break;
 
             case FIRE:
-                args.add (commands[nextIndex]);
-                int i = nextIndex + 1;
+                int i = nextIndex;
                 while (i < commands.length)
                 {
                     if (isReserveWord (commands[i]) == null)
@@ -154,6 +177,10 @@ public class InputProcessor
                         i++;
                     } else
                         break;
+                }
+                if (args.size () <= 0) {
+                    System.out.println ("jurl: try 'jurl --help' / 'jurl -h' for more information");
+                    return null;
                 }
         }
         return args;
@@ -167,15 +194,12 @@ public class InputProcessor
         return url;
     }
 
-    public int getInputType () {
-        return inputType;
-    }
+
 
     public void print ()
     {
         System.out.println (Arrays.toString (commands));
         System.out.println (url);
-        System.out.println (inputType);
         for (ReservedWord reservedWord : tasks.keySet ())
             System.out.println (reservedWord + "/" + tasks.get (reservedWord).toString ());
     }

@@ -31,12 +31,37 @@ public class ClientRequest implements Runnable , Serializable
         queryHeadersString = new StringBuilder ();
     }
 
+
     public void setName (String name) {
         this.name = name;
     }
 
-    public void setRequestType (RequestType requestType) {
-        this.requestType = requestType;
+    public void setRequestType (String requestType) {
+
+        if (requestType == null)
+        {
+            this.requestType = RequestType.GET;
+            return;
+        }
+        switch (requestType) {
+            case "POST":
+                this.requestType = RequestType.POST;
+                break;
+            case "PATCH":
+                this.requestType = RequestType.PATCH;
+                break;
+            case "DELETE":
+                this.requestType = RequestType.DELETE;
+                break;
+            case "PUT":
+                this.requestType = RequestType.PUT;
+                break;
+            case "GET":
+            default:
+                this.requestType = RequestType.GET;
+                break;
+        }
+
     }
 
     public void setUrl (String url) {
@@ -48,9 +73,17 @@ public class ClientRequest implements Runnable , Serializable
         }
     }
 
-    public void addHeader (String key, String value)
+    public void addHeader (String inputHeader)
     {
-        customHeaders.put(key,value);
+        if (inputHeader == null)
+            return;
+        String[] headers = inputHeader.trim ().split (";");
+        for (String header : headers)
+        {
+            String[] keyValue = header.split (":",2);
+            if (keyValue.length >= 2)
+                customHeaders.put(keyValue[0],keyValue[1]);
+        }
     }
 
     public void addQueryHeaders (String key, String value)
@@ -154,5 +187,14 @@ public class ClientRequest implements Runnable , Serializable
 
     public String getName () {
         return name;
+    }
+
+    @Override
+    public String toString () {
+        return "name: " + name + " | " +
+                "url: " + url + " | " +
+                "method: " + requestType + " | " +
+                "headers=" + customHeaders + " | " +
+                "queryHeadersString=" + queryHeadersString;
     }
 }
