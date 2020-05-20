@@ -1,3 +1,4 @@
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
@@ -7,7 +8,6 @@ public class Jurl
 {
     private InputProcessor inputProcessor;
     private StorageUnit storageUnit;
-    private ClientRequest currentClientRequest;
     private ExecutorService pool;
 
 
@@ -22,60 +22,79 @@ public class Jurl
 
     public void startProgram ()
     {
-        boolean isFinished = false;
-        while (!isFinished)
-        {
-            currentClientRequest = new ClientRequest ("MyRequest",RequestType.GET);
+        while (true) {
             inputProcessor.getLine ();
-            isFinished = doTasks (inputProcessor.getTasks (),inputProcessor.getUrl ());
+            ArrayList<ClientRequest> clientRequests = createClientRequest (inputProcessor.getTasks (),
+                    inputProcessor.getUrl (), inputProcessor.getInputType ());
+            if (clientRequests != null)
+                execute (clientRequests);
         }
     }
 
 
 
-
-    private boolean doTasks (TreeMap<ReservedWord, ArrayList<String>> tasks, String url)
+    private ArrayList<ClientRequest> createClientRequest (TreeMap<ReservedWord,
+                                    ArrayList<String>> tasks, String url, int inputType)
     {
         ArrayList<ClientRequest> clientRequests = new ArrayList<> ();
 
-        for (ReservedWord reservedWord : tasks.keySet ())
+        if (inputType == 1)
         {
-            switch (reservedWord)
+            for (ReservedWord reservedWord : tasks.keySet ())
             {
-                case CLOSE: return true;
-                case FIRE:
-                    for (String task : tasks.get (reservedWord))
-                    {
-                        clientRequests.add (storageUnit.getClientRequest (Integer.parseInt (task)));
-                    }
-                    execute (clientRequests);
-                    return false;
-                case HELP_V2: help (); return false;
-                case LIST: storageUnit.printList (); return false;
-                case JSON_V2:
-                case OUTPUT_V2:
-                case FOLLOW_REDIRECT:
-                case NAME: currentClientRequest.setName (tasks.get (reservedWord).get (0));
-                    break;
-                case UPLOAD:
-                case HEADER_V2: currentClientRequest.addHeader (tasks.get (reservedWord).get (0));
-                    break;
-                case METHOD_V2: currentClientRequest.setRequestType (tasks.get (reservedWord).get (0));
-                case SAVE_V2: storageUnit.addRequest (currentClientRequest);
-                    break;
-                case FORM_DATA_V2:
-                case SHOW_HEADER_ARG_V2:
+                switch (reservedWord)
+                {
+                    case CLOSE: System.exit (0);
+                    case FIRE:
+                        for (String task : tasks.get (reservedWord))
+                        {
+                            clientRequests.add (storageUnit.getClientRequest (Integer.parseInt (task)));
+                        }
+                        return clientRequests;
+                    case HELP_V2: help (); return null;
+                    case LIST: storageUnit.printList (); return null;
+
+                }
             }
         }
-
-        if (url != null)
+        else
         {
-            currentClientRequest.setUrl (url);
-            clientRequests.add (currentClientRequest);
-            execute (clientRequests);
-        }
+            try {
+                ClientRequest clientRequest = new ClientRequest (url, RequestType.GET);
 
-        return false;
+                for (ReservedWord reservedWord : tasks.keySet ())
+                {
+                    switch (reservedWord)
+                    {
+                        case JSON_V2:
+                            break;
+                        case OUTPUT_V2:
+                            break;
+                        case FOLLOW_REDIRECT: clientRequest.setFollowRedirect (true);
+                            break;
+                        case NAME: clientRequest.setName (tasks.get (reservedWord).get (0));
+                            break;
+                        case UPLOAD:
+                        case HEADER_V2: clientRequest.addHeader (tasks.get (reservedWord).get (0));
+                            break;
+                        case METHOD_V2: clientRequest.setRequestType (tasks.get (reservedWord).get (0));
+                            break;
+                        case FORM_DATA_V2:
+                            clientRequest.setMessageBodyType (1);
+                            clientRequest.addFormUrlData (tasks.get (reservedWord).get (0));
+                            break;
+                        case SHOW_HEADER_ARG_V2: clientRequest.setShowHeadersInResult (true);
+                    }
+                }
+                if (tasks.containsKey (ReservedWord.SAVE_V2))
+                    storageUnit.addRequest (clientRequest);
+                clientRequests.add (clientRequest);
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace ();
+            }
+        }
+        return clientRequests;
     }
 
     private void execute (ArrayList<ClientRequest> clientRequests)
@@ -83,7 +102,15 @@ public class Jurl
         if (clientRequests == null)
             return;
         for (ClientRequest clientRequest : clientRequests)
+        {
+            try {
+                Thread.sleep (5000);
+            } catch (InterruptedException e)
+            {
+                e.printStackTrace ();
+            }
             pool.execute (clientRequest);
+        }
     }
 
     private void help ()

@@ -108,7 +108,7 @@ public class BinaryFilePanel extends JPanel
      * @param size input size
      * @return humanReadable form
      */
-    private String makeSizeReadable (long size)
+    public static String makeSizeReadable (long size)
     {
         if (size < 1024)
             return size + " B";

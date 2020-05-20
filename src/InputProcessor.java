@@ -2,25 +2,22 @@ import java.util.*;
 
 public class InputProcessor
 {
-    private Scanner systemInput;
     private String[] commands;
     private TreeMap<ReservedWord,ArrayList<String>> tasks;
     private String url;
+    private int inputType;
 
 
-    public InputProcessor ()
-    {
-        systemInput = new Scanner (System.in);
-    }
 
 
     public void getLine ()
     {
-        System.out.print ("> ");
-        commands = systemInput.nextLine ().trim ().
-                replaceAll ("\\s+"," ").trim ().split (" ");
         tasks = new TreeMap<> ();
         url = null;
+
+        Scanner systemInput = new Scanner (System.in);
+        commands = systemInput.nextLine ().trim ().
+                replaceAll ("\\s+"," ").trim ().split (" ");
         process ();
     }
 
@@ -52,14 +49,17 @@ public class InputProcessor
             ArrayList<String> args = findArgumentForReserveWord (reservedWordStart,2);
             if (args == null)
             {
+                System.out.println ("jurl: try 'jurl --help' / 'jurl -h' for more information");
                 getLine ();
                 return;
             }
-            tasks.put (reservedWordStart,findArgumentForReserveWord (reservedWordStart,2));
+            tasks.put (reservedWordStart,args);
+            inputType = 1;
         }
         else
         {
             url = commands[1];
+            inputType = 2;
             for (int i = 2; i < commands.length; i++)
             {
                 ReservedWord reservedWord;
@@ -68,9 +68,12 @@ public class InputProcessor
                     if (reservedWord != ReservedWord.FIRE && reservedWord != ReservedWord.LIST &&
                             reservedWord != ReservedWord.CLOSE)
                     {
-                        ArrayList<String> args = findArgumentForReserveWord (reservedWord,i + 1);
+                        ArrayList<String> args = findArgumentForReserveWord
+                                (reservedWord,i + 1);
                         if (args == null)
                         {
+                            System.out.println
+                                    ("jurl: try 'jurl --help' / 'jurl -h' for more information");
                             getLine ();
                             return;
                         }
@@ -190,11 +193,10 @@ public class InputProcessor
         return tasks;
     }
 
+
     public String getUrl () {
         return url;
     }
-
-
 
     public void print ()
     {
@@ -202,5 +204,9 @@ public class InputProcessor
         System.out.println (url);
         for (ReservedWord reservedWord : tasks.keySet ())
             System.out.println (reservedWord + "/" + tasks.get (reservedWord).toString ());
+    }
+
+    public int getInputType () {
+        return inputType;
     }
 }

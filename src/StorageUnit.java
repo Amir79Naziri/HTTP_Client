@@ -1,6 +1,6 @@
 import java.io.*;
 
-public class StorageUnit implements Serializable
+public class StorageUnit
 {
     private RequestsStorage requestsStorage;
     private File file;
@@ -30,11 +30,11 @@ public class StorageUnit implements Serializable
 
     public ClientRequest getClientRequest (int index)
     {
-        if (index < 0 || index >= requestsStorage.size ())
+        if (index - 1 < 0 || index - 1 >= requestsStorage.size ())
             throw new IndexOutOfBoundsException ("index should be in range 0 to " +
                     (requestsStorage.size () - 1));
 
-        return requestsStorage.get (index);
+        return requestsStorage.get (index - 1);
     }
 
     private void save ()
@@ -44,7 +44,7 @@ public class StorageUnit implements Serializable
             out.writeObject (requestsStorage);
         } catch (IOException e)
         {
-            e.printStackTrace ();
+            System.out.println ("some thing was wrong in save");
         }
     }
 
@@ -67,6 +67,7 @@ public class StorageUnit implements Serializable
     {
         return requestsStorage.size ();
     }
+
 
     public void printList ()
     {
