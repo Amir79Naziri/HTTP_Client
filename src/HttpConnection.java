@@ -15,6 +15,7 @@ public class HttpConnection implements Serializable
     private ResponseStorage responseStorage;
     private RequestType requestType;
     private boolean followRedirect;
+    private boolean showHeadersInResponse;
 
 
     public HttpConnection (String url) throws MalformedURLException
@@ -22,6 +23,7 @@ public class HttpConnection implements Serializable
         this.url = new URL (url);
         this.requestType = RequestType.GET;
         followRedirect = false;
+        showHeadersInResponse = false;
         responseStorage = new ResponseStorage ();
     }
 
@@ -62,6 +64,7 @@ public class HttpConnection implements Serializable
         if (connection == null)
             throw new NullPointerException ("inValid input");
         try {
+            responseStorage.reset ();
             connection.connect ();
             return true;
         }
@@ -72,21 +75,15 @@ public class HttpConnection implements Serializable
         }
     }
 
-    private boolean readFromServer (HttpURLConnection connection) {
+    private void readFromServer (HttpURLConnection connection) {
         if (connection == null)
             throw new NullPointerException ("inValid input");
         try {
             responseStorage.setResponseCode (connection.getResponseCode ());
             responseStorage.setResponseMessage (connection.getResponseMessage ());
 
-            if (connection.getResponseCode () != HttpURLConnection.HTTP_OK) {
-
-                responseStorage.setResponseRawData
-                        ("Error: URL using bad/illegal format or missing URL");
-                return false;
-            }
-
             responseStorage.setResponseHeaders (connection.getHeaderFields ());
+
 
             Scanner in = new Scanner (connection.getInputStream ());
             StringBuilder content = new StringBuilder ();
@@ -96,16 +93,15 @@ public class HttpConnection implements Serializable
             in.close ();
             responseStorage.setResponseRawData (content.toString ());
 
-            return true;
 
-        }catch (IOException e)
+
+        }catch (IOException ignore)
         {
-            System.out.println ("some thing went wrong in reading from server");
-            return false;
+            responseStorage.setResponseRawData ("Error: URL using bad/illegal format or missing URL");
         }
     }
 
-    private boolean writeToServer (HttpURLConnection connection, byte[] bytes)
+    private void writeToServer (HttpURLConnection connection, byte[] bytes)
     {
         if (connection == null)
             throw new NullPointerException ("inValid input");
@@ -113,10 +109,10 @@ public class HttpConnection implements Serializable
         {
             out.write (bytes);
             out.flush ();
-            return true;
+
         } catch (IOException e) {
+            e.printStackTrace ();
             System.out.println ("some thing went wrong in writing to server");
-            return false;
         }
     }
 
@@ -127,13 +123,14 @@ public class HttpConnection implements Serializable
         long startTime = System.currentTimeMillis ();
         connection.setDoOutput(true);
         connection.setDoInput(true);
-        boolean success = false;
         if (connectToServer (connection))
         {
             // reading
-            success = readFromServer (connection);
+            readFromServer (connection);
         }
         responseStorage.setResponseTime ((System.currentTimeMillis () - startTime));
+
+        printResult ();
         connection.disconnect ();
     }
 
@@ -144,8 +141,7 @@ public class HttpConnection implements Serializable
         long startTime = System.currentTimeMillis ();
         connection.setDoOutput (true);
         connection.setDoInput (true);
-        boolean result1 = false;
-        boolean result2 = false;
+
         if (messageBodyType == 1)
         {
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -153,14 +149,15 @@ public class HttpConnection implements Serializable
             if (connectToServer (connection))
             {
                 //writing
-                result1 = writeToServer (connection, bytes);
+                 writeToServer (connection, bytes);
 
                 // reading
-                result2 = readFromServer (connection);
+                readFromServer (connection);
             }
         }
         // TODO : Add JSON and Binary
         responseStorage.setResponseTime ((System.currentTimeMillis () - startTime));
+        printResult ();
         connection.disconnect ();
     }
 
@@ -177,6 +174,10 @@ public class HttpConnection implements Serializable
         this.url = new URL (url);
     }
 
+    public void setShowHeadersInResponse (boolean showHeadersInResponse) {
+        this.showHeadersInResponse = showHeadersInResponse;
+    }
+
     public void setFollowRedirect (boolean followRedirect) {
         this.followRedirect = followRedirect;
     }
@@ -191,5 +192,14 @@ public class HttpConnection implements Serializable
 
     public RequestType getRequestType () {
         return requestType;
+    }
+
+    private void printResult ()
+    {
+        System.out.println ();
+        System.out.println (url + "response : ");
+        if (showHeadersInResponse)
+            responseStorage.printHeaders ();
+        responseStorage.printRawResponse ();
     }
 }

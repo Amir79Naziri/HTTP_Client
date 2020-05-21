@@ -162,6 +162,10 @@ public class ClientRequest implements Serializable, Runnable
         httpConnection.setFollowRedirect (followRedirection);
     }
 
+    public void setShowHeadersInResponse (boolean showHeadersInResponse)
+    {
+        httpConnection.setShowHeadersInResponse (showHeadersInResponse);
+    }
     public void setUrl (String url) throws MalformedURLException
     {
         httpConnection.setUrl (url);
@@ -186,8 +190,5 @@ public class ClientRequest implements Serializable, Runnable
         }
     }
 
-    public void setShowHeadersInResult (boolean showHeadersInResult)
-    {
-        httpConnection.getResponseStorage ().setShowHeadersInResult (showHeadersInResult);
-    }
+
 }

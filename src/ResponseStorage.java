@@ -14,10 +14,15 @@ public class ResponseStorage implements Serializable
 
     public ResponseStorage ()
     {
+        reset ();
+        showHeadersInResult = false;
+    }
+
+    public void reset ()
+    {
         responseRawData = "Error: URL using bad/illegal format or missing URL";
         readLength = "0";
         responseTime = 0;
-        showHeadersInResult = false;
     }
 
     public void setResponseMessage (String responseMessage) {
@@ -74,9 +79,37 @@ public class ResponseStorage implements Serializable
         return responseHeaders;
     }
 
-    public void printResult ()
+    public void printHeaders ()
     {
+        if (getResponseHeaders () != null)
+        {
+            List<String> values = getResponseHeaders ().get (null);
+            if (values != null) {
+                System.out.println (values.get (0));
 
+                for (String key : getResponseHeaders ().keySet ()) {
+                    if (key == null)
+                        continue;
+                    System.out.print (key + " : ");
+                    int counter = 0;
+                    for (String value : getResponseHeaders ().get (key)) {
+                        if (counter == 0)
+                            System.out.print (value);
+                        else
+                            System.out.print (", " + value);
+                        counter++;
+                    }
+                    System.out.println ();
+                }
+                System.out.println ();
+            }
+        }
+
+    }
+
+    public void printRawResponse ()
+    {
+        System.out.println (getResponseRawData ());
     }
 
 }

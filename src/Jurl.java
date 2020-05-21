@@ -83,7 +83,7 @@ public class Jurl
                             clientRequest.setMessageBodyType (1);
                             clientRequest.addFormUrlData (tasks.get (reservedWord).get (0));
                             break;
-                        case SHOW_HEADER_ARG_V2: clientRequest.setShowHeadersInResult (true);
+                        case SHOW_HEADER_ARG_V2: clientRequest.setShowHeadersInResponse (true);
                     }
                 }
                 if (tasks.containsKey (ReservedWord.SAVE_V2))
