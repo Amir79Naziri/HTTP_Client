@@ -10,15 +10,17 @@ public class ClientRequest implements Serializable, Runnable
     private String name;
     private HashMap<String,ArrayList<String>> customHeaders;
     private HashMap<String,ArrayList<String>> formUrlData;
+    private HashMap<String,ArrayList<String>> queryData;
     private int messageBodyType;
 
 
-    public ClientRequest (String url) throws MalformedURLException
+    public ClientRequest (String url, boolean followRedirect) throws MalformedURLException
     {
         this.name = "MyRequest";
         customHeaders = new HashMap<> ();
         formUrlData = new HashMap<> ();
-        httpConnection = new HttpConnection (url);
+        queryData = new HashMap<> ();
+        httpConnection = new HttpConnection (url,followRedirect);
         messageBodyType = 1;
     }
 
@@ -33,6 +35,26 @@ public class ClientRequest implements Serializable, Runnable
             ArrayList<String> values = new ArrayList<> ();
             values.add (value);
             list.put (key,values);
+        }
+    }
+
+    private void addKeyAndValueType (String input,char f1, String f2, String s, String t)
+    {
+        if (input == null)
+            return;
+        if (input.toCharArray ()[0] != f1 ||
+                input.toCharArray ()[input.length () - 1] != f1)
+            return;
+
+        String inputHeadersV2 = input.trim ().replaceAll (f2,"");
+        String[] headers = inputHeadersV2.split (s);
+        for (String header : headers)
+        {
+            if (!(header.contains (t)))
+                continue;
+            String[] keyValue = header.split (t,2);
+            if (keyValue.length >= 2)
+                addTo (keyValue[0],keyValue[1], customHeaders);
         }
     }
 
@@ -52,14 +74,34 @@ public class ClientRequest implements Serializable, Runnable
 
     public void addCustomHeader (String inputHeader)
     {
-        if (inputHeader == null)
+        addKeyAndValueType
+                (inputHeader,'\"',"\"",";",":");
+    }
+
+    public void removeCustomHeader (String key, String value)
+    {
+        removeFrom (key,value,customHeaders);
+    }
+
+
+    public void addQuery (String query)
+    {
+        addKeyAndValueType
+                (query,'\"',"\"","&","=");
+    }
+
+    public void addJSON (String json)
+    {
+        if (json == null)
             return;
-        if (inputHeader.toCharArray ()[0] != '\"' ||
-                inputHeader.toCharArray ()[inputHeader.length () - 1] != '\"')
+        if (json.toCharArray ()[0] != '\"' || json.toCharArray ()[1] != '{' ||
+                json.toCharArray ()[json.length () - 1] != '\"' ||
+                json.toCharArray ()[json.length () - 2] != '}')
             return;
 
-        String inputHeadersV2 = inputHeader.trim ().replaceAll ("\"","");
-        String[] headers = inputHeadersV2.split (";");
+        String inputHeadersV2 = json.trim ().substring (2,json.length () - 2);
+
+        String[] headers = inputHeadersV2.split (",");
         for (String header : headers)
         {
             if (!(header.contains (":")))
@@ -70,30 +112,10 @@ public class ClientRequest implements Serializable, Runnable
         }
     }
 
-    public void removeCustomHeader (String key, String value)
-    {
-        removeFrom (key,value,customHeaders);
-    }
-
-
     public void addFormUrlData (String inputFormUrl)
     {
-        if (inputFormUrl == null)
-            return;
-        if (inputFormUrl.toCharArray ()[0] != '\"' ||
-                inputFormUrl.toCharArray ()[inputFormUrl.length () - 1] != '\"')
-            return;
-
-        String inputFormUrlV2 = inputFormUrl.trim ().replaceAll ("\"","");
-        String[] bodies = inputFormUrlV2.split ("&");
-        for (String body : bodies)
-        {
-            if (!(inputFormUrl.contains ("=")))
-                continue;
-            String[] keyValue = body.split ("=",2);
-            if (keyValue.length >= 2)
-                addTo (keyValue[0],keyValue[1], formUrlData);
-        }
+        addKeyAndValueType
+                (inputFormUrl,'\"',"\"","&","=");
     }
 
     public void removeFormUrlData (String key, String value)
@@ -140,10 +162,31 @@ public class ClientRequest implements Serializable, Runnable
 
     @Override
     public String toString () {
+
+        StringBuilder stringBuilder = new StringBuilder ();
+        int counter1 = 0;
+        for (String key : customHeaders.keySet ())
+        {
+            if (counter1 == 0)
+                stringBuilder.append (key).append (": ");
+            else
+                stringBuilder.append ("  ").append (key).append (": ");
+            counter1++;
+            int counter2 = 0;
+            for (String value : customHeaders.get (key))
+            {
+                if (counter2 == 0)
+                    stringBuilder.append (value);
+                else
+                    stringBuilder.append (",").append (value);
+                counter2++;
+            }
+        }
+
         return "name: " + name + " | " +
                 "url: " + httpConnection.getUrl ().toString () + " | " +
                 "method: " + httpConnection.getRequestType () + " | " +
-                "headers=" + customHeaders;
+                "headers: " + stringBuilder.toString ();
     }
 
 
@@ -166,6 +209,18 @@ public class ClientRequest implements Serializable, Runnable
     {
         httpConnection.setShowHeadersInResponse (showHeadersInResponse);
     }
+
+    public void setShouldSaveOutputInFile (boolean shouldSaveOutputInFile, String nameOfFile)
+    {
+        if (nameOfFile == null)
+        {
+            httpConnection.setSaveRawDataOnFile (shouldSaveOutputInFile);
+        } else
+        {
+            httpConnection.setSaveRawDataOnFile (shouldSaveOutputInFile, nameOfFile);
+        }
+    }
+
     public void setUrl (String url) throws MalformedURLException
     {
         httpConnection.setUrl (url);
@@ -189,6 +244,4 @@ public class ClientRequest implements Serializable, Runnable
             default : httpConnection.setRequestType (RequestType.GET);
         }
     }
-
-
 }

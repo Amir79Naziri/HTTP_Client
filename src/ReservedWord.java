@@ -22,7 +22,8 @@ public enum ReservedWord
     LIST("list"),
     FIRE("fire"),
     NAME("--name"),
-    CLOSE ("--close");
+    CLOSE ("--close"),
+    QUERY ("-Q");
 
 
     private String commandString;

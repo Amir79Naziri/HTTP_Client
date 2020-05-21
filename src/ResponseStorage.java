@@ -1,4 +1,4 @@
-import java.io.Serializable;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 
@@ -10,12 +10,10 @@ public class ResponseStorage implements Serializable
     private Map<String, List<String>> responseHeaders;
     private String readLength;
     private long responseTime;
-    private boolean showHeadersInResult;
 
     public ResponseStorage ()
     {
         reset ();
-        showHeadersInResult = false;
     }
 
     public void reset ()
@@ -51,9 +49,6 @@ public class ResponseStorage implements Serializable
         this.responseTime = responseTime;
     }
 
-    public void setShowHeadersInResult (boolean showHeadersInResult) {
-        this.showHeadersInResult = showHeadersInResult;
-    }
 
     public long getResponseTime () {
         return responseTime;
@@ -77,6 +72,12 @@ public class ResponseStorage implements Serializable
 
     public Map<String, List<String>> getResponseHeaders () {
         return responseHeaders;
+    }
+
+    public void printTimeAndReadDetails ()
+    {
+        System.out.println ("\nread : " + getReadLength () + "  time : " +
+                getResponseTime () +" milliSec" );
     }
 
     public void printHeaders ()
@@ -110,6 +111,19 @@ public class ResponseStorage implements Serializable
     public void printRawResponse ()
     {
         System.out.println (getResponseRawData ());
+    }
+
+    public void saveRawData (String fileName)
+    {
+
+        try (BufferedOutputStream in = new BufferedOutputStream (new FileOutputStream (
+                "./data/RawData/" + fileName))){
+            in.write (responseRawData.getBytes ());
+            in.flush ();
+        } catch (IOException e)
+        {
+            System.out.println ("some thing went wrong in saving rawData");
+        }
     }
 
 }

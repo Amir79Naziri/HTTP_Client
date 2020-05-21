@@ -9,7 +9,6 @@ public class InputProcessor
 
 
 
-
     public void getLine ()
     {
         tasks = new TreeMap<> ();
@@ -138,6 +137,8 @@ public class InputProcessor
             return ReservedWord.NAME;
         else if (command.equals (ReservedWord.CLOSE.getCommandString ()))
             return ReservedWord.CLOSE;
+        else if (command.equals (ReservedWord.QUERY.getCommandString ()))
+            return ReservedWord.QUERY;
         else
             return null;
     }
@@ -149,23 +150,24 @@ public class InputProcessor
         if (nextIndex < 0)
             throw new IndexOutOfBoundsException ("index should be 0 to " + commands.length);
         ArrayList<String> args = new ArrayList<> ();
+
         switch (reservedWord)
         {
             case UPLOAD:
-                if (nextIndex < commands.length && isReserveWord (commands[nextIndex]) == null)
-                    args.add (commands[nextIndex]);
-                break;
             case JSON_V2:
             case NAME:
             case HEADER_V2:
+            case QUERY:
             case METHOD_V2:
             case OUTPUT_V2:
+                if (nextIndex < commands.length && isReserveWord (commands[nextIndex]) == null)
+                    args.add (commands[nextIndex]);
+                break;
             case FORM_DATA_V2:
                 if (nextIndex < commands.length && isReserveWord (commands[nextIndex]) == null)
                     args.add (commands[nextIndex]);
                 else
                 {
-                    System.out.println ("jurl: try 'jurl --help' / 'jurl -h' for more information");
                     return null;
                 }
                 break;
@@ -182,7 +184,6 @@ public class InputProcessor
                         break;
                 }
                 if (args.size () <= 0) {
-                    System.out.println ("jurl: try 'jurl --help' / 'jurl -h' for more information");
                     return null;
                 }
         }

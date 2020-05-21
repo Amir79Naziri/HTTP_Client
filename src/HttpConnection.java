@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class HttpConnection implements Serializable
@@ -16,13 +17,15 @@ public class HttpConnection implements Serializable
     private RequestType requestType;
     private boolean followRedirect;
     private boolean showHeadersInResponse;
+    private boolean saveRawDataOnFile;
+    private String nameOfFileForSaveOutput;
 
 
-    public HttpConnection (String url) throws MalformedURLException
+    public HttpConnection (String url, boolean followRedirect) throws MalformedURLException
     {
         this.url = new URL (url);
         this.requestType = RequestType.GET;
-        followRedirect = false;
+        this.followRedirect = followRedirect;
         showHeadersInResponse = false;
         responseStorage = new ResponseStorage ();
     }
@@ -56,6 +59,7 @@ public class HttpConnection implements Serializable
             return connection;
         } catch(IOException e) {
             System.err.println ("Failed to start Connecting");
+            responseStorage.printTimeAndReadDetails ();
             return null;
         }
     }
@@ -71,6 +75,7 @@ public class HttpConnection implements Serializable
         catch (IOException e)
         {
             System.err.println ("Failed to Connect");
+            responseStorage.printTimeAndReadDetails ();
             return false;
         }
     }
@@ -130,8 +135,7 @@ public class HttpConnection implements Serializable
         }
         responseStorage.setResponseTime ((System.currentTimeMillis () - startTime));
 
-        printResult ();
-        connection.disconnect ();
+        disconnectServer (connection);
     }
 
     public void postMethod (HttpURLConnection connection, byte[] bytes, int messageBodyType)
@@ -157,22 +161,40 @@ public class HttpConnection implements Serializable
         }
         // TODO : Add JSON and Binary
         responseStorage.setResponseTime ((System.currentTimeMillis () - startTime));
-        printResult ();
-        connection.disconnect ();
+        disconnectServer (connection);
     }
 
-
-
-
+    private void disconnectServer (HttpURLConnection connection)
+    {
+        if (connection == null)
+            throw new NullPointerException ("inValid input");
+        printResult ();
+        if (saveRawDataOnFile)
+            responseStorage.saveRawData (nameOfFileForSaveOutput);
+        connection.disconnect ();
+    }
 
     public void setRequestType (RequestType requestType) {
         this.requestType = requestType;
     }
 
+
     public void setUrl (String url) throws MalformedURLException
     {
         this.url = new URL (url);
     }
+
+    public void setSaveRawDataOnFile (boolean saveRawDataOnFile) {
+        this.saveRawDataOnFile = saveRawDataOnFile;
+        this.nameOfFileForSaveOutput = "Output_" + new SimpleDateFormat (
+                "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".html";
+    }
+
+    public void setSaveRawDataOnFile (boolean saveRawDataOnFile, String nameOfFile) {
+        this.saveRawDataOnFile = saveRawDataOnFile;
+        this.nameOfFileForSaveOutput = nameOfFile;
+    }
+
 
     public void setShowHeadersInResponse (boolean showHeadersInResponse) {
         this.showHeadersInResponse = showHeadersInResponse;
@@ -196,8 +218,9 @@ public class HttpConnection implements Serializable
 
     private void printResult ()
     {
+        responseStorage.printTimeAndReadDetails ();
         System.out.println ();
-        System.out.println (url + "response : ");
+        System.out.println (url);
         if (showHeadersInResponse)
             responseStorage.printHeaders ();
         responseStorage.printRawResponse ();

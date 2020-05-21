@@ -59,7 +59,7 @@ public class Jurl
         else
         {
             try {
-                ClientRequest clientRequest = new ClientRequest (url);
+                ClientRequest clientRequest = new ClientRequest (url,false);
 
                 for (ReservedWord reservedWord : tasks.keySet ())
                 {
@@ -67,7 +67,16 @@ public class Jurl
                     {
                         case JSON_V2:
                             break;
+                        case QUERY:
+                            break;
                         case OUTPUT_V2:
+                            if (tasks.get (reservedWord).size () == 1)
+                                clientRequest.setShouldSaveOutputInFile
+                                    (true,tasks.get (reservedWord).get(0));
+                            else
+                                clientRequest.setShouldSaveOutputInFile
+                                        (true,null);
+
                             break;
                         case FOLLOW_REDIRECT: clientRequest.setFollowRedirect (true);
                             break;
