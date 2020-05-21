@@ -1,34 +1,149 @@
-import javax.net.ssl.HttpsURLConnection;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class ClientRequest implements Runnable , Serializable
+public class ClientRequest implements Serializable, Runnable
 {
+    private HttpConnection httpConnection;
     private String name;
-    private URL url;
-    private RequestType requestType; // method of request
-    private String responseRawData;
-    private Map<String, List<String>> responseHeaders;
-    private int responseCode;
-    private String responseMessage;
-    private HashMap<String,String> customHeaders;
-    private StringBuilder queryHeadersString;
+    private HashMap<String,ArrayList<String>> customHeaders;
+    private HashMap<String,ArrayList<String>> formUrlData;
+    private int messageBodyType;
 
 
-
-    public ClientRequest (String name, RequestType requestType)
+    public ClientRequest (String url) throws MalformedURLException
     {
-
-        responseRawData = null;
-        this.name = name;
-        this.requestType = Objects.requireNonNullElse (requestType, RequestType.GET);
-        responseMessage = "";
+        this.name = "MyRequest";
         customHeaders = new HashMap<> ();
-        queryHeadersString = new StringBuilder ();
+        formUrlData = new HashMap<> ();
+        httpConnection = new HttpConnection (url);
+        messageBodyType = 1;
+    }
+
+
+    private void addTo (String key, String value, HashMap<String, ArrayList<String>> list)
+    {
+        if (key == null || value == null || list == null)
+            return;
+        if (list.containsKey (key))
+            list.get (key).add (value);
+        else {
+            ArrayList<String> values = new ArrayList<> ();
+            values.add (value);
+            list.put (key,values);
+        }
+    }
+
+    private void removeFrom (String key, String value, HashMap<String,ArrayList<String>> list)
+    {
+        if (key == null || value == null || list == null)
+            return;
+        if (list.containsKey (key))
+        {
+            ArrayList<String> values = list.get (key);
+            values.remove (value);
+
+            if (values.size () <= 0)
+                list.remove (key);
+        }
+    }
+
+    public void addCustomHeader (String inputHeader)
+    {
+        if (inputHeader == null)
+            return;
+        if (inputHeader.toCharArray ()[0] != '\"' ||
+                inputHeader.toCharArray ()[inputHeader.length () - 1] != '\"')
+            return;
+
+        String inputHeadersV2 = inputHeader.trim ().replaceAll ("\"","");
+        String[] headers = inputHeadersV2.split (";");
+        for (String header : headers)
+        {
+            if (!(header.contains (":")))
+                continue;
+            String[] keyValue = header.split (":",2);
+            if (keyValue.length >= 2)
+                addTo (keyValue[0],keyValue[1], customHeaders);
+        }
+    }
+
+    public void removeCustomHeader (String key, String value)
+    {
+        removeFrom (key,value,customHeaders);
+    }
+
+
+    public void addFormUrlData (String inputFormUrl)
+    {
+        if (inputFormUrl == null)
+            return;
+        if (inputFormUrl.toCharArray ()[0] != '\"' ||
+                inputFormUrl.toCharArray ()[inputFormUrl.length () - 1] != '\"')
+            return;
+
+        String inputFormUrlV2 = inputFormUrl.trim ().replaceAll ("\"","");
+        String[] bodies = inputFormUrlV2.split ("&");
+        for (String body : bodies)
+        {
+            if (!(inputFormUrl.contains ("=")))
+                continue;
+            String[] keyValue = body.split ("=",2);
+            if (keyValue.length >= 2)
+                addTo (keyValue[0],keyValue[1], formUrlData);
+        }
+    }
+
+    public void removeFormUrlData (String key, String value)
+    {
+        removeFrom (key,value,formUrlData);
+    }
+
+
+    public byte[] getFormUrlDataByteForServer ()
+    {
+        StringBuilder data = new StringBuilder ();
+
+        int counter = 0;
+        for (String key : formUrlData.keySet ())
+        {
+            for (String value : formUrlData.get (key))
+            {
+                if (counter == 0)
+                    data.append (key).append ("=").append (value);
+                else
+                    data.append ("&").append (key).append ("=").append (value);
+                counter++;
+            }
+        }
+        return data.toString ().getBytes (StandardCharsets.UTF_8);
+    }
+
+
+    @Override
+    public void run ()
+    {
+        HttpURLConnection connection;
+        if ((connection = httpConnection.connectionInitializer (customHeaders)) != null)
+        {
+            switch (httpConnection.getRequestType ())
+            {
+                case GET: httpConnection.getMethod (connection); return;
+                case POST: httpConnection.postMethod (connection,getFormUrlDataByteForServer (),
+                        messageBodyType);
+            }
+        }
+    }
+
+
+    @Override
+    public String toString () {
+        return "name: " + name + " | " +
+                "url: " + httpConnection.getUrl ().toString () + " | " +
+                "method: " + httpConnection.getRequestType () + " | " +
+                "headers=" + customHeaders;
     }
 
 
@@ -36,165 +151,43 @@ public class ClientRequest implements Runnable , Serializable
         this.name = name;
     }
 
-    public void setRequestType (String requestType) {
 
+    public void setMessageBodyType (int messageBodyType) {
+        this.messageBodyType = messageBodyType;
+    }
+
+
+    public void setFollowRedirect (boolean followRedirection)
+    {
+        httpConnection.setFollowRedirect (followRedirection);
+    }
+
+    public void setUrl (String url) throws MalformedURLException
+    {
+        httpConnection.setUrl (url);
+    }
+
+    public void setRequestType (String requestType)
+    {
         if (requestType == null)
         {
-            this.requestType = RequestType.GET;
-            return;
-        }
-        switch (requestType) {
-            case "POST":
-                this.requestType = RequestType.POST;
-                break;
-            case "PATCH":
-                this.requestType = RequestType.PATCH;
-                break;
-            case "DELETE":
-                this.requestType = RequestType.DELETE;
-                break;
-            case "PUT":
-                this.requestType = RequestType.PUT;
-                break;
-            case "GET":
-            default:
-                this.requestType = RequestType.GET;
-                break;
-        }
-
-    }
-
-    public void setUrl (String url) {
-        try {
-            this.url = new URL (url + "/");
-        } catch (MalformedURLException e)
-        {
-            e.printStackTrace ();
-        }
-    }
-
-    public void addHeader (String inputHeader)
-    {
-        if (inputHeader == null)
-            return;
-        String[] headers = inputHeader.trim ().split (";");
-        for (String header : headers)
-        {
-            String[] keyValue = header.split (":",2);
-            if (keyValue.length >= 2)
-                customHeaders.put(keyValue[0],keyValue[1]);
-        }
-    }
-
-    public void addQueryHeaders (String key, String value)
-    {
-
-        if (queryHeadersString.length () == 0)
-            queryHeadersString.append ("?").append (key).append ("=").append (value);
-        else
-            queryHeadersString.append ("&").append (key).append ("=").append (value);
-    }
-
-    public void removeQuery (String key, String value)
-    {
-        String qHeader = "&" + key + "=" + value;
-        int start = queryHeadersString.indexOf (qHeader);
-    }
-
-    public void removeHeader (String key)
-    {
-        customHeaders.remove (key);
-    }
-
-    @Override
-    public void run ()
-    {
-        HttpURLConnection connection ;
-        String address = url.toString ();
-        if (queryHeadersString.toString ().length () > 0)
-        {
-            address = url.toString ();
-            address = address + queryHeadersString.toString ();
-        }
-
-        System.out.println (address);
-        setUrl (address);
-
-        try {
-
-            if (("http").equals (url.getProtocol ()))
-                connection = (HttpURLConnection)url.openConnection ();
-            else if (("https").equals (url.getProtocol ()))
-                connection = (HttpsURLConnection)url.openConnection ();
-            else
-            {
-                System.out.println ("UNDEFINED PROTOCOL");
-                return;
-            }
-
-            connection.setRequestMethod (requestType.toString ());
-
-            //add custom headers
-            for (String key : customHeaders.keySet ())
-                connection.setRequestProperty (key,customHeaders.get (key));
-
-
-            connection.connect ();
-
-            if (connection.getResponseCode () != 200)
-            {
-                responseMessage = connection.getResponseMessage ();
-                responseCode = connection.getResponseCode ();
-                return;
-            }
-
-            responseHeaders = connection.getHeaderFields ();
-            responseCode = connection.getResponseCode ();
-            responseMessage = connection.getResponseMessage ();
-            System.out.println (connection.getExpiration ());
-
-
-        } catch (IOException e)
-        {
-            System.out.println ("Failed to Connect");
+            httpConnection.setRequestType (RequestType.GET);
             return;
         }
 
-
-        try(Scanner in =
-                new Scanner (connection.getInputStream ()))
+        switch (requestType)
         {
-
-            StringBuilder content = new StringBuilder ();
-            while (in.hasNext ())
-            {
-                content.append (in.nextLine ()).append ('\n');
-            }
-
-            responseRawData = content.toString ();
-            System.out.println (responseCode + " " + responseMessage );
-            for (String key : responseHeaders.keySet ())
-                System.out.println (key + " " + responseHeaders.get (key));
-            System.out.println (responseRawData);
-
-
-        } catch (IOException e)
-        {
-            e.printStackTrace ();
+            case "POST" : httpConnection.setRequestType (RequestType.POST); break;
+            case "DELETE" : httpConnection.setRequestType (RequestType.DELETE); break;
+            case "PATCH" : httpConnection.setRequestType (RequestType.PATCH); break;
+            case "PUT" : httpConnection.setRequestType (RequestType.PUT); break;
+            case "GET" :
+            default : httpConnection.setRequestType (RequestType.GET);
         }
-
     }
 
-    public String getName () {
-        return name;
-    }
-
-    @Override
-    public String toString () {
-        return "name: " + name + " | " +
-                "url: " + url + " | " +
-                "method: " + requestType + " | " +
-                "headers=" + customHeaders + " | " +
-                "queryHeadersString=" + queryHeadersString;
+    public void setShowHeadersInResult (boolean showHeadersInResult)
+    {
+        httpConnection.getResponseStorage ().setShowHeadersInResult (showHeadersInResult);
     }
 }

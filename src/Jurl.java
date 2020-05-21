@@ -19,7 +19,6 @@ public class Jurl
     }
 
 
-
     public void startProgram ()
     {
         while (true) {
@@ -60,7 +59,7 @@ public class Jurl
         else
         {
             try {
-                ClientRequest clientRequest = new ClientRequest (url, RequestType.GET);
+                ClientRequest clientRequest = new ClientRequest (url);
 
                 for (ReservedWord reservedWord : tasks.keySet ())
                 {
@@ -75,7 +74,8 @@ public class Jurl
                         case NAME: clientRequest.setName (tasks.get (reservedWord).get (0));
                             break;
                         case UPLOAD:
-                        case HEADER_V2: clientRequest.addHeader (tasks.get (reservedWord).get (0));
+                        case HEADER_V2: clientRequest.addCustomHeader
+                                (tasks.get (reservedWord).get (0));
                             break;
                         case METHOD_V2: clientRequest.setRequestType (tasks.get (reservedWord).get (0));
                             break;
