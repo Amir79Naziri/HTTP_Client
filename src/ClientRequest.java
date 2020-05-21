@@ -38,7 +38,8 @@ public class ClientRequest implements Serializable, Runnable
         }
     }
 
-    private void addKeyAndValueType (String input,char f1, String f2, String s, String t)
+    private void addKeyAndValueType (HashMap<String,ArrayList<String>> list,
+                                     String input,char f1, String f2, String s, String t)
     {
         if (input == null)
             return;
@@ -54,7 +55,7 @@ public class ClientRequest implements Serializable, Runnable
                 continue;
             String[] keyValue = header.split (t,2);
             if (keyValue.length >= 2)
-                addTo (keyValue[0],keyValue[1], customHeaders);
+                addTo (keyValue[0],keyValue[1], list);
         }
     }
 
@@ -75,19 +76,26 @@ public class ClientRequest implements Serializable, Runnable
     public void addCustomHeader (String inputHeader)
     {
         addKeyAndValueType
-                (inputHeader,'\"',"\"",";",":");
+                (customHeaders,inputHeader,'\"',"\"",";",":");
     }
 
     public void removeCustomHeader (String key, String value)
     {
-        removeFrom (key,value,customHeaders);
+        removeFrom
+                (key,value,customHeaders);
     }
 
 
     public void addQuery (String query)
     {
         addKeyAndValueType
-                (query,'\"',"\"","&","=");
+                (queryData,query,'\"',"\"","&","=");
+    }
+
+    public void removeQuery (String key, String value)
+    {
+        removeFrom
+                (key,value,queryData);
     }
 
     public void addJSON (String json)
@@ -108,19 +116,20 @@ public class ClientRequest implements Serializable, Runnable
                 continue;
             String[] keyValue = header.split (":",2);
             if (keyValue.length >= 2)
-                addTo (keyValue[0],keyValue[1], customHeaders);
+                addTo (keyValue[0],keyValue[1], );
         }
     }
 
     public void addFormUrlData (String inputFormUrl)
     {
         addKeyAndValueType
-                (inputFormUrl,'\"',"\"","&","=");
+                (formUrlData,inputFormUrl,'\"',"\"","&","=");
     }
 
     public void removeFormUrlData (String key, String value)
     {
-        removeFrom (key,value,formUrlData);
+        removeFrom
+                (key,value,formUrlData);
     }
 
 
