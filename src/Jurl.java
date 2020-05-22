@@ -67,7 +67,7 @@ public class Jurl
                     {
                         case JSON_V2:
                             break;
-                        case QUERY:
+                        case QUERY: clientRequest.addQuery (tasks.get (reservedWord).get (0));
                             break;
                         case OUTPUT_V2:
                             if (tasks.get (reservedWord).size () == 1)

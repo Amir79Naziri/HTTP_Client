@@ -1,5 +1,7 @@
 import javax.swing.*;
+import javax.swing.text.html.HTMLWriter;
 import java.net.MalformedURLException;
+import java.net.http.HttpClient;
 import java.util.ArrayList;
 
 /**
@@ -20,7 +22,7 @@ public class Run
 //        gui.setBaseFrameVisible ();
 
 
-
+//
         Jurl jurl = new Jurl ();
         jurl.startProgram ();
 

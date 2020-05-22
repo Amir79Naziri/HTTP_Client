@@ -1,10 +1,9 @@
 import javax.net.ssl.HttpsURLConnection;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -18,7 +17,7 @@ public class HttpConnection implements Serializable
     private boolean followRedirect;
     private boolean showHeadersInResponse;
     private boolean saveRawDataOnFile;
-    private String nameOfFileForSaveOutput;
+    private String addressOfFileForSaveOutput;
 
 
     public HttpConnection (String url, boolean followRedirect) throws MalformedURLException
@@ -31,7 +30,7 @@ public class HttpConnection implements Serializable
     }
 
 
-    public HttpURLConnection connectionInitializer (HashMap<String, ArrayList<String>> headers)
+    public HttpURLConnection connectionInitializer (HashMap<String, String> headers)
     {
         try {
             HttpURLConnection connection;
@@ -53,8 +52,7 @@ public class HttpConnection implements Serializable
 
             //add headers
             for (String key : headers.keySet ())
-                for (String value : headers.get (key))
-                    connection.setRequestProperty (key,value);
+                    connection.setRequestProperty (key,headers.get (key));
 
             return connection;
         } catch(IOException e) {
@@ -75,10 +73,10 @@ public class HttpConnection implements Serializable
         catch (IOException e)
         {
             System.err.println ("Failed to Connect");
-            responseStorage.printTimeAndReadDetails ();
             return false;
         }
     }
+
 
     private void readFromServer (HttpURLConnection connection) {
         if (connection == null)
@@ -86,24 +84,83 @@ public class HttpConnection implements Serializable
         try {
             responseStorage.setResponseCode (connection.getResponseCode ());
             responseStorage.setResponseMessage (connection.getResponseMessage ());
-
             responseStorage.setResponseHeaders (connection.getHeaderFields ());
 
 
-            Scanner in = new Scanner (connection.getInputStream ());
-            StringBuilder content = new StringBuilder ();
-            while (in.hasNext ()) {
-                content.append (in.nextLine ()).append ('\n');
+            String contentType = connection.getContentType ().split (";")[0];
+
+            switch (contentType) {
+                case "text/html":
+                    if (addressOfFileForSaveOutput == null) {
+                        addressOfFileForSaveOutput = "./data/RawData/Output_" + new SimpleDateFormat (
+                                "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".html";
+                    }
+                    textReader (connection.getInputStream ());
+                    break;
+                case "image/png":
+                    if (addressOfFileForSaveOutput == null) {
+                        addressOfFileForSaveOutput = "./data/RawData/Output_" + new SimpleDateFormat (
+                                "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".png";
+                    }
+                    if (!saveRawDataOnFile) {
+                        System.out.println ("you should use --output!");
+                    } else {
+                        binaryReader (connection.getInputStream ());
+                    }
+                    responseStorage.setResponseTextRawData ("File is Binary !");
+                    break;
+                case "text/plain":
+                    if (addressOfFileForSaveOutput == null) {
+                        addressOfFileForSaveOutput = "./data/RawData/Output_" + new SimpleDateFormat (
+                                "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".txt";
+                    }
+                    textReader (connection.getInputStream ());
+                    break;
             }
-            in.close ();
-            responseStorage.setResponseRawData (content.toString ());
 
-
-
-        }catch (IOException ignore)
+        }catch (IOException e)
         {
-            responseStorage.setResponseRawData ("Error: URL using bad/illegal format or missing URL");
+            responseStorage.setResponseTextRawData ("Error: URL using bad/illegal format or missing URL");
         }
+    }
+
+
+    private void textReader (InputStream serverInputStream)
+    {
+        Scanner out = new Scanner (serverInputStream);
+        StringBuilder content = new StringBuilder ();
+        while (out.hasNext ()) {
+            content.append (out.nextLine ()).append ('\n');
+        }
+        responseStorage.setResponseTextRawData (content.toString ());
+        responseStorage.setReadLength (BinaryFilePanel.
+                makeSizeReadable (content.toString ().getBytes ().length));
+        if (saveRawDataOnFile)
+        {
+            try (BufferedOutputStream in = new BufferedOutputStream (new FileOutputStream (
+                    addressOfFileForSaveOutput))){
+                in.write (content.toString ().getBytes ());
+                in.flush ();
+            } catch (IOException e)
+            {
+                System.out.println ("some thing went wrong in saving rawData");
+            }
+        }
+    }
+
+    private void binaryReader (InputStream serverInputStream) throws IOException
+    {
+        BufferedInputStream in= new BufferedInputStream (serverInputStream);
+        BufferedOutputStream out = new BufferedOutputStream (
+                new FileOutputStream (addressOfFileForSaveOutput));
+        out.write (in.readAllBytes ());
+        out.flush ();
+        out.close ();
+        in.close ();
+        responseStorage.setResponseFileRawData (new File (addressOfFileForSaveOutput));
+        responseStorage.setReadLength (BinaryFilePanel.makeSizeReadable (Files.size (
+                responseStorage.getResponseFileRawData ().toPath ()
+        )));
     }
 
     private void writeToServer (HttpURLConnection connection, byte[] bytes)
@@ -148,7 +205,6 @@ public class HttpConnection implements Serializable
 
         if (messageBodyType == 1)
         {
-            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
             if (connectToServer (connection))
             {
@@ -164,15 +220,15 @@ public class HttpConnection implements Serializable
         disconnectServer (connection);
     }
 
+
     private void disconnectServer (HttpURLConnection connection)
     {
         if (connection == null)
             throw new NullPointerException ("inValid input");
         printResult ();
-        if (saveRawDataOnFile)
-            responseStorage.saveRawData (nameOfFileForSaveOutput);
         connection.disconnect ();
     }
+
 
     public void setRequestType (RequestType requestType) {
         this.requestType = requestType;
@@ -186,13 +242,13 @@ public class HttpConnection implements Serializable
 
     public void setSaveRawDataOnFile (boolean saveRawDataOnFile) {
         this.saveRawDataOnFile = saveRawDataOnFile;
-        this.nameOfFileForSaveOutput = "Output_" + new SimpleDateFormat (
-                "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".html";
+        this.addressOfFileForSaveOutput = null;
     }
+
 
     public void setSaveRawDataOnFile (boolean saveRawDataOnFile, String nameOfFile) {
         this.saveRawDataOnFile = saveRawDataOnFile;
-        this.nameOfFileForSaveOutput = nameOfFile;
+        this.addressOfFileForSaveOutput = "./data/RawData/" + nameOfFile;
     }
 
 
@@ -200,21 +256,26 @@ public class HttpConnection implements Serializable
         this.showHeadersInResponse = showHeadersInResponse;
     }
 
+
     public void setFollowRedirect (boolean followRedirect) {
         this.followRedirect = followRedirect;
     }
+
 
     public URL getUrl () {
         return url;
     }
 
+
     public ResponseStorage getResponseStorage () {
         return responseStorage;
     }
 
+
     public RequestType getRequestType () {
         return requestType;
     }
+
 
     private void printResult ()
     {

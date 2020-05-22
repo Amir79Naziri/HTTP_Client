@@ -18,7 +18,7 @@ public class SecondPanel extends JPanel
     // panel's in second Panel
     private QueryPanel queryPanel;
     private HeaderPanel headerPanel;
-    private FormUrlPanel formUrlPanel;
+    private MultiPartPanel multiPartPanel;
     private JsonPanel jsonPanel;
     private BearerPanel bearerPanel;
     private BinaryFilePanel binaryFilePanel;
@@ -112,12 +112,12 @@ public class SecondPanel extends JPanel
 
         queryPanel = new QueryPanel (theme);
         headerPanel = new HeaderPanel (theme);
-        formUrlPanel = new FormUrlPanel (theme);
+        multiPartPanel = new MultiPartPanel (theme);
         jsonPanel = new JsonPanel (theme);
         bearerPanel = new BearerPanel (theme);
         binaryFilePanel = new BinaryFilePanel (theme);
 
-        String[] bodyTypes = {"Form URL Encoded ","JSON ", "Binary File"};
+        String[] bodyTypes = {"MultiPart ","JSON ", "Binary File"};
         JComboBox<String> body = new JComboBox<> (bodyTypes);
         body.addItemListener (new ItemListener () {
             @Override
@@ -125,7 +125,7 @@ public class SecondPanel extends JPanel
 
                 if (body.getSelectedIndex () == 0)
                 {
-                    tabbedPane.setComponentAt (0,formUrlPanel);
+                    tabbedPane.setComponentAt (0, multiPartPanel);
 
                 }
                 else if (body.getSelectedIndex () == 1)
@@ -147,7 +147,7 @@ public class SecondPanel extends JPanel
         });
         body.setBackground (Color.GRAY);
 
-        tabbedPane.add (formUrlPanel);
+        tabbedPane.add (multiPartPanel);
         tabbedPane.setTabComponentAt (0,body);
         tabbedPane.addTab ("Bearer",bearerPanel);
         tabbedPane.addTab ("Query",queryPanel);

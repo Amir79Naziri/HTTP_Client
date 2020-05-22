@@ -4,7 +4,8 @@ import java.util.Map;
 
 public class ResponseStorage implements Serializable
 {
-    private String responseRawData;
+    private String responseTextRawData;
+    private File responseFileRawData;
     private int responseCode;
     private String responseMessage;
     private Map<String, List<String>> responseHeaders;
@@ -18,7 +19,7 @@ public class ResponseStorage implements Serializable
 
     public void reset ()
     {
-        responseRawData = "Error: URL using bad/illegal format or missing URL";
+        responseTextRawData = "Error: URL using bad/illegal format or missing URL";
         readLength = "0";
         responseTime = 0;
     }
@@ -39,10 +40,13 @@ public class ResponseStorage implements Serializable
         this.responseHeaders = responseHeaders;
     }
 
-    public void setResponseRawData (String responseRawData) {
-        this.responseRawData = responseRawData;
-        setReadLength (BinaryFilePanel.
-                makeSizeReadable (getResponseRawData ().getBytes ().length));
+    public void setResponseTextRawData (String responseRawData) {
+        this.responseTextRawData = responseRawData;
+
+    }
+
+    public void setResponseFileRawData (File responseFileRawData) {
+        this.responseFileRawData = responseFileRawData;
     }
 
     public void setResponseTime (long responseTime) {
@@ -66,8 +70,12 @@ public class ResponseStorage implements Serializable
         return responseMessage;
     }
 
-    public String getResponseRawData () {
-        return responseRawData;
+    public String getResponseTextRawData () {
+        return responseTextRawData;
+    }
+
+    public File getResponseFileRawData () {
+        return responseFileRawData;
     }
 
     public Map<String, List<String>> getResponseHeaders () {
@@ -78,6 +86,7 @@ public class ResponseStorage implements Serializable
     {
         System.out.println ("\nread : " + getReadLength () + "  time : " +
                 getResponseTime () +" milliSec" );
+
     }
 
     public void printHeaders ()
@@ -110,20 +119,9 @@ public class ResponseStorage implements Serializable
 
     public void printRawResponse ()
     {
-        System.out.println (getResponseRawData ());
+        System.out.println (getResponseTextRawData ());
     }
 
-    public void saveRawData (String fileName)
-    {
 
-        try (BufferedOutputStream in = new BufferedOutputStream (new FileOutputStream (
-                "./data/RawData/" + fileName))){
-            in.write (responseRawData.getBytes ());
-            in.flush ();
-        } catch (IOException e)
-        {
-            System.out.println ("some thing went wrong in saving rawData");
-        }
-    }
 
 }

@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -8,9 +9,9 @@ public class ClientRequest implements Serializable, Runnable
 {
     private HttpConnection httpConnection;
     private String name;
-    private HashMap<String,ArrayList<String>> customHeaders;
-    private HashMap<String,ArrayList<String>> formUrlData;
-    private HashMap<String,ArrayList<String>> queryData;
+    private HashMap<String,String> customHeaders;
+    private HashMap<String,String> formData;
+    private HashMap<String,String> queryData;
     private int messageBodyType;
 
 
@@ -18,27 +19,16 @@ public class ClientRequest implements Serializable, Runnable
     {
         this.name = "MyRequest";
         customHeaders = new HashMap<> ();
-        formUrlData = new HashMap<> ();
+        formData = new HashMap<> ();
         queryData = new HashMap<> ();
         httpConnection = new HttpConnection (url,followRedirect);
         messageBodyType = 1;
     }
 
 
-    private void addTo (String key, String value, HashMap<String, ArrayList<String>> list)
-    {
-        if (key == null || value == null || list == null)
-            return;
-        if (list.containsKey (key))
-            list.get (key).add (value);
-        else {
-            ArrayList<String> values = new ArrayList<> ();
-            values.add (value);
-            list.put (key,values);
-        }
-    }
 
-    private void addKeyAndValueType (HashMap<String,ArrayList<String>> list,
+
+    private void addKeyAndValueType (HashMap<String,String> list,
                                      String input,char f1, String f2, String s, String t)
     {
         if (input == null)
@@ -55,23 +45,11 @@ public class ClientRequest implements Serializable, Runnable
                 continue;
             String[] keyValue = header.split (t,2);
             if (keyValue.length >= 2)
-                addTo (keyValue[0],keyValue[1], list);
+                list.put (keyValue[0],keyValue[1]);
         }
     }
 
-    private void removeFrom (String key, String value, HashMap<String,ArrayList<String>> list)
-    {
-        if (key == null || value == null || list == null)
-            return;
-        if (list.containsKey (key))
-        {
-            ArrayList<String> values = list.get (key);
-            values.remove (value);
 
-            if (values.size () <= 0)
-                list.remove (key);
-        }
-    }
 
     public void addCustomHeader (String inputHeader)
     {
@@ -79,10 +57,9 @@ public class ClientRequest implements Serializable, Runnable
                 (customHeaders,inputHeader,'\"',"\"",";",":");
     }
 
-    public void removeCustomHeader (String key, String value)
+    public void removeCustomHeader (String key)
     {
-        removeFrom
-                (key,value,customHeaders);
+        customHeaders.remove (key);
     }
 
 
@@ -92,77 +69,65 @@ public class ClientRequest implements Serializable, Runnable
                 (queryData,query,'\"',"\"","&","=");
     }
 
-    public void removeQuery (String key, String value)
+    public void removeQuery (String key)
     {
-        removeFrom
-                (key,value,queryData);
+        queryData.remove (key);
     }
 
-    public void addJSON (String json)
-    {
-        if (json == null)
-            return;
-        if (json.toCharArray ()[0] != '\"' || json.toCharArray ()[1] != '{' ||
-                json.toCharArray ()[json.length () - 1] != '\"' ||
-                json.toCharArray ()[json.length () - 2] != '}')
-            return;
-
-        String inputHeadersV2 = json.trim ().substring (2,json.length () - 2);
-
-        String[] headers = inputHeadersV2.split (",");
-        for (String header : headers)
+    public String getQueryData () {
+        int counter = 0;
+        StringBuilder stringBuilder = new StringBuilder ();
+        for (String key : queryData.keySet ())
         {
-            if (!(header.contains (":")))
-                continue;
-            String[] keyValue = header.split (":",2);
-            if (keyValue.length >= 2)
-                addTo (keyValue[0],keyValue[1], );
+            if (counter == 0)
+            {
+                stringBuilder.append ("?").append (key).append ("=").append (queryData.get (key));
+            }
+            else
+            {
+                stringBuilder.append ("&").append (key).append ("=").append (queryData.get (key));
+            }
+            counter++;
         }
+        return stringBuilder.toString ();
     }
 
     public void addFormUrlData (String inputFormUrl)
     {
         addKeyAndValueType
-                (formUrlData,inputFormUrl,'\"',"\"","&","=");
+                (formData,inputFormUrl,'\"',"\"","&","=");
     }
 
-    public void removeFormUrlData (String key, String value)
+    public void removeFormData (String key)
     {
-        removeFrom
-                (key,value,formUrlData);
+        formData.remove (key);
     }
 
 
-    public byte[] getFormUrlDataByteForServer ()
-    {
-        StringBuilder data = new StringBuilder ();
 
-        int counter = 0;
-        for (String key : formUrlData.keySet ())
-        {
-            for (String value : formUrlData.get (key))
-            {
-                if (counter == 0)
-                    data.append (key).append ("=").append (value);
-                else
-                    data.append ("&").append (key).append ("=").append (value);
-                counter++;
-            }
-        }
-        return data.toString ().getBytes (StandardCharsets.UTF_8);
-    }
 
 
     @Override
     public void run ()
     {
+        URL past = httpConnection.getUrl ();
+        try {
+            httpConnection.setUrl (httpConnection.getUrl () + "" + getQueryData ());
+        } catch (MalformedURLException e) {
+            try {
+                httpConnection.setUrl (past.toString ());
+            } catch (MalformedURLException ignore)
+            {
+            }
+        }
+
         HttpURLConnection connection;
         if ((connection = httpConnection.connectionInitializer (customHeaders)) != null)
         {
             switch (httpConnection.getRequestType ())
             {
                 case GET: httpConnection.getMethod (connection); return;
-                case POST: httpConnection.postMethod (connection,getFormUrlDataByteForServer (),
+                case POST: httpConnection.postMethod (connection,null,
                         messageBodyType);
             }
         }
@@ -181,15 +146,8 @@ public class ClientRequest implements Serializable, Runnable
             else
                 stringBuilder.append ("  ").append (key).append (": ");
             counter1++;
-            int counter2 = 0;
-            for (String value : customHeaders.get (key))
-            {
-                if (counter2 == 0)
-                    stringBuilder.append (value);
-                else
-                    stringBuilder.append (",").append (value);
-                counter2++;
-            }
+
+            stringBuilder.append (customHeaders.get (key));
         }
 
         return "name: " + name + " | " +

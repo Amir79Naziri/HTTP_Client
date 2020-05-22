@@ -2,19 +2,19 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * this class represents FormURLPanel
+ * this class represents MultiPartPanel
  *
  * @author Amir Naziri
  */
-public class FormUrlPanel extends JPanel
+public class MultiPartPanel extends JPanel
 {
     private KeyAndValuePanel keyAndValuePanel; // keyAndValue panel
 
     /**
-     * create a new FormURL panel
+     * create a new MultiPartPanel
      * @param theme theme
      */
-    public FormUrlPanel (Theme theme)
+    public MultiPartPanel (Theme theme)
     {
         super();
         if (theme == null)
@@ -25,7 +25,7 @@ public class FormUrlPanel extends JPanel
     }
 
     /**
-     * add new keyAndValue in formURL panel
+     * add new keyAndValue in MultiPartPanel
      */
     public void addNewKeyAndValue ()
     {
@@ -33,7 +33,7 @@ public class FormUrlPanel extends JPanel
     }
 
     /**
-     * @return keyAndValue panel
+     * @return MultiPartPanel
      */
     public KeyAndValuePanel getKeyAndValuePanel () {
         return keyAndValuePanel;
