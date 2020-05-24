@@ -93,14 +93,16 @@ public class HttpConnection implements Serializable
             switch (contentType) {
                 case "text/html":
                     if (addressOfFileForSaveOutput == null) {
-                        addressOfFileForSaveOutput = "./data/RawData/Output_" + new SimpleDateFormat (
+                        addressOfFileForSaveOutput = "./data/RawData/Output_" +
+                                new SimpleDateFormat (
                                 "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".html";
                     }
                     textReader (connection.getInputStream ());
                     break;
                 case "image/png":
                     if (addressOfFileForSaveOutput == null) {
-                        addressOfFileForSaveOutput = "./data/RawData/Output_" + new SimpleDateFormat (
+                        addressOfFileForSaveOutput = "./data/RawData/Output_" +
+                                new SimpleDateFormat (
                                 "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".png";
                     }
                     if (!saveRawDataOnFile) {
@@ -112,7 +114,8 @@ public class HttpConnection implements Serializable
                     break;
                 case "text/plain":
                     if (addressOfFileForSaveOutput == null) {
-                        addressOfFileForSaveOutput = "./data/RawData/Output_" + new SimpleDateFormat (
+                        addressOfFileForSaveOutput = "./data/RawData/Output_" +
+                                new SimpleDateFormat (
                                 "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".txt";
                     }
                     textReader (connection.getInputStream ());
@@ -128,26 +131,24 @@ public class HttpConnection implements Serializable
     }
 
 
-    private void textReader (InputStream serverInputStream)
+    private void textReader (InputStream serverInputStream) throws IOException
     {
         Scanner out = new Scanner (serverInputStream);
         StringBuilder content = new StringBuilder ();
         while (out.hasNext ()) {
             content.append (out.nextLine ()).append ('\n');
         }
+        out.close ();
         responseStorage.setResponseTextRawData (content.toString ());
         responseStorage.setReadLength (BinaryFilePanel.
                 makeSizeReadable (content.toString ().getBytes ().length));
         if (saveRawDataOnFile)
         {
-            try (BufferedOutputStream in = new BufferedOutputStream (new FileOutputStream (
-                    addressOfFileForSaveOutput))){
-                in.write (content.toString ().getBytes ());
-                in.flush ();
-            } catch (IOException e)
-            {
-                System.out.println ("some thing went wrong in saving rawData");
-            }
+            BufferedOutputStream in = new BufferedOutputStream (new FileOutputStream (
+                addressOfFileForSaveOutput));
+            in.write (content.toString ().getBytes ());
+            in.flush ();
+            in.close ();
         }
     }
 
@@ -166,19 +167,64 @@ public class HttpConnection implements Serializable
         )));
     }
 
-    private void writeToServer (HttpURLConnection connection, byte[] bytes)
+    private void writeToServer (HttpURLConnection connection, int messageType,
+                                HashMap<String,String> body, File file, String boundary)
     {
-        if (connection == null)
-            throw new NullPointerException ("inValid input");
-        try (BufferedOutputStream out = new BufferedOutputStream (connection.getOutputStream ()))
+        try {
+            if (messageType == 1)
+            {
+                writeBinaryFormData (connection.getOutputStream (),boundary,body);
+            } else if (messageType == 2)
+            {
+                writeBinary (connection.getOutputStream (),file);
+            }
+        } catch (IOException e)
         {
-            out.write (bytes);
-            out.flush ();
-
-        } catch (IOException e) {
-            e.printStackTrace ();
-            System.out.println ("some thing went wrong in writing to server");
+            System.out.println ("Couldn't write on Server");
         }
+    }
+
+    private void writeBinaryFormData (OutputStream serverOutPutSteam, String boundary,
+                              HashMap<String,String> body) throws IOException
+    {
+        if (body == null || boundary == null)
+            throw new IOException("Body or Boundary is Empty");
+        BufferedOutputStream out = new BufferedOutputStream (serverOutPutSteam);
+        for (String key : body.keySet())
+        {
+            out.write(("--" + boundary + "\r\n").getBytes());
+            if (key.contains("file")) {
+                out.write (("" +
+                        "" + (new File(body.get(key))).getName() +
+                        "\"\r\nContent-Type: Auto\r\n\r\n").getBytes());
+
+                BufferedInputStream tempBufferedInputStream = new BufferedInputStream
+                        (new FileInputStream(new File(body.get(key))));
+                byte[] filesBytes = tempBufferedInputStream.readAllBytes();
+                out.write(filesBytes);
+                out.write("\r\n".getBytes());
+                tempBufferedInputStream.close ();
+
+            } else {
+                out.write(("Content-Disposition: form" +
+                        "-data; name=\"" + key + "\"\r\n\r\n").getBytes());
+                out.write((body.get(key) + "\r\n").getBytes());
+            }
+        }
+        out.write(("--" + boundary + "--\r\n").getBytes());
+        out.flush();
+        out.close();
+
+    }
+
+    private void writeBinary (OutputStream serverOutPutStream, File file) throws IOException
+    {
+        BufferedOutputStream out = new BufferedOutputStream (serverOutPutStream);
+        BufferedInputStream in = new BufferedInputStream (new FileInputStream (file));
+        out.write (in.readAllBytes ());
+        out.flush ();
+        out.close ();
+        in.close ();
     }
 
     public void getMethod (HttpURLConnection connection)
@@ -186,7 +232,6 @@ public class HttpConnection implements Serializable
         if (connection == null)
             throw new NullPointerException ("inValid input");
         long startTime = System.currentTimeMillis ();
-        connection.setDoOutput(true);
         connection.setDoInput(true);
         if (connectToServer (connection))
         {
@@ -198,27 +243,34 @@ public class HttpConnection implements Serializable
         disconnectServer (connection);
     }
 
-    public void postMethod (HttpURLConnection connection, byte[] bytes, int messageBodyType)
+    public void postMethod (HttpURLConnection connection, int messageBodyType,
+                            HashMap<String,String> body, File file)
     {
         if (connection == null)
             throw new NullPointerException ("inValid input");
         long startTime = System.currentTimeMillis ();
         connection.setDoOutput (true);
         connection.setDoInput (true);
-
-        if (messageBodyType == 1)
+        String boundary = "";
+        if (messageBodyType == 1) {
+            boundary = System.currentTimeMillis () + "";
+            connection.setRequestProperty ("Content-Type",
+                    "multipart/form-data; boundary=" + boundary);
+        } else if (messageBodyType == 2)
         {
+            connection.setRequestProperty("Content-Type", "application/octet-stream");
+        }
 
-            if (connectToServer (connection))
-            {
+        if (connectToServer (connection))
+        {
                 //writing
-                 writeToServer (connection, bytes);
+            writeToServer (connection,messageBodyType,body,file,boundary);
 
                 // reading
-                readFromServer (connection);
-            }
+            readFromServer (connection);
         }
-        // TODO : Add JSON and Binary
+
+
         responseStorage.setResponseTime ((System.currentTimeMillis () - startTime));
         disconnectServer (connection);
     }
@@ -269,10 +321,6 @@ public class HttpConnection implements Serializable
         return url;
     }
 
-
-    public ResponseStorage getResponseStorage () {
-        return responseStorage;
-    }
 
 
     public RequestType getRequestType () {

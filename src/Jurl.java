@@ -1,3 +1,4 @@
+import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -48,7 +49,8 @@ public class Jurl
                     case FIRE:
                         for (String task : tasks.get (reservedWord))
                         {
-                            clientRequests.add (storageUnit.getClientRequest (Integer.parseInt (task)));
+                            clientRequests.add
+                                    (storageUnit.getClientRequest (Integer.parseInt (task)));
                         }
                         return clientRequests;
                     case HELP_V2: help (); return null;
@@ -84,6 +86,10 @@ public class Jurl
                         case NAME: clientRequest.setName (tasks.get (reservedWord).get (0));
                             break;
                         case UPLOAD:
+                            clientRequest.setMessageBodyType (2);
+                            clientRequest.addUploadBinaryFile
+                                    (new File (tasks.get (reservedWord).get (0)));
+                            break;
                         case HEADER_V2: clientRequest.addCustomHeader
                                 (tasks.get (reservedWord).get (0));
                             break;

@@ -11,6 +11,7 @@ public class ClientRequest implements Serializable, Runnable
     private HashMap<String,String> customHeaders;
     private HashMap<String,String> formData;
     private HashMap<String,String> queryData;
+    private File uploadBinaryFile;
     private int messageBodyType;
 
 
@@ -23,8 +24,6 @@ public class ClientRequest implements Serializable, Runnable
         httpConnection = new HttpConnection (url,followRedirect);
         messageBodyType = 1;
     }
-
-
 
 
     private void addKeyAndValueType (HashMap<String,String> list,
@@ -48,7 +47,9 @@ public class ClientRequest implements Serializable, Runnable
         }
     }
 
-
+    public void addUploadBinaryFile (File uploadBinaryFile) {
+        this.uploadBinaryFile = uploadBinaryFile;
+    }
 
     public void addCustomHeader (String inputHeader)
     {
@@ -59,6 +60,11 @@ public class ClientRequest implements Serializable, Runnable
     public void removeCustomHeader (String key)
     {
         customHeaders.remove (key);
+    }
+
+    public HashMap<String,String> getFormData ()
+    {
+        return formData;
     }
 
 
@@ -72,6 +78,7 @@ public class ClientRequest implements Serializable, Runnable
     {
         queryData.remove (key);
     }
+
 
     public String getQueryData () {
         int counter = 0;
@@ -91,6 +98,7 @@ public class ClientRequest implements Serializable, Runnable
         return stringBuilder.toString ();
     }
 
+
     public void addFormUrlData (String inputFormUrl)
     {
         addKeyAndValueType
@@ -101,6 +109,8 @@ public class ClientRequest implements Serializable, Runnable
     {
         formData.remove (key);
     }
+
+
 
 
 
@@ -126,8 +136,8 @@ public class ClientRequest implements Serializable, Runnable
             switch (httpConnection.getRequestType ())
             {
                 case GET: httpConnection.getMethod (connection); return;
-                case POST: httpConnection.postMethod (connection,null,
-                        messageBodyType);
+                case POST: httpConnection.postMethod (connection,messageBodyType,
+                        getFormData (),uploadBinaryFile);
             }
         }
     }

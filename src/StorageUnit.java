@@ -71,11 +71,16 @@ public class StorageUnit
 
     public void printList ()
     {
-        int count = 1;
-        for (ClientRequest request : requestsStorage.getClientRequests ())
+        if (requestsStorage.getClientRequests ().size () == 0)
+            System.out.println ("List is Empty");
+        else
         {
-            System.out.println (count + " . " + request.toString ());
-            count++;
+            int count = 1;
+            for (ClientRequest request : requestsStorage.getClientRequests ())
+            {
+                System.out.println (count + " . " + request.toString ());
+                count++;
+            }
         }
     }
 
