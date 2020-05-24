@@ -86,8 +86,9 @@ public class HttpConnection implements Serializable
             responseStorage.setResponseMessage (connection.getResponseMessage ());
             responseStorage.setResponseHeaders (connection.getHeaderFields ());
 
-
-            String contentType = connection.getContentType ().split (";")[0];
+            String contentType = "text/html";
+            if (connection.getContentType () != null)
+                 contentType = connection.getContentType ().split (";")[0];
 
             switch (contentType) {
                 case "text/html":
@@ -120,7 +121,9 @@ public class HttpConnection implements Serializable
 
         }catch (IOException e)
         {
-            responseStorage.setResponseTextRawData ("Error: URL using bad/illegal format or missing URL");
+//            textReader (connection.getErrorStream ());
+            responseStorage.setResponseTextRawData ("Error:" +
+                    " URL using bad/illegal format or missing URL");
         }
     }
 

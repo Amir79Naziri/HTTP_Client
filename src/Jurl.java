@@ -1,21 +1,19 @@
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.TreeMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Jurl
 {
     private InputProcessor inputProcessor;
     private StorageUnit storageUnit;
-    private ExecutorService pool;
+    private ClientRequestExecutor clientRequestExecutor;
 
 
     public Jurl ()
     {
         inputProcessor = new InputProcessor ();
         storageUnit = new StorageUnit ();
-        pool = Executors.newCachedThreadPool ();
+        clientRequestExecutor = new ClientRequestExecutor ();
     }
 
 
@@ -26,7 +24,10 @@ public class Jurl
             ArrayList<ClientRequest> clientRequests = createClientRequest (inputProcessor.getTasks (),
                     inputProcessor.getUrl (), inputProcessor.getInputType ());
             if (clientRequests != null)
-                execute (clientRequests);
+            {
+                clientRequestExecutor.setClientRequests (clientRequests);
+                new Thread (clientRequestExecutor).start ();
+            }
         }
     }
 
@@ -106,21 +107,7 @@ public class Jurl
         return clientRequests;
     }
 
-    private void execute (ArrayList<ClientRequest> clientRequests)
-    {
-        if (clientRequests == null)
-            return;
-        for (ClientRequest clientRequest : clientRequests)
-        {
-            try {
-                Thread.sleep (5000);
-            } catch (InterruptedException e)
-            {
-                e.printStackTrace ();
-            }
-            pool.execute (clientRequest);
-        }
-    }
+
 
     private void help ()
     {
