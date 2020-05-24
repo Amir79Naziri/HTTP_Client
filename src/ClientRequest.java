@@ -135,8 +135,10 @@ public class ClientRequest implements Serializable, Runnable
         {
             switch (httpConnection.getRequestType ())
             {
-                case GET: httpConnection.getMethod (connection); return;
-                case POST: httpConnection.postMethod (connection,messageBodyType,
+                case GET: httpConnection.get (connection); return;
+                case POST:
+                case PUT:
+                case DELETE:httpConnection.sendAndGet (connection,messageBodyType,
                         getFormData (),uploadBinaryFile);
             }
         }

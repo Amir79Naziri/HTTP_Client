@@ -120,6 +120,14 @@ public class HttpConnection implements Serializable
                     }
                     textReader (connection.getInputStream ());
                     break;
+                case "application/json":
+                    if (addressOfFileForSaveOutput == null) {
+                        addressOfFileForSaveOutput = "./data/RawData/Output_" +
+                                new SimpleDateFormat (
+                                        "yyyy.MM.dd  HH.mm.ss").format (new Date ())
+                                + ".js";
+                        textReader (connection.getInputStream ());
+                    }
             }
 
         }catch (IOException e)
@@ -227,7 +235,7 @@ public class HttpConnection implements Serializable
         in.close ();
     }
 
-    public void getMethod (HttpURLConnection connection)
+    public void get (HttpURLConnection connection)
     {
         if (connection == null)
             throw new NullPointerException ("inValid input");
@@ -243,7 +251,7 @@ public class HttpConnection implements Serializable
         disconnectServer (connection);
     }
 
-    public void postMethod (HttpURLConnection connection, int messageBodyType,
+    public void sendAndGet (HttpURLConnection connection, int messageBodyType,
                             HashMap<String,String> body, File file)
     {
         if (connection == null)
@@ -258,15 +266,22 @@ public class HttpConnection implements Serializable
                     "multipart/form-data; boundary=" + boundary);
         } else if (messageBodyType == 2)
         {
+            if (file == null || !file.exists ()) {
+                {
+                    System.out.println ("File is not Valid");
+                    return;
+                }
+            }
+
             connection.setRequestProperty("Content-Type", "application/octet-stream");
         }
 
         if (connectToServer (connection))
         {
-                //writing
+            //writing
             writeToServer (connection,messageBodyType,body,file,boundary);
 
-                // reading
+            // reading
             readFromServer (connection);
         }
 
@@ -274,6 +289,8 @@ public class HttpConnection implements Serializable
         responseStorage.setResponseTime ((System.currentTimeMillis () - startTime));
         disconnectServer (connection);
     }
+
+
 
 
     private void disconnectServer (HttpURLConnection connection)
