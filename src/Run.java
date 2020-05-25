@@ -1,5 +1,6 @@
+import GUI.GUI;
+
 import javax.swing.*;
-import java.net.http.HttpClient;
 
 /**
  * this class build for test
@@ -20,8 +21,8 @@ public class Run
 
 
 //
-        Jurl jurl = new Jurl ();
-        jurl.startProgram ();
+//        Jurl.Jurl jurl = new Jurl.Jurl ();
+//        jurl.startProgram ();
 
 //        HttpClient httpClient = new HttpClient ();
 //        httpClient.startProgram ();
