@@ -7,14 +7,13 @@ public class Jurl
 {
     private InputProcessor inputProcessor;
     private StorageUnit storageUnit;
-    private ClientRequestExecutor clientRequestExecutor;
+
 
 
     public Jurl ()
     {
         inputProcessor = new InputProcessor ();
         storageUnit = new StorageUnit ();
-        clientRequestExecutor = new ClientRequestExecutor ();
     }
 
 
@@ -26,8 +25,7 @@ public class Jurl
                     inputProcessor.getUrl (), inputProcessor.getInputType ());
             if (clientRequests != null)
             {
-                clientRequestExecutor.setClientRequests (clientRequests);
-                new Thread (clientRequestExecutor).start ();
+                new Thread (new ClientRequestExecutor (clientRequests)).start ();
             }
         }
     }

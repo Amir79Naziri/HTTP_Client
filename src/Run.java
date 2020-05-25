@@ -1,8 +1,5 @@
 import javax.swing.*;
-import javax.swing.text.html.HTMLWriter;
-import java.net.MalformedURLException;
 import java.net.http.HttpClient;
-import java.util.ArrayList;
 
 /**
  * this class build for test
@@ -26,6 +23,8 @@ public class Run
         Jurl jurl = new Jurl ();
         jurl.startProgram ();
 
+//        HttpClient httpClient = new HttpClient ();
+//        httpClient.startProgram ();
 
 
 

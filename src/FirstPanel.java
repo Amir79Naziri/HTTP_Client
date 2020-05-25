@@ -200,6 +200,7 @@ public class FirstPanel extends JPanel
                             (addNewRequestPanel.getNameOfNewRequest (),
                                     addNewRequestPanel.getChosenRequestType ()
                             );
+
                 }
             }
         }

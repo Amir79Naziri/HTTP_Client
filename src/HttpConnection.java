@@ -345,7 +345,7 @@ public class HttpConnection implements Serializable
     }
 
 
-    private void printResult ()
+    private synchronized void printResult ()
     {
         responseStorage.printTimeAndReadDetails ();
         System.out.println ();

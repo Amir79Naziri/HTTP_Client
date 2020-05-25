@@ -142,4 +142,8 @@ public class OptionPanel extends JPanel
             }
         }
     }
+
+    public boolean getFollowRedirect () {
+        return followRedirect.isSelected ();
+    }
 }

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class ClientRequestExecutor implements Runnable
 {
@@ -8,15 +9,12 @@ public class ClientRequestExecutor implements Runnable
     ArrayList<ClientRequest> clientRequests;
     ExecutorService pool;
 
-    public ClientRequestExecutor ()
+    public ClientRequestExecutor (ArrayList<ClientRequest> clientRequests)
     {
-        clientRequests = new ArrayList<> ();
+        this.clientRequests = clientRequests;
         pool = Executors.newCachedThreadPool ();
     }
 
-    public void setClientRequests (ArrayList<ClientRequest> clientRequests) {
-        this.clientRequests = clientRequests;
-    }
 
     public void run () {
         if (clientRequests == null)
@@ -30,6 +28,13 @@ public class ClientRequestExecutor implements Runnable
                 e.printStackTrace ();
             }
             pool.execute (clientRequest);
+        }
+
+        try {
+            pool.awaitTermination (1, TimeUnit.MINUTES);
+        } catch (InterruptedException e)
+        {
+            e.printStackTrace ();
         }
 
     }
