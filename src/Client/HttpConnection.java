@@ -357,6 +357,9 @@ public class HttpConnection implements Serializable
         return requestType;
     }
 
+    public ResponseStorage getResponseStorage () {
+        return responseStorage;
+    }
 
     private synchronized void printResult ()
     {

@@ -24,6 +24,7 @@ public class ResponseStorage implements Serializable
         responseTextRawData = "Error: URL using bad/illegal format or missing URL";
         readLength = "0";
         responseTime = 0;
+        responseMessage = "ERROR";
     }
 
     public void setResponseMessage (String responseMessage) {

@@ -24,6 +24,7 @@ public class ThirdPanel extends JPanel
     private ResultHeaderPanel resultHeaderPanel;
     private Theme theme; // theme
     private Request request;
+    private ResponseCalculator responseCalculator;
 
     /**
      * creates new Third panel
@@ -131,4 +132,13 @@ public class ThirdPanel extends JPanel
         tabbedPane.addTab ("Header",resultHeaderPanel);
 
     }
+
+    public void execute ()
+    {
+        responseCalculator = new ResponseCalculator (request,statusMessage,time,
+                size,rawPanel,resultHeaderPanel);
+        responseCalculator.execute ();
+    }
+
+
 }

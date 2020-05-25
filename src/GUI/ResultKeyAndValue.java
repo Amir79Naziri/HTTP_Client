@@ -65,7 +65,7 @@ public class ResultKeyAndValue extends JPanel
     {
         if (textArea == null || color == null)
             throw new InputMismatchException ("inValid input");
-        textArea.setBorder (new EmptyBorder (1,1,1,1));
+        textArea.setBorder (new EmptyBorder (0,1,0,1));
         textArea.setBackground (color);
         textArea.setLineWrap (true);
         textArea.setCursor (Cursor.getPredefinedCursor (Cursor.TEXT_CURSOR));
@@ -89,18 +89,5 @@ public class ResultKeyAndValue extends JPanel
         return value;
     }
 
-    @Override
-    public Dimension getMaximumSize () {
-        return new Dimension (900,45);
-    }
 
-    @Override
-    public Dimension getPreferredSize () {
-        return new Dimension (100,45);
-    }
-
-    @Override
-    public Dimension getMinimumSize () {
-        return new Dimension (100,45);
-    }
 }

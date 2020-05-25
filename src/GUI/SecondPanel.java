@@ -32,7 +32,7 @@ public class SecondPanel extends JPanel
     private Theme theme; // theme
 
     private JPanel programThirdPanel; // third panel which user will see , it is null panel at first
-    private final JPanel mainThirdPanel; // main third panel for  request
+    private final ThirdPanel mainThirdPanel; // main third panel for  request
 
     /**
      * creates a new GUI.SecondPanel
@@ -199,7 +199,7 @@ public class SecondPanel extends JPanel
             {
                 gui.setThirdPanel (mainThirdPanel);
                 programThirdPanel = mainThirdPanel;
-                new Thread (request.getClientRequest ()).start ();
+                mainThirdPanel.execute ();
             }
         }
 

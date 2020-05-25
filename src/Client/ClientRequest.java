@@ -1,5 +1,7 @@
 package Client;
 
+import Storage.ResponseStorage;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -129,8 +131,9 @@ public class ClientRequest implements Serializable, Runnable
     }
 
 
-
-
+    public ResponseStorage getResponseStorage () {
+        return httpConnection.getResponseStorage ();
+    }
 
 
 

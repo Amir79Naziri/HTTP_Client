@@ -16,8 +16,8 @@ public class Run
         {
             e.printStackTrace ();
         }
-//        GUI gui = new GUI ();
-//        gui.setBaseFrameVisible ();
+        GUI gui = new GUI ();
+        gui.setBaseFrameVisible ();
 
 
 //

@@ -81,10 +81,9 @@ public class ResultHeaderPanel extends JPanel
                         theme.getForeGroundColorV2 ());
         basePanel.add(fixedResultKeyAndValue);
         add(ScrollPaneAdder.fetchToJScrollPane (basePanel,theme));
-        for (int i = 0; i < 14; i++)
-            addResultKeyAndValue ("sdfsadfasdf","dsfas");
-        for (int i = 0; i < 14; i++)
-            addResultKeyAndValue ("sAssSSS","ds234fa");
+
+
+
 
     }
 
@@ -114,5 +113,12 @@ public class ResultHeaderPanel extends JPanel
             basePanel.add (resultKeyAndValue);
             whichColor = 1;
         }
+    }
+
+    public void clear ()
+    {
+        for (ResultKeyAndValue keyAndValue : resultKeyAndValues)
+            keyAndValue.setVisible (false);
+        resultKeyAndValues.clear ();
     }
 }
