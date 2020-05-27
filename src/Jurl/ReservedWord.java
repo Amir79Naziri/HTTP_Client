@@ -18,6 +18,7 @@ public enum ReservedWord
     SAVE_V2("--save"),
     FORM_DATA_V1("-d"),
     FORM_DATA_V2("--data"),
+    FORM_DATA_ENCODED ("--dataEncoded"),
     JSON_V1("-j"),
     JSON_V2("--json"),
     UPLOAD("--upload"),

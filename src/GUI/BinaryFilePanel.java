@@ -21,7 +21,7 @@ public class BinaryFilePanel extends JPanel
     private JButton chooseFile; // chooseFileButton
     private JButton resetFile; // reset file
     private Theme theme; // theme
-
+    private Path path;
     /**
      * creates a new binary file panel
      * @param theme theme
@@ -35,6 +35,7 @@ public class BinaryFilePanel extends JPanel
         this.theme = theme;
         setBackground (theme.getBackGroundColorV4 ());
         addComponent ();
+        path = null;
     }
 
     /**
@@ -132,7 +133,7 @@ public class BinaryFilePanel extends JPanel
      */
     private void pathHandler ()
     {
-        Path path = useFileChooser ();
+        path = useFileChooser ();
 
         if (path != null && Files.exists (path))
         {
@@ -159,7 +160,14 @@ public class BinaryFilePanel extends JPanel
             if (e.getSource () == chooseFile)
                 pathHandler ();
             else if (e.getSource () == resetFile)
+            {
                 fileAddress.setText ("No file selected");
+                path = null;
+            }
         }
+    }
+
+    public Path getPath () {
+        return path;
     }
 }

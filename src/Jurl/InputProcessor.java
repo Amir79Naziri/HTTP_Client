@@ -141,7 +141,8 @@ public class InputProcessor
             return ReservedWord.CLOSE;
         else if (command.equals (ReservedWord.QUERY.getCommandString ()))
             return ReservedWord.QUERY;
-        else
+        else if (command.equals (ReservedWord.FORM_DATA_ENCODED.getCommandString ()))
+            return ReservedWord.FORM_DATA_ENCODED;
             return null;
     }
 
@@ -161,10 +162,7 @@ public class InputProcessor
             case HEADER_V2:
             case QUERY:
             case METHOD_V2:
-            case OUTPUT_V2:
-                if (nextIndex < commands.length && isReserveWord (commands[nextIndex]) == null)
-                    args.add (commands[nextIndex]);
-                break;
+            case FORM_DATA_ENCODED:
             case FORM_DATA_V2:
                 if (nextIndex < commands.length && isReserveWord (commands[nextIndex]) == null)
                     args.add (commands[nextIndex]);
@@ -173,7 +171,10 @@ public class InputProcessor
                     return null;
                 }
                 break;
-
+            case OUTPUT_V2:
+                if (nextIndex < commands.length && isReserveWord (commands[nextIndex]) == null)
+                    args.add (commands[nextIndex]);
+                break;
             case FIRE:
                 int i = nextIndex;
                 while (i < commands.length)
@@ -201,13 +202,6 @@ public class InputProcessor
         return url;
     }
 
-    public void print ()
-    {
-        System.out.println (Arrays.toString (commands));
-        System.out.println (url);
-        for (ReservedWord reservedWord : tasks.keySet ())
-            System.out.println (reservedWord + "/" + tasks.get (reservedWord).toString ());
-    }
 
     public int getInputType () {
         return inputType;

@@ -2,10 +2,11 @@ package Client;
 
 import Storage.ResponseStorage;
 
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
+
 import java.util.*;
 
 public class ClientRequest implements Serializable, Runnable
@@ -14,6 +15,7 @@ public class ClientRequest implements Serializable, Runnable
     private String name;
     private HashMap<String,String> customHeaders;
     private HashMap<String,String> formData;
+    private HashMap<String,String> formDataEncoded;
     private HashMap<String,String> queryData;
     private File uploadBinaryFile;
     private int messageBodyType;
@@ -24,6 +26,7 @@ public class ClientRequest implements Serializable, Runnable
         this.name = "MyRequest";
         customHeaders = new HashMap<> ();
         formData = new HashMap<> ();
+        formDataEncoded = new HashMap<> ();
         queryData = new HashMap<> ();
         httpConnection = new HttpConnection (url,followRedirect);
         messageBodyType = 1;
@@ -36,6 +39,7 @@ public class ClientRequest implements Serializable, Runnable
 
         customHeaders = new HashMap<> ();
         formData = new HashMap<> ();
+        formDataEncoded = new HashMap<> ();
         queryData = new HashMap<> ();
         try {
             httpConnection = new HttpConnection (followRedirect,requestType);
@@ -71,10 +75,16 @@ public class ClientRequest implements Serializable, Runnable
         this.uploadBinaryFile = uploadBinaryFile;
     }
 
+
     public void addCustomHeader (String inputHeader)
     {
         addKeyAndValueType
                 (customHeaders,inputHeader,'\"',"\"",";",":");
+    }
+
+    public void addCustomHeader (String key, String value)
+    {
+        customHeaders.put (key,value);
     }
 
     public void removeCustomHeader (String key)
@@ -82,16 +92,25 @@ public class ClientRequest implements Serializable, Runnable
         customHeaders.remove (key);
     }
 
-    public HashMap<String,String> getFormData ()
-    {
-        return formData;
-    }
-
 
     public void addQuery (String query)
     {
         addKeyAndValueType
                 (queryData,query,'\"',"\"","&","=");
+    }
+
+    public void addQuery (String key,String value)
+    {
+        queryData.put (key,value);
+        System.out.println ("hahahahahaha");
+    }
+
+    public void clear ()
+    {
+        queryData.clear ();
+        formData.clear ();
+        formDataEncoded.clear ();
+        uploadBinaryFile = null;
     }
 
     public void removeQuery (String key)
@@ -125,17 +144,64 @@ public class ClientRequest implements Serializable, Runnable
                 (formData,inputFormUrl,'\"',"\"","&","=");
     }
 
+    public void addFormUrlData (String key, String value)
+    {
+        formData.put (key,value);
+    }
+
+
+    public void addFormUrlDataEncoded (String inputFormUrlEncoded)
+    {
+        addKeyAndValueType
+                (formDataEncoded,inputFormUrlEncoded,'\"',"\"","&","=");
+    }
+
+
+    public void addFormUrlDataEncoded (String key, String value)
+    {
+        formDataEncoded.put (key,value);
+    }
+
+
+    public String getFormDataEncoded () {
+        int counter = 0;
+        StringBuilder stringBuilder = new StringBuilder ();
+        for (String key : formDataEncoded.keySet ())
+        {
+            if (counter == 0)
+            {
+                stringBuilder.append (key).append ("=").append (formDataEncoded.get (key));
+            }
+            else
+            {
+                stringBuilder.append ("&").append (key).append ("=").
+                        append (formDataEncoded.get (key));
+            }
+            counter++;
+        }
+        return stringBuilder.toString ();
+    }
+
+
     public void removeFormData (String key)
     {
         formData.remove (key);
     }
 
 
+    public HashMap<String,String> getFormData ()
+    {
+        return formData;
+    }
+
     public ResponseStorage getResponseStorage () {
         return httpConnection.getResponseStorage ();
     }
 
 
+    public int getMessageBodyType () {
+        return messageBodyType;
+    }
 
     @Override
     public void run ()
@@ -156,7 +222,7 @@ public class ClientRequest implements Serializable, Runnable
                 case POST:
                 case PUT:
                 case DELETE:httpConnection.sendAndGet (connection,messageBodyType,
-                        getFormData (),uploadBinaryFile);
+                        getFormData (),uploadBinaryFile,getFormDataEncoded ());
             }
         }
     }
@@ -191,7 +257,11 @@ public class ClientRequest implements Serializable, Runnable
 
 
     public void setMessageBodyType (int messageBodyType) {
-        this.messageBodyType = messageBodyType;
+        if (messageBodyType != this.messageBodyType)
+        {
+            this.messageBodyType = messageBodyType;
+            clear ();
+        }
     }
 
 

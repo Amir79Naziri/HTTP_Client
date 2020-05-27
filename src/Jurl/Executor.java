@@ -7,13 +7,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class ClientRequestExecutor implements Runnable
+public class Executor implements Runnable
 {
 
     ArrayList<ClientRequest> clientRequests;
     ExecutorService pool;
 
-    public ClientRequestExecutor (ArrayList<ClientRequest> clientRequests)
+    public Executor (ArrayList<ClientRequest> clientRequests)
     {
         this.clientRequests = clientRequests;
         pool = Executors.newCachedThreadPool ();

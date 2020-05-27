@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.net.MalformedURLException;
 
 /**
@@ -18,7 +19,7 @@ public class SecondPanel extends JPanel
     private JComboBox<String> type; // type of request
     private JButton send; // send button
     private JButton save; // save button
-
+    // private int messageBody;
     // panel's in second Panel
     private QueryPanel queryPanel;
     private HeaderPanel headerPanel;
@@ -197,9 +198,15 @@ public class SecondPanel extends JPanel
         public void actionPerformed (ActionEvent e) {
             if (e.getSource () == send)
             {
-                gui.setThirdPanel (mainThirdPanel);
-                programThirdPanel = mainThirdPanel;
-                mainThirdPanel.execute ();
+                if (addHeadersAndBodyToRequest ())
+                {
+                    gui.setThirdPanel (mainThirdPanel);
+                    programThirdPanel = mainThirdPanel;
+                    mainThirdPanel.execute ();
+                }
+                else
+                    System.out.println ("some thing Went Wrong");
+
             }
         }
 
@@ -225,4 +232,50 @@ public class SecondPanel extends JPanel
         }
     }
 
+    public boolean addHeadersAndBodyToRequest ()
+    {
+        request.getClientRequest ().clear ();
+
+        switch (request.getClientRequest ().getMessageBodyType ())
+        {
+            case 1 :
+                for (KeyAndValue keyAndValue :
+                        multiPartPanel.getKeyAndValuePanel ().getKeyAndValues ())
+                {
+                    if (!keyAndValue.isDeleted () && keyAndValue.getActive ().isSelected ())
+                        request.getClientRequest ().addFormUrlData
+                            (keyAndValue.getKey ().getText (),
+                            keyAndValue.getValue ().getText ());
+                }
+                break;
+
+            case 2 :
+                if (binaryFilePanel.getPath () == null)
+                {
+                    JOptionPane.showMessageDialog
+                            (this,"Choose a File Please","Warning",
+                                    JOptionPane.WARNING_MESSAGE);
+                    return false;
+                }
+                request.getClientRequest ().addUploadBinaryFile (
+                        new File (binaryFilePanel.getPath ().toString ()));
+
+        }
+
+        for (KeyAndValue keyAndValue : headerPanel.getKeyAndValuePanel ().getKeyAndValues ())
+        {
+            if (!keyAndValue.isDeleted () && keyAndValue.getActive ().isSelected ())
+                request.getClientRequest ().addCustomHeader (keyAndValue.getKey ().getText (),
+                    keyAndValue.getValue ().getText ());
+        }
+
+        for (KeyAndValue keyAndValue : queryPanel.getKeyAndValuePanel ().getKeyAndValues ())
+        {
+            if (!keyAndValue.isDeleted () && keyAndValue.getActive ().isSelected ())
+                request.getClientRequest ().addQuery (keyAndValue.getKey ().getText (),
+                        keyAndValue.getValue ().getText ());
+        }
+        return true;
+
+    }
 }

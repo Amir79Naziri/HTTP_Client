@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -189,7 +190,8 @@ public class HttpConnection implements Serializable
     }
 
     private void writeToServer (HttpURLConnection connection, int messageType,
-                                HashMap<String,String> body, File file, String boundary)
+                                HashMap<String,String> body, File file, String boundary,
+                                String formUrlEncodedData)
     {
         try {
             if (messageType == 1)
@@ -198,6 +200,9 @@ public class HttpConnection implements Serializable
             } else if (messageType == 2)
             {
                 writeBinary (connection.getOutputStream (),file);
+            } else if (messageType == 3)
+            {
+                writeBinaryFormDataEncoded (connection.getOutputStream (),formUrlEncodedData);
             }
         } catch (IOException e)
         {
@@ -238,6 +243,17 @@ public class HttpConnection implements Serializable
 
     }
 
+    private void writeBinaryFormDataEncoded (OutputStream serverOutPutStream,
+                                             String formUrlEncodedData) throws IOException
+    {
+        if (formUrlEncodedData == null)
+            throw new IOException("Body is Empty");
+        BufferedOutputStream out = new BufferedOutputStream (serverOutPutStream);
+        out.write (formUrlEncodedData.getBytes (StandardCharsets.UTF_8));
+        out.flush ();
+        out.close ();
+    }
+
     private void writeBinary (OutputStream serverOutPutStream, File file) throws IOException
     {
         BufferedOutputStream out = new BufferedOutputStream (serverOutPutStream);
@@ -265,7 +281,7 @@ public class HttpConnection implements Serializable
     }
 
     public void sendAndGet (HttpURLConnection connection, int messageBodyType,
-                            HashMap<String,String> body, File file)
+                            HashMap<String,String> body, File file, String formUrlEncodedData)
     {
         if (connection == null)
             throw new NullPointerException ("inValid input");
@@ -287,12 +303,18 @@ public class HttpConnection implements Serializable
             }
 
             connection.setRequestProperty("Content-Type", "application/octet-stream");
+        } else if (messageBodyType == 3)
+        {
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            connection.setRequestProperty("charset", "utf-8");
+            connection.setRequestProperty("Content-Length", Integer.
+                    toString(formUrlEncodedData.getBytes (StandardCharsets.UTF_8).length));
         }
 
         if (connectToServer (connection))
         {
             //writing
-            writeToServer (connection,messageBodyType,body,file,boundary);
+            writeToServer (connection,messageBodyType,body,file,boundary,formUrlEncodedData);
 
             // reading
             readFromServer (connection);
@@ -302,8 +324,6 @@ public class HttpConnection implements Serializable
         responseStorage.setResponseTime ((System.currentTimeMillis () - startTime));
         disconnectServer (connection);
     }
-
-
 
 
     private void disconnectServer (HttpURLConnection connection)

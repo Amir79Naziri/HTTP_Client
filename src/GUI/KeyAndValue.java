@@ -24,6 +24,8 @@ public class KeyAndValue extends JPanel
     private GridBagConstraints constraints; // constrains
     private boolean isDeleted; // is Deleted
     private Theme theme; // theme
+    private boolean isEditable;
+
 
     /**
      * creates a new Key and Value
@@ -47,7 +49,7 @@ public class KeyAndValue extends JPanel
         setLayout (layout);
         setBackground (theme.getBackGroundColorV4 ());
 
-
+        this.isEditable = isEditable;
         if (isEditable)
             createComponents (keyName, valueName);
         else
@@ -61,6 +63,10 @@ public class KeyAndValue extends JPanel
      */
     public boolean isDeleted () {
         return isDeleted;
+    }
+
+    public boolean isEditable () {
+        return isEditable;
     }
 
     /**
@@ -277,6 +283,10 @@ public class KeyAndValue extends JPanel
             panelDesc.setVisible (false);
         else
             panelDesc.setVisible (true);
+    }
+
+    public JCheckBox getActive () {
+        return active;
     }
 
     /**

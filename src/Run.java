@@ -1,4 +1,5 @@
-import GUI.GUI;
+import GUI.*;
+import Jurl.*;
 
 import javax.swing.*;
 
@@ -16,13 +17,13 @@ public class Run
         {
             e.printStackTrace ();
         }
-        GUI gui = new GUI ();
-        gui.setBaseFrameVisible ();
+//        GUI gui = new GUI ();
+//        gui.setBaseFrameVisible ();
 
 
 //
-//        Jurl.Jurl jurl = new Jurl.Jurl ();
-//        jurl.startProgram ();
+        Jurl jurl = new Jurl ();
+        jurl.startProgram ();
 
 //        HttpClient httpClient = new HttpClient ();
 //        httpClient.startProgram ();

@@ -100,9 +100,10 @@ public class KeyAndValuePanel extends JPanel
         {
             keyAndValue.setVisible (false);
             keyAndValue.delete ();
-//            keyAndValues.remove (keyAndValue);
         }
+        keyAndValues.clear ();
     }
+
 
     /**
      * this class handles components in this panel

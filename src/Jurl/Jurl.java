@@ -36,7 +36,7 @@ public class Jurl
                     inputProcessor.getUrl (), inputProcessor.getInputType ());
             if (clientRequests != null)
             {
-                new Thread (new ClientRequestExecutor (clientRequests)).start ();
+                new Thread (new Executor (clientRequests)).start ();
             }
         }
     }
@@ -108,6 +108,10 @@ public class Jurl
                             clientRequest.setMessageBodyType (1);
                             clientRequest.addFormUrlData (tasks.get (reservedWord).get (0));
                             break;
+                        case FORM_DATA_ENCODED:
+                            clientRequest.setMessageBodyType (3);
+                            clientRequest.addFormUrlDataEncoded
+                                    (tasks.get (reservedWord).get (0));
                         case SHOW_HEADER_ARG_V2: clientRequest.setShowHeadersInResponse (true);
                     }
                 }

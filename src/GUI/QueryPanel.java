@@ -114,13 +114,7 @@ public class QueryPanel extends JPanel
         return previewURLText;
     }
 
-    /**
-     * add new key And Value to Query
-     */
-    public void addNewKeyAndValue ()
-    {
-        keyAndValuePanel.addNewKeyAndValue ();
-    }
+
 
     /**
      * @return keyAndValuePanel
