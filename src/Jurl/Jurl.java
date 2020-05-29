@@ -2,7 +2,6 @@ package Jurl;
 
 import Client.ClientRequest;
 import Storage.StorageUnit;
-
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -56,10 +55,10 @@ public class Jurl
                 {
                     case CLOSE: System.exit (0);
                     case FIRE:
-                        for (String task : tasks.get (reservedWord))
+                        for (String arg : tasks.get (reservedWord))
                         {
                             clientRequests.add
-                                    (storageUnit.getClientRequest (Integer.parseInt (task)));
+                                    (storageUnit.getClientRequest (Integer.parseInt (arg)));
                         }
                         return clientRequests;
                     case HELP_V2: help (); return null;
@@ -112,6 +111,7 @@ public class Jurl
                             clientRequest.setMessageBodyType (3);
                             clientRequest.addFormUrlDataEncoded
                                     (tasks.get (reservedWord).get (0));
+                            break;
                         case SHOW_HEADER_ARG_V2: clientRequest.setShowHeadersInResponse (true);
                     }
                 }

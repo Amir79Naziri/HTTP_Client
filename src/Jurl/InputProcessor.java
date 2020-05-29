@@ -137,12 +137,16 @@ public class InputProcessor
 
         else if (command.equals (ReservedWord.NAME.getCommandString ()))
             return ReservedWord.NAME;
+
         else if (command.equals (ReservedWord.CLOSE.getCommandString ()))
             return ReservedWord.CLOSE;
+
         else if (command.equals (ReservedWord.QUERY.getCommandString ()))
             return ReservedWord.QUERY;
+
         else if (command.equals (ReservedWord.FORM_DATA_ENCODED.getCommandString ()))
             return ReservedWord.FORM_DATA_ENCODED;
+        else
             return null;
     }
 
