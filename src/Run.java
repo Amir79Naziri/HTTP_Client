@@ -2,6 +2,9 @@ import GUI.*;
 import Jurl.*;
 
 import javax.swing.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 /**
  * this class build for test
@@ -19,14 +22,13 @@ public class Run
         }
 //        GUI gui = new GUI ();
 //        gui.setBaseFrameVisible ();
-
-
 //
+//
+////
         Jurl jurl = new Jurl ();
         jurl.startProgram ();
 
-//        HttpClient httpClient = new HttpClient ();
-//        httpClient.startProgram ();
+
 
 
 

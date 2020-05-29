@@ -1,8 +1,6 @@
 package Client;
 
 import Storage.ResponseStorage;
-
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -32,11 +30,9 @@ public class ClientRequest implements Serializable, Runnable
         messageBodyType = 1;
     }
 
-
     public ClientRequest (boolean followRedirect, String name, RequestType requestType)
     {
         this.name = name;
-
         customHeaders = new HashMap<> ();
         formData = new HashMap<> ();
         formDataEncoded = new HashMap<> ();
@@ -49,17 +45,15 @@ public class ClientRequest implements Serializable, Runnable
         messageBodyType = 1;
     }
 
-
-    private void addKeyAndValueType (HashMap<String,String> list,
-                                     String input,char f1, String f2, String s, String t)
+    private void addKeyAndValueType (HashMap<String, String> list, String input, String s, String t)
     {
         if (input == null)
             return;
-        if (input.toCharArray ()[0] != f1 ||
-                input.toCharArray ()[input.length () - 1] != f1)
+        if (input.toCharArray ()[0] != '\"' ||
+                input.toCharArray ()[input.length () - 1] != '\"')
             return;
 
-        String inputHeadersV2 = input.trim ().replaceAll (f2,"");
+        String inputHeadersV2 = input.trim ().replaceAll ("\"","");
         String[] headers = inputHeadersV2.split (s);
         for (String header : headers)
         {
@@ -72,14 +66,15 @@ public class ClientRequest implements Serializable, Runnable
     }
 
     public void addUploadBinaryFile (File uploadBinaryFile) {
-        this.uploadBinaryFile = uploadBinaryFile;
+        this.uploadBinaryFile =
+                uploadBinaryFile;
     }
 
 
     public void addCustomHeader (String inputHeader)
     {
         addKeyAndValueType
-                (customHeaders,inputHeader,'\"',"\"",";",":");
+                (customHeaders,inputHeader, ";",":");
     }
 
     public void addCustomHeader (String key, String value)
@@ -87,36 +82,24 @@ public class ClientRequest implements Serializable, Runnable
         customHeaders.put (key,value);
     }
 
-    public void removeCustomHeader (String key)
-    {
-        customHeaders.remove (key);
+
+
+    public HashMap<String, String> getCustomHeaders () {
+        return customHeaders;
     }
 
 
     public void addQuery (String query)
     {
         addKeyAndValueType
-                (queryData,query,'\"',"\"","&","=");
+                (queryData,query, "&","=");
     }
 
     public void addQuery (String key,String value)
     {
         queryData.put (key,value);
-        System.out.println ("hahahahahaha");
     }
 
-    public void clear ()
-    {
-        queryData.clear ();
-        formData.clear ();
-        formDataEncoded.clear ();
-        uploadBinaryFile = null;
-    }
-
-    public void removeQuery (String key)
-    {
-        queryData.remove (key);
-    }
 
 
     public String getQueryData () {
@@ -141,7 +124,7 @@ public class ClientRequest implements Serializable, Runnable
     public void addFormUrlData (String inputFormUrl)
     {
         addKeyAndValueType
-                (formData,inputFormUrl,'\"',"\"","&","=");
+                (formData,inputFormUrl, "&","=");
     }
 
     public void addFormUrlData (String key, String value)
@@ -150,12 +133,18 @@ public class ClientRequest implements Serializable, Runnable
     }
 
 
+
+    public HashMap<String,String> getFormData ()
+    {
+        return formData;
+    }
+
+
     public void addFormUrlDataEncoded (String inputFormUrlEncoded)
     {
         addKeyAndValueType
-                (formDataEncoded,inputFormUrlEncoded,'\"',"\"","&","=");
+                (formDataEncoded,inputFormUrlEncoded, "&","=");
     }
-
 
     public void addFormUrlDataEncoded (String key, String value)
     {
@@ -183,42 +172,24 @@ public class ClientRequest implements Serializable, Runnable
     }
 
 
-    public void removeFormData (String key)
+    public void clear ()
     {
-        formData.remove (key);
-    }
-
-
-    public HashMap<String,String> getFormData ()
-    {
-        return formData;
-    }
-
-    public ResponseStorage getResponseStorage () {
-        return httpConnection.getResponseStorage ();
-    }
-
-
-    public int getMessageBodyType () {
-        return messageBodyType;
+        formData.clear ();
+        formDataEncoded.clear ();
+        uploadBinaryFile = null;
     }
 
     @Override
     public void run ()
     {
 
-        try {
-            httpConnection.setUrl (httpConnection.getUrl () + "" + getQueryData ());
-        } catch (MalformedURLException ignore) {
-            System.out.println ("wrong Url");
-        }
-
         HttpURLConnection connection;
-        if ((connection = httpConnection.connectionInitializer (customHeaders)) != null)
+        if ((connection = httpConnection.connectionInitializer
+                (getCustomHeaders (), getQueryData ())) != null)
         {
             switch (httpConnection.getRequestType ())
             {
-                case GET: httpConnection.get (connection); return;
+                case GET: httpConnection.onlyGet (connection); return;
                 case POST:
                 case PUT:
                 case DELETE:httpConnection.sendAndGet (connection,messageBodyType,
@@ -227,6 +198,13 @@ public class ClientRequest implements Serializable, Runnable
         }
     }
 
+    public ResponseStorage getResponseStorage () {
+        return httpConnection.getResponseStorage ();
+    }
+
+    public int getMessageBodyType () {
+        return messageBodyType;
+    }
 
     @Override
     public String toString () {
@@ -250,11 +228,9 @@ public class ClientRequest implements Serializable, Runnable
                 "headers: " + stringBuilder.toString ();
     }
 
-
     public void setName (String name) {
         this.name = name;
     }
-
 
     public void setMessageBodyType (int messageBodyType) {
         if (messageBodyType != this.messageBodyType)
@@ -267,7 +243,8 @@ public class ClientRequest implements Serializable, Runnable
 
     public void setFollowRedirect (boolean followRedirection)
     {
-        httpConnection.setFollowRedirect (followRedirection);
+        httpConnection.
+                setFollowRedirect (followRedirection);
     }
 
     public void setShowHeadersInResponse (boolean showHeadersInResponse)
@@ -308,5 +285,10 @@ public class ClientRequest implements Serializable, Runnable
             case "GET" :
             default : httpConnection.setRequestType (RequestType.GET);
         }
+    }
+
+    public RequestType getRequestType ()
+    {
+        return httpConnection.getRequestType ();
     }
 }

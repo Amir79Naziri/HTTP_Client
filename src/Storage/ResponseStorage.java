@@ -7,7 +7,7 @@ import java.util.Map;
 public class ResponseStorage implements Serializable
 {
     private String responseTextRawData;
-    private File responseFileRawData;
+    private byte[] responseBinaryRawData;
     private int responseCode;
     private String responseMessage;
     private Map<String, List<String>> responseHeaders;
@@ -25,6 +25,9 @@ public class ResponseStorage implements Serializable
         readLength = "0";
         responseTime = 0;
         responseMessage = "ERROR";
+        responseCode = 0;
+        responseBinaryRawData = null;
+        responseHeaders = null;
     }
 
     public void setResponseMessage (String responseMessage) {
@@ -48,8 +51,8 @@ public class ResponseStorage implements Serializable
 
     }
 
-    public void setResponseFileRawData (File responseFileRawData) {
-        this.responseFileRawData = responseFileRawData;
+    public void setResponseBinaryRawData (byte[] responseBinaryRawData) {
+        this.responseBinaryRawData = responseBinaryRawData;
     }
 
     public void setResponseTime (long responseTime) {
@@ -77,8 +80,8 @@ public class ResponseStorage implements Serializable
         return responseTextRawData;
     }
 
-    public File getResponseFileRawData () {
-        return responseFileRawData;
+    public byte[] getResponseBinaryRawData () {
+        return responseBinaryRawData;
     }
 
     public Map<String, List<String>> getResponseHeaders () {
@@ -124,7 +127,4 @@ public class ResponseStorage implements Serializable
     {
         System.out.println (getResponseTextRawData ());
     }
-
-
-
 }

@@ -31,11 +31,16 @@ public class Jurl
     {
         while (true) {
             inputProcessor.getLine ();
-            ArrayList<ClientRequest> clientRequests = createClientRequest (inputProcessor.getTasks (),
-                    inputProcessor.getUrl (), inputProcessor.getInputType ());
-            if (clientRequests != null)
+            try {
+                ArrayList<ClientRequest> clientRequests = createClientRequest (inputProcessor.getTasks (),
+                        inputProcessor.getUrl (), inputProcessor.getInputType ());
+                if (clientRequests != null)
+                {
+                    new Thread (new Executor (clientRequests)).start ();
+                }
+            } catch (MalformedURLException e)
             {
-                new Thread (new Executor (clientRequests)).start ();
+                e.printStackTrace ();
             }
         }
     }
@@ -44,6 +49,7 @@ public class Jurl
 
     private ArrayList<ClientRequest> createClientRequest (TreeMap<ReservedWord,
                                     ArrayList<String>> tasks, String url, int inputType)
+            throws MalformedURLException
     {
         ArrayList<ClientRequest> clientRequests = new ArrayList<> ();
 
@@ -69,59 +75,57 @@ public class Jurl
         }
         else
         {
-            try {
-                ClientRequest clientRequest = new ClientRequest (url,false);
 
-                for (ReservedWord reservedWord : tasks.keySet ())
+            ClientRequest clientRequest = new ClientRequest (url,false);
+
+            for (ReservedWord reservedWord : tasks.keySet ())
+            {
+                switch (reservedWord)
                 {
-                    switch (reservedWord)
-                    {
-                        case JSON_V2:
-                            break;
-                        case QUERY: clientRequest.addQuery (tasks.get (reservedWord).get (0));
-                            break;
-                        case OUTPUT_V2:
-                            if (tasks.get (reservedWord).size () == 1)
-                                clientRequest.setShouldSaveOutputInFile
+                    case JSON_V2:
+                        break;
+                    case QUERY: clientRequest.addQuery (tasks.get (reservedWord).get (0));
+                        break;
+                    case OUTPUT_V2:
+                        if (tasks.get (reservedWord).size () == 1)
+                            clientRequest.setShouldSaveOutputInFile
                                     (true,tasks.get (reservedWord).get(0));
-                            else
-                                clientRequest.setShouldSaveOutputInFile
-                                        (true,null);
+                        else
+                            clientRequest.setShouldSaveOutputInFile
+                                    (true,null);
 
-                            break;
-                        case FOLLOW_REDIRECT: clientRequest.setFollowRedirect (true);
-                            break;
-                        case NAME: clientRequest.setName (tasks.get (reservedWord).get (0));
-                            break;
-                        case UPLOAD:
-                            clientRequest.setMessageBodyType (2);
-                            clientRequest.addUploadBinaryFile
-                                    (new File (tasks.get (reservedWord).get (0)));
-                            break;
-                        case HEADER_V2: clientRequest.addCustomHeader
+                        break;
+                    case FOLLOW_REDIRECT: clientRequest.setFollowRedirect (true);
+                        break;
+                    case NAME: clientRequest.setName (tasks.get (reservedWord).get (0));
+                        break;
+                    case UPLOAD:
+                        clientRequest.setMessageBodyType (2);
+                        clientRequest.addUploadBinaryFile
+                                (new File (tasks.get (reservedWord).get (0)));
+                        break;
+                    case HEADER_V2: clientRequest.addCustomHeader
+                            (tasks.get (reservedWord).get (0));
+                        break;
+                    case METHOD_V2: clientRequest.setRequestType (tasks.get (reservedWord).get (0));
+                        break;
+                    case FORM_DATA_V2:
+                        clientRequest.setMessageBodyType (1);
+                        clientRequest.addFormUrlData (tasks.get (reservedWord).get (0));
+                        break;
+                    case FORM_DATA_ENCODED:
+                        clientRequest.setMessageBodyType (3);
+                        clientRequest.addFormUrlDataEncoded
                                 (tasks.get (reservedWord).get (0));
-                            break;
-                        case METHOD_V2: clientRequest.setRequestType (tasks.get (reservedWord).get (0));
-                            break;
-                        case FORM_DATA_V2:
-                            clientRequest.setMessageBodyType (1);
-                            clientRequest.addFormUrlData (tasks.get (reservedWord).get (0));
-                            break;
-                        case FORM_DATA_ENCODED:
-                            clientRequest.setMessageBodyType (3);
-                            clientRequest.addFormUrlDataEncoded
-                                    (tasks.get (reservedWord).get (0));
-                            break;
-                        case SHOW_HEADER_ARG_V2: clientRequest.setShowHeadersInResponse (true);
-                    }
+                        break;
+                    case SHOW_HEADER_ARG_V2: clientRequest.setShowHeadersInResponse (true);
                 }
-                if (tasks.containsKey (ReservedWord.SAVE_V2))
-                    storageUnit.addRequest (clientRequest);
-                clientRequests.add (clientRequest);
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace ();
             }
+            if (tasks.containsKey (ReservedWord.SAVE_V2))
+                storageUnit.addRequest (clientRequest);
+            clientRequests.add (clientRequest);
+
+
         }
         return clientRequests;
     }

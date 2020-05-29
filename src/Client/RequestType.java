@@ -39,7 +39,7 @@ public enum RequestType
     /**
      * @return name of requestType
      */
-    public String getName () {
+    public String getMinimizedName () {
         return name;
     }
 }
