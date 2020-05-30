@@ -45,7 +45,8 @@ public class ClientRequest implements Serializable, Runnable
         messageBodyType = 1;
     }
 
-    private void addKeyAndValueType (HashMap<String, String> list, String input, String s, String t)
+    private static void addKeyAndValueType
+            (HashMap<String, String> list, String input, String s, String t)
     {
         if (input == null)
             return;
@@ -53,7 +54,8 @@ public class ClientRequest implements Serializable, Runnable
                 input.toCharArray ()[input.length () - 1] != '\"')
             return;
 
-        String inputHeadersV2 = input.trim ().replaceAll ("\"","");
+        String inputHeadersV2 = input.trim ().replaceAll ("\"","").
+                replaceAll ("\\s+","");
         String[] headers = inputHeadersV2.split (s);
         for (String header : headers)
         {
@@ -239,7 +241,7 @@ public class ClientRequest implements Serializable, Runnable
             clear ();
         }
     }
-
+    
 
     public void setFollowRedirect (boolean followRedirection)
     {

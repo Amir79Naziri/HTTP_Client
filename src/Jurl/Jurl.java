@@ -63,8 +63,10 @@ public class Jurl
                     case FIRE:
                         for (String arg : tasks.get (reservedWord))
                         {
-                            clientRequests.add
-                                    (storageUnit.getClientRequest (Integer.parseInt (arg)));
+                            ClientRequest clientRequest =
+                                    storageUnit.getClientRequest (Integer.parseInt (arg));
+                            if (clientRequest != null)
+                                clientRequests.add (clientRequest);
                         }
                         return clientRequests;
                     case HELP_V2: help (); return null;
@@ -122,7 +124,10 @@ public class Jurl
                 }
             }
             if (tasks.containsKey (ReservedWord.SAVE_V2))
+            {
+
                 storageUnit.addRequest (clientRequest);
+            }
             clientRequests.add (clientRequest);
 
 
@@ -136,7 +141,8 @@ public class Jurl
     {
         System.out.println (" Usage: jurl url [options...]");
         System.out.println (" do not write <> for your input , this is just for obvious input");
-        System.out.println (" -d, --data <data>   HTTP POST data (message body)");
+        System.out.println (" -d, --data <\"key1=value1&key2=value2&.....\">" +
+                " (message body) MultiPart form");
         System.out.println (" -M, --method <method> HTTP method ");
         System.out.println (" -H, --headers <\"key1;value1:key2;value2:...\">" +
                 " Pass custom header(s) to server");
@@ -147,6 +153,11 @@ public class Jurl
                 "                     if you don't mention any name it will be output_[CurrentDate]");
         System.out.println (" -S, --save           This will save the request");
         System.out.println (" -j, --json  <\"{data1:details,data2:details,....}\">");
-        System.out.println (" --upload <absolute path>   ????");
+        System.out.println (" --upload <absolute path>   upload file");
+        System.out.println (" -Q <\"key1=value1&key2=value2&.....\"> add query data");
+        System.out.println (" --name <name of request>   change name of request");
+        System.out.println (" --close                     close program");
+        System.out.println ("--dataEncoded <\"key1=value1&key2=value2&.....\">" +
+                " (message body) form url encoded form");
     }
 }

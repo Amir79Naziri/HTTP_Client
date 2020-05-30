@@ -34,9 +34,15 @@ public class StorageUnit
 
     public ClientRequest getClientRequest (int index)
     {
-        if (index - 1 < 0 || index - 1 >= requestsStorage.size ())
-            throw new IndexOutOfBoundsException ("index should be in range 0 to " +
-                    (requestsStorage.size () - 1));
+        try{
+            if (index - 1 < 0 || index - 1 >= requestsStorage.size ())
+                throw new IndexOutOfBoundsException ("index should be in range 0 to " +
+                        (requestsStorage.size () - 1));
+        } catch (IndexOutOfBoundsException e)
+        {
+            System.out.println (e.getMessage ());
+            return null;
+        }
 
         return requestsStorage.get (index - 1);
     }
@@ -75,6 +81,7 @@ public class StorageUnit
 
     public void printList ()
     {
+        load ();
         if (requestsStorage.getClientRequests ().size () == 0)
             System.out.println ("List is Empty");
         else

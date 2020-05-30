@@ -47,6 +47,12 @@ public class HttpConnection implements Serializable
     public HttpURLConnection connectionInitializer (HashMap<String, String> headers, String queryData)
     {
         try {
+            setUrl (getUrl () + "" + queryData);
+        } catch (MalformedURLException ignore) {
+            System.out.println ("wrong Query format");
+        }
+
+        try {
             HttpURLConnection connection;
             if (("http").equals (url.getProtocol ()))
                 connection = (HttpURLConnection) url.openConnection ();
@@ -68,11 +74,7 @@ public class HttpConnection implements Serializable
             for (String key : headers.keySet ())
                     connection.setRequestProperty (key,headers.get (key));
 
-            try {
-                setUrl (getUrl () + "" + queryData);
-            } catch (MalformedURLException ignore) {
-                System.out.println ("wrong Query format");
-            }
+
 
             return connection;
         } catch(IOException e) {
@@ -223,9 +225,13 @@ public class HttpConnection implements Serializable
 
         }catch (IOException e)
         {
-//            textReader (connection.getErrorStream ());
-            responseStorage.setResponseTextRawData ("Error:" +
-                    " URL using bad/illegal format or missing URL");
+            try {
+                textReader (connection.getErrorStream ());
+            } catch (IOException ex)
+            {
+                responseStorage.setResponseTextRawData ("Error:" +
+                        " URL using bad/illegal format or missing URL");
+            }
         }
     }
 
