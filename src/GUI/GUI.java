@@ -41,7 +41,7 @@ public class GUI
     private TrayIcon trayIcon; // trayIcon
 
     /**
-     * creates a new GUI.GUI
+     * creates a new GUI
      */
     public GUI ()
     {
@@ -306,6 +306,12 @@ public class GUI
     public void setBaseFrameVisible ()
     {
         baseFrame.setVisible (true);
+    }
+
+
+    public OptionData getOptionData ()
+    {
+        return optionData;
     }
 
     /**

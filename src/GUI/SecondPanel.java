@@ -1,12 +1,16 @@
 package GUI;
 
+import Client.ClientRequest;
 import Client.RequestType;
+import ControlUnit.Controller;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 
 /**
  * this class represents secondPanel in program
@@ -18,12 +22,13 @@ public class SecondPanel extends JPanel
     private JTextField url; // url text
     private JComboBox<String> type; // type of request
     private JButton send; // send button
-    private JButton save; // save button
+    private JCheckBox save; // save button
     // private int messageBody;
     // panel's in second Panel
     private QueryPanel queryPanel;
     private HeaderPanel headerPanel;
     private MultiPartPanel multiPartPanel;
+    private MultiPartPanel urlEncoded;
     private JsonPanel jsonPanel;
     private BearerPanel bearerPanel;
     private BinaryFilePanel binaryFilePanel;
@@ -32,7 +37,8 @@ public class SecondPanel extends JPanel
     private Request request; // request which has this panel
     private Theme theme; // theme
 
-    private JPanel programThirdPanel; // third panel which user will see , it is null panel at first
+    private JPanel programThirdPanel; // third panel which user will see , it is null
+    // panel at first
     private final ThirdPanel mainThirdPanel; // main third panel for  request
 
     /**
@@ -85,9 +91,10 @@ public class SecondPanel extends JPanel
         send.setBackground (Color.WHITE);
         send.addActionListener (componentHandler);
 
-        save = new JButton ("Save");
+        save = new JCheckBox ("Save Output");
         save.setFont (new Font ("Arial",Font.PLAIN,11));
         save.setBackground (Color.WHITE);
+        save.setSelected (false);
 
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.insets = new Insets (10,10,10,10);
@@ -117,12 +124,13 @@ public class SecondPanel extends JPanel
 
         queryPanel = new QueryPanel (theme);
         headerPanel = new HeaderPanel (theme);
+        urlEncoded = new MultiPartPanel (theme);
         multiPartPanel = new MultiPartPanel (theme);
         jsonPanel = new JsonPanel (theme);
         bearerPanel = new BearerPanel (theme);
         binaryFilePanel = new BinaryFilePanel (theme);
 
-        String[] bodyTypes = {"MultiPart ","JSON ", "Binary File"};
+        String[] bodyTypes = {"MultiPart ","form url encoded","JSON ", "Binary File"};
         JComboBox<String> body = new JComboBox<> (bodyTypes);
         body.addItemListener (new ItemListener () {
             @Override
@@ -132,17 +140,27 @@ public class SecondPanel extends JPanel
                 {
                     tabbedPane.setComponentAt (0, multiPartPanel);
                     request.getClientRequest ().setMessageBodyType (1);
-
+                    binaryFilePanel.clearPath ();
+                    urlEncoded.getKeyAndValuePanel ().deleteAll ();
                 }
                 else if (body.getSelectedIndex () == 1)
                 {
+                    tabbedPane.setComponentAt (0,urlEncoded);
+                    request.getClientRequest ().setMessageBodyType (3);
+                    multiPartPanel.getKeyAndValuePanel ().deleteAll ();
+                    binaryFilePanel.clearPath ();
+                }
+                else if (body.getSelectedIndex () == 2)
+                {
                     tabbedPane.setComponentAt (0,jsonPanel);
 
-
-                } else if (body.getSelectedIndex () == 2)
+                }
+                else if (body.getSelectedIndex () == 3)
                 {
                     tabbedPane.setComponentAt (0,binaryFilePanel);
                     request.getClientRequest ().setMessageBodyType (2);
+                    urlEncoded.getKeyAndValuePanel ().deleteAll ();
+                    urlEncoded.getKeyAndValuePanel ().deleteAll ();
                 }
                 repaint ();
             }
@@ -180,102 +198,170 @@ public class SecondPanel extends JPanel
     {
         @Override
         public void keyReleased (KeyEvent e) {
-            String a = url.getText ();
-            queryPanel.getPreviewURLText ().setText (a);
-            try{
-                request.getClientRequest ().setUrl (a);
-            } catch (MalformedURLException ex)
+            if (e.getKeyCode () == KeyEvent.VK_ENTER)
             {
-                try {
-                    request.getClientRequest ().setUrl ("http://" + a);
-                } catch (MalformedURLException ignore)
+                if (initializeForSend ())
                 {
+                    gui.setThirdPanel (mainThirdPanel);
+                    programThirdPanel = mainThirdPanel;
+                    mainThirdPanel.execute ();
+                }
+            }
+            else
+            {
+                String a = url.getText ();
+                queryPanel.getPreviewURLText ().setText (a);
+                try{
+                    request.getClientRequest ().setUrl (a);
+                } catch (MalformedURLException ex)
+                {
+                    try {
+                        request.getClientRequest ().setUrl ("http://" + a);
+                    } catch (MalformedURLException ignore)
+                    {
+                    }
                 }
             }
         }
 
         @Override
         public void actionPerformed (ActionEvent e) {
-            if (e.getSource () == send)
-            {
-                if (addHeadersAndBodyToRequest ())
+            if (e.getSource () == send) {
+
+                if (initializeForSend ())
                 {
                     gui.setThirdPanel (mainThirdPanel);
                     programThirdPanel = mainThirdPanel;
-                    mainThirdPanel.execute ();
-                }
-                else
-                    System.out.println ("some thing Went Wrong");
-
+//                    mainThirdPanel.execute ();
+                } else
+                    System.out.println ("Some thing went wrong");
             }
         }
 
         @Override
         public void itemStateChanged (ItemEvent e) {
-            switch (type.getSelectedIndex ()) {
-                case 0:
-                    request.setRequestType (RequestType.GET);
+            if (e.getSource () == type)
+            {
+                switch (type.getSelectedIndex ()) {
+                    case 0:
+                        request.setRequestType (RequestType.GET);
+                        request.getClientRequest ().
+                                setRequestType (RequestType.GET.toString ());
+                        break;
+                    case 1:
+                        request.setRequestType (RequestType.POST);
+                        request.getClientRequest ().
+                                setRequestType (RequestType.POST.toString ());
+                        break;
+                    case 2:
+                        request.setRequestType (RequestType.PUT);
+                        request.getClientRequest ().
+                                setRequestType (RequestType.PUT.toString ());
+                        break;
+                    case 3:
+                        request.setRequestType (RequestType.PATCH);
+                        request.getClientRequest ().
+                                setRequestType (RequestType.PATCH.toString ());
+                        break;
+                    case 4:
+                        request.setRequestType (RequestType.DELETE);
+                        request.getClientRequest ().
+                                setRequestType (RequestType.DELETE.toString ());
+                        break;
+                }
+            }
+            //TODO : create save panel and add functionality
+        }
+    }
+
+    private boolean initializeForSend ()
+    {
+        properHeaders ();
+        properQuery ();
+        if (request.getClientRequest ().getRequestType () != RequestType.GET)
+        {
+            switch (request.getClientRequest ().getMessageBodyType ())
+            {
+                case 0 :
+                    properMultiPart ();
                     break;
-                case 1:
-                    request.setRequestType (RequestType.POST);
+                case 1 :
+                    File file;
+                    if (binaryFilePanel.getPath () != null)
+                    {
+                        file = new File (binaryFilePanel.getPath ().toString ());
+                        if (!file.exists ())
+                        {
+                            JOptionPane.showMessageDialog (this,
+                                    "Invalid File !","Error",JOptionPane.ERROR_MESSAGE);
+                            return false;
+                        }
+                    } else
+                    {
+                        JOptionPane.showMessageDialog (this,
+                                "Invalid File !","Error",JOptionPane.ERROR_MESSAGE);
+                        return false;
+                    }
+
+                    request.getClientRequest ().addUploadBinaryFile (
+                            new File (binaryFilePanel.getPath ().toString ()));
                     break;
-                case 2:
-                    request.setRequestType (RequestType.PUT);
-                    break;
-                case 3:
-                    request.setRequestType (RequestType.PATCH);
-                    break;
-                case 4:
-                    request.setRequestType (RequestType.DELETE);
-                    break;
+                case 2 :
+                    properUrlEncoded ();
             }
         }
+        return true;
     }
 
-    public boolean addHeadersAndBodyToRequest ()
+    private void properHeaders ()
     {
-        request.getClientRequest ().clear ();
 
-        switch (request.getClientRequest ().getMessageBodyType ())
-        {
-            case 1 :
-                for (KeyAndValue keyAndValue :
-                        multiPartPanel.getKeyAndValuePanel ().getKeyAndValues ())
-                {
-                    if (!keyAndValue.isDeleted () && keyAndValue.getActive ().isSelected ())
-                        request.getClientRequest ().addFormUrlData
-                            (keyAndValue.getKey ().getText (),
-                            keyAndValue.getValue ().getText ());
-                }
-                break;
-
-            case 2 :
-                if (binaryFilePanel.getPath () == null)
-                {
-                    JOptionPane.showMessageDialog
-                            (this,"Choose a File Please","Warning",
-                                    JOptionPane.WARNING_MESSAGE);
-                    return false;
-                }
-                request.getClientRequest ().addUploadBinaryFile (
-                        new File (binaryFilePanel.getPath ().toString ()));
-
-        }
-
+        headerPanel.getKeyAndValuePanel ().updateList ();
+        request.getClientRequest ().clearCustomHeaders ();
         for (KeyAndValue keyAndValue : headerPanel.getKeyAndValuePanel ().getKeyAndValues ())
-        {
-            if (!keyAndValue.isDeleted () && keyAndValue.getActive ().isSelected ())
+            if (keyAndValue.isActive ())
+            {
                 request.getClientRequest ().addCustomHeader (keyAndValue.getKey ().getText (),
-                    keyAndValue.getValue ().getText ());
-        }
+                        keyAndValue.getValue ().getText ());
+            }
+    }
 
+    private void properQuery ()
+    {
+
+        queryPanel.getKeyAndValuePanel ().updateList ();
+        request.getClientRequest ().clearQuery ();
         for (KeyAndValue keyAndValue : queryPanel.getKeyAndValuePanel ().getKeyAndValues ())
-        {
-            if (!keyAndValue.isDeleted () && keyAndValue.getActive ().isSelected ())
+            if (keyAndValue.isActive ())
+            {
                 request.getClientRequest ().addQuery (keyAndValue.getKey ().getText (),
                         keyAndValue.getValue ().getText ());
-        }
-        return true;
-
+            }
     }
+
+    private void properMultiPart ()
+    {
+        multiPartPanel.getKeyAndValuePanel ().updateList ();
+        request.getClientRequest ().clearBody ();
+        for (KeyAndValue keyAndValue : multiPartPanel.getKeyAndValuePanel ().getKeyAndValues ())
+            if (keyAndValue.isActive ())
+            {
+                request.getClientRequest ().addFormUrlData (keyAndValue.getKey ().getText (),
+                        keyAndValue.getValue ().getText ());
+            }
+    }
+
+    private void properUrlEncoded ()
+    {
+        urlEncoded.getKeyAndValuePanel ().updateList ();
+        request.getClientRequest ().clearBody ();
+        for (KeyAndValue keyAndValue : urlEncoded.getKeyAndValuePanel ().getKeyAndValues ())
+            if (keyAndValue.isActive ())
+            {
+                request.getClientRequest ().addFormUrlDataEncoded
+                        (keyAndValue.getKey ().getText (),
+                        keyAndValue.getValue ().getText ());
+            }
+    }
+
 }

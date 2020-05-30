@@ -72,6 +72,7 @@ public class BinaryFilePanel extends JPanel
         resetFile.setForeground (theme.getForeGroundColorV2 ());
         resetFile.setFocusable (false);
         resetFile.addActionListener (buttonHandler);
+        resetFile.setEnabled (false);
 
 
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -135,8 +136,10 @@ public class BinaryFilePanel extends JPanel
     {
         path = useFileChooser ();
 
+
         if (path != null && Files.exists (path))
         {
+            resetFile.setEnabled (true);
             StringBuilder stringBuilder = new StringBuilder ();
             stringBuilder.append (String.format ("%s",path)).append (" ");
             try{
@@ -161,10 +164,16 @@ public class BinaryFilePanel extends JPanel
                 pathHandler ();
             else if (e.getSource () == resetFile)
             {
-                fileAddress.setText ("No file selected");
-                path = null;
+                clearPath ();
             }
         }
+    }
+
+    public void clearPath ()
+    {
+        fileAddress.setText ("No file selected");
+        path = null;
+        resetFile.setEnabled (false);
     }
 
     public Path getPath () {

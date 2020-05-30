@@ -1,11 +1,15 @@
 package GUI;
 
+import Client.ClientRequest;
 import Client.RequestType;
+import ControlUnit.Controller;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+
 
 /**
  * this class represents requestPanel
@@ -44,11 +48,12 @@ public class RequestsPanel extends JPanel
     {
         if (type == null || name == null)
             throw new NullPointerException ("inValid input");
-        Request request = new Request (type,name,gui,theme);
+        ClientRequest clientRequest = new ClientRequest (gui.getOptionData ().isFollowRedirect (),
+                name,type);
+        Request request = new Request (type,name,clientRequest,gui,theme);
+        Controller.addNewRequest (clientRequest);
         MouseHandler mouseHandler = new MouseHandler ();
         request.addMouseListener (mouseHandler);
-
-
         requests.add (request);
         add(request);
         request.setVisible (false);
@@ -91,7 +96,7 @@ public class RequestsPanel extends JPanel
                     if (request == e.getComponent ()) {
                         request.setChoseVisibly (true);
                         request.getNameLabel ().setFont (
-                                new Font ("Arial",Font.BOLD + Font.ITALIC,13));
+                                new Font ("Arial",Font.BOLD,13));
                         gui.setSecondPanel (request.getSecondPanel ());
                         gui.setThirdPanel (request.getSecondPanel ().getProgramThirdPanel ());
 

@@ -169,7 +169,7 @@ public class FirstPanel extends JPanel
         }
         for (Request request : requestsPanel.getRequests ())
         {
-            String a = request.getRequestType ().getName ().toLowerCase ().trim ().
+            String a = request.getRequestType ().getMinimizedName ().toLowerCase ().trim ().
                     replaceAll ("\\s+","") +
                     "" +request.getRequestType ().toString ().toLowerCase ().trim ().
                     replaceAll ("\\s+","")
@@ -196,7 +196,7 @@ public class FirstPanel extends JPanel
                 AddNewRequestPanel addNewRequestPanel = new AddNewRequestPanel ();
                 int res =
                         JOptionPane.showOptionDialog (gui.getBaseFrame (),
-                        addNewRequestPanel,"New GUI.Request",
+                        addNewRequestPanel,"New Request",
                         JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,null,
                         null,null);
                 if (res == 0) {
@@ -211,7 +211,12 @@ public class FirstPanel extends JPanel
 
         @Override
         public void keyReleased (KeyEvent e) {
-            doFilter (searchText.getText ());
+            if (e.getKeyCode () != KeyEvent.VK_ENTER)
+                doFilter (searchText.getText ());
         }
+    }
+
+    public RequestsPanel getRequestsPanel () {
+        return requestsPanel;
     }
 }

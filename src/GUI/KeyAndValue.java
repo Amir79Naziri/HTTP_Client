@@ -1,5 +1,7 @@
 package GUI;
 
+import Client.ClientRequest;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -24,7 +26,6 @@ public class KeyAndValue extends JPanel
     private GridBagConstraints constraints; // constrains
     private boolean isDeleted; // is Deleted
     private Theme theme; // theme
-    private boolean isEditable;
 
 
     /**
@@ -49,7 +50,6 @@ public class KeyAndValue extends JPanel
         setLayout (layout);
         setBackground (theme.getBackGroundColorV4 ());
 
-        this.isEditable = isEditable;
         if (isEditable)
             createComponents (keyName, valueName);
         else
@@ -65,9 +65,6 @@ public class KeyAndValue extends JPanel
         return isDeleted;
     }
 
-    public boolean isEditable () {
-        return isEditable;
-    }
 
     /**
      * sets IsDeleted true
@@ -285,8 +282,8 @@ public class KeyAndValue extends JPanel
             panelDesc.setVisible (true);
     }
 
-    public JCheckBox getActive () {
-        return active;
+    public boolean isActive () {
+        return active.isSelected ();
     }
 
     /**
@@ -301,6 +298,7 @@ public class KeyAndValue extends JPanel
             {
                 setVisible (false);
                 delete ();
+
             }
         }
 
@@ -328,7 +326,7 @@ public class KeyAndValue extends JPanel
             if (e.getComponent () instanceof JTextField && active.isSelected () )
             {
                 JTextField textField = (JTextField)(e.getComponent ());
-                textField.setFont (new Font ("Arial",Font.BOLD + Font.ITALIC,11));
+                textField.setFont (new Font ("Arial",Font.BOLD,11));
             }
         }
 

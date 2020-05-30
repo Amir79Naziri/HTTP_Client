@@ -1,6 +1,7 @@
 package Jurl;
 
 import Client.ClientRequest;
+import ControlUnit.Controller;
 import Storage.StorageUnit;
 import java.io.File;
 import java.net.MalformedURLException;
@@ -30,6 +31,7 @@ public class Jurl
     public void startProgram ()
     {
         while (true) {
+            Controller.saveUpdates ();
             inputProcessor.getLine ();
             try {
                 ArrayList<ClientRequest> clientRequests = createClientRequest (inputProcessor.getTasks (),
@@ -125,7 +127,6 @@ public class Jurl
             }
             if (tasks.containsKey (ReservedWord.SAVE_V2))
             {
-
                 storageUnit.addRequest (clientRequest);
             }
             clientRequests.add (clientRequest);

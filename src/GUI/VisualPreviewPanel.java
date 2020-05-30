@@ -1,8 +1,13 @@
 package GUI;
 
+import javax.imageio.ImageIO;
+import javax.print.DocFlavor;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 /**
  * this class represents visual preview panel in third panel
@@ -13,64 +18,64 @@ public class VisualPreviewPanel extends JPanel
 {
 
 //    private JLabel imageLabel;
-    private boolean hasError; // has error to load image
+
     private Theme theme; // theme
+    private JLabel imageLabel;
+    JTextArea textArea;
+
 
     /**
      * creates a new visual panel
-     * @param imageIcon imageIcon
      * @param theme theme
      */
-    public VisualPreviewPanel (ImageIcon imageIcon, Theme theme)
+    public VisualPreviewPanel (Theme theme)
     {
         super();
         if (theme == null)
             throw new NullPointerException ("inValid input");
         this.theme = theme;
-        hasError = false;
+        imageLabel = new JLabel ();
         setLayout (new BorderLayout());
         setBackground (theme.getBackGroundColorV4 ());
         addTextArea ();
-        if (imageIcon == null)
-            hasError = true;
+        add(imageLabel,BorderLayout.CENTER);
     }
-
-//    public void setImageIcon (ImageIcon imageIcon)
-//    {
-//        if (imageIcon == null)
-//        {
-//            hasError = true;
-//            return;
-//        }
-//        imageLabel = new JLabel (imageIcon);
-//        hasError = false;
-//        repaint ();
-//    }
-//
-//    private void addImagePanel ()
-//    {
-//        JPanel imagePanel = new JPanel ();
-//        imagePanel.setLayout (new BorderLayout ());
-//        imagePanel.setBackground (new Color (40, 38, 37, 255));
-//        if (!hasError)
-//        {
-//            imagePanel.add(imageLabel);
-//            textArea.setVisible (false);
-//        } else
-//            textArea.setVisible (true);
-//        add(imagePanel);
-//    }
 
     /**
      * adds text message to panel
      */
     private void addTextArea ()
     {
-        JTextArea textArea = new JTextArea ("Error: URL using bad/illegal format or missing URL");
+        textArea = new JTextArea ("Error: URL using bad/illegal format or missing URL");
         textArea.setEditable (false);
         textArea.setBorder (new EmptyBorder (5,5,5,5));
         textArea.setForeground (theme.getForeGroundColorV2 ());
         textArea.setBackground (theme.getBackGroundColorV4 ());
         add (textArea,BorderLayout.NORTH);
+    }
+
+    public void removeImage ()
+    {
+        this.setVisible (false);
+        textArea.setVisible (true);
+        imageLabel.setIcon (null);
+        this.setVisible (true);
+    }
+
+    public void addImage (byte[] data)  {
+
+        ByteArrayInputStream in = new ByteArrayInputStream (data);
+        try{
+            BufferedImage image = ImageIO.read(in);
+            this.setVisible (false);
+            textArea.setVisible (false);
+            imageLabel.setIcon (new ImageIcon (image));
+            this.setVisible (true);
+
+        } catch (IOException e)
+        {
+            System.out.println ("some thing went wrong in loading image");
+
+        }
     }
 }

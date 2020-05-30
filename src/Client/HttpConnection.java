@@ -44,20 +44,17 @@ public class HttpConnection implements Serializable
     }
 
 
-    public HttpURLConnection connectionInitializer (HashMap<String, String> headers, String queryData)
+    public HttpURLConnection connectionInitializer
+            (HashMap<String, String> headers, String queryData)
     {
-        try {
-            setUrl (getUrl () + "" + queryData);
-        } catch (MalformedURLException ignore) {
-            System.out.println ("wrong Query format");
-        }
 
         try {
+            URL connectionUrl = new URL (getUrl () + "" + queryData);
             HttpURLConnection connection;
-            if (("http").equals (url.getProtocol ()))
-                connection = (HttpURLConnection) url.openConnection ();
-            else if (("https").equals (url.getProtocol ()))
-                connection = (HttpsURLConnection) url.openConnection ();
+            if (("http").equals (connectionUrl.getProtocol ()))
+                connection = (HttpURLConnection) connectionUrl.openConnection ();
+            else if (("https").equals (connectionUrl.getProtocol ()))
+                connection = (HttpsURLConnection) connectionUrl.openConnection ();
             else {
                 System.err.println ("UNDEFINED PROTOCOL");
                 return null;
@@ -75,9 +72,16 @@ public class HttpConnection implements Serializable
                     connection.setRequestProperty (key,headers.get (key));
 
 
-
+            System.out.println ("Connection Initialized in : " + connection.getURL () +
+                    "\nconnecting......");
             return connection;
-        } catch(IOException e) {
+        }
+        catch (MalformedURLException e)
+        {
+            System.out.println ("Wrong url format");
+            return null;
+        }
+        catch(IOException e) {
             System.err.println ("Failed to start Connecting");
             return null;
         }

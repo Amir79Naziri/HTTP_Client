@@ -34,12 +34,6 @@ public class Executor implements Runnable
             pool.execute (clientRequest);
         }
 
-        try {
-            pool.awaitTermination (1, TimeUnit.MINUTES);
-        } catch (InterruptedException e)
-        {
-            e.printStackTrace ();
-        }
 
     }
 }

@@ -173,8 +173,17 @@ public class ClientRequest implements Serializable, Runnable
         return stringBuilder.toString ();
     }
 
+    public void clearCustomHeaders ()
+    {
+        customHeaders.clear ();
+    }
 
-    public void clear ()
+    public void clearQuery ()
+    {
+        queryData.clear ();
+    }
+
+    public void clearBody ()
     {
         formData.clear ();
         formDataEncoded.clear ();
@@ -238,7 +247,7 @@ public class ClientRequest implements Serializable, Runnable
         if (messageBodyType != this.messageBodyType)
         {
             this.messageBodyType = messageBodyType;
-            clear ();
+            clearBody ();
         }
     }
     

@@ -20,9 +20,9 @@ public class RequestsStorage implements Serializable
         clientRequests.add (clientRequest);
     }
 
-    public void remove (int index)
+    public void remove (ClientRequest clientRequest)
     {
-        clientRequests.remove (index);
+        clientRequests.remove (clientRequest);
     }
 
     public ClientRequest get (int index)

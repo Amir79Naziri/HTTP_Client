@@ -2,6 +2,8 @@ package GUI;
 
 import Client.ClientRequest;
 import Client.RequestType;
+import ControlUnit.Controller;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -27,18 +29,19 @@ public class Request extends JPanel
      * create a new request
      * @param requestType request type
      * @param name name of request
+     * @param clientRequest index of request
      * @param gui gui
      * @param theme theme
      */
-    public Request (RequestType requestType, String name, GUI gui, Theme theme)
+    public Request (RequestType requestType, String name, ClientRequest clientRequest
+            , GUI gui, Theme theme)
     {
         super();
         if (name == null || requestType == null || gui == null || theme == null)
             throw new NullPointerException ("inValid input");
         isDeleted = false;
-        this.clientRequest = new ClientRequest (
-                gui.getOptionPanel ().getFollowRedirect (),name,requestType);
         this.requestType = requestType;
+        this.clientRequest = clientRequest;
         setBackground (theme.getBackGroundColorV2 ());
         setLayout (new FlowLayout (FlowLayout.LEFT));
 
@@ -47,7 +50,7 @@ public class Request extends JPanel
         chose.setPreferredSize (new Dimension (2,29));
         chose.setVisible (false);
 
-        typeLabel = new JLabel (requestType.getName ());
+        typeLabel = new JLabel (requestType.getMinimizedName ());
         secondPanel = new SecondPanel (gui,this,theme);
         typeLabel.setFont (new Font ("Arial",Font.PLAIN,10));
         typeLabel.setForeground (requestType.getColor ());
@@ -70,6 +73,7 @@ public class Request extends JPanel
                     gui.setThirdPanel (new NullPanel (2,theme));
                     gui.setSecondPanel (new NullPanel (1,theme));
                 }
+                Controller.removeRequest (clientRequest);
             }
         });
 
@@ -105,8 +109,7 @@ public class Request extends JPanel
         if (requestType == null)
             throw new NullPointerException ("inValid input");
         this.requestType = requestType;
-        clientRequest.setRequestType (requestType.toString ());
-        typeLabel.setText (requestType.getName ());
+        typeLabel.setText (requestType.getMinimizedName ());
         typeLabel.setForeground (requestType.getColor ());
         setVisible (false);
         setVisible (true);
@@ -192,6 +195,4 @@ public class Request extends JPanel
     public ClientRequest getClientRequest () {
         return clientRequest;
     }
-
-
 }

@@ -85,8 +85,8 @@ public class ThirdPanel extends JPanel
             throw new NullPointerException ("inValid input");
         label.setForeground (Color.WHITE);
         label.setOpaque (true);
-        label.setPreferredSize (new Dimension (width,25));
-        label.setMaximumSize (new Dimension (width,25));
+
+        label.setMaximumSize (new Dimension (width + 50,25));
         label.setMinimumSize (new Dimension (width,25));
         label.setHorizontalAlignment (SwingConstants.CENTER);
     }
@@ -97,7 +97,7 @@ public class ThirdPanel extends JPanel
     private void addBasePanel ()
     {
         rawPanel = new RawPanel (theme);
-        visualPreviewPanel = new VisualPreviewPanel (null,theme);
+        visualPreviewPanel = new VisualPreviewPanel (theme);
         resultHeaderPanel = new ResultHeaderPanel (theme);
         JTabbedPane tabbedPane = new JTabbedPane ();
         tabbedPane.setTabLayoutPolicy (JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -136,7 +136,7 @@ public class ThirdPanel extends JPanel
     public void execute ()
     {
         responseCalculator = new ResponseCalculator (request,statusMessage,time,
-                size,rawPanel,resultHeaderPanel);
+                size,rawPanel,resultHeaderPanel,visualPreviewPanel);
         responseCalculator.execute ();
     }
 

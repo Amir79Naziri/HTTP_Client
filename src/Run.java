@@ -1,3 +1,4 @@
+import ControlUnit.Controller;
 import GUI.*;
 import Jurl.*;
 
@@ -5,6 +6,8 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * this class build for test
@@ -20,13 +23,12 @@ public class Run
         {
             e.printStackTrace ();
         }
-//        GUI gui = new GUI ();
-//        gui.setBaseFrameVisible ();
+        GUI gui = new GUI ();
+        gui.setBaseFrameVisible ();
 //
 //
 ////
-        Jurl jurl = new Jurl ();
-        jurl.startProgram ();
+        Controller.startProgram ();
 
 
 

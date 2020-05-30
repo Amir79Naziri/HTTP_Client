@@ -1,5 +1,7 @@
 package GUI;
 
+import Client.ClientRequest;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * this class represents a key and value panel
@@ -105,6 +108,14 @@ public class KeyAndValuePanel extends JPanel
     }
 
 
+
+
+
+    public void updateList ()
+    {
+        keyAndValues.removeIf (keyAndValue -> keyAndValue.isDeleted ());
+    }
+
     /**
      * this class handles components in this panel
      */
@@ -114,7 +125,9 @@ public class KeyAndValuePanel extends JPanel
         @Override
         public void actionPerformed (ActionEvent e) {
             if (e.getSource () == deleteAll)
+            {
                 deleteAll ();
+            }
             else if (e.getSource () == toggleDescription)
                 toggleAllDescription ();
         }

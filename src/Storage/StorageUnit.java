@@ -1,8 +1,10 @@
 package Storage;
 
 import Client.ClientRequest;
+import GUI.Request;
 
 import java.io.*;
+import java.util.ArrayList;
 
 public class StorageUnit
 {
@@ -23,17 +25,16 @@ public class StorageUnit
         save ();
     }
 
-    public void removeRequest (int index)
+    public void removeRequest (ClientRequest clientRequest)
     {
-        if (index < 0 || index >= requestsStorage.size ())
-            throw new IndexOutOfBoundsException ("index should be in range 0 to " +
-                    (requestsStorage.size () - 1));
-        requestsStorage.remove (index);
+
+        requestsStorage.remove (clientRequest);
         save ();
     }
 
     public ClientRequest getClientRequest (int index)
     {
+        //TODO : change in bounds
         try{
             if (index - 1 < 0 || index - 1 >= requestsStorage.size ())
                 throw new IndexOutOfBoundsException ("index should be in range 0 to " +
@@ -47,7 +48,7 @@ public class StorageUnit
         return requestsStorage.get (index - 1);
     }
 
-    private void save ()
+    public void save ()
     {
         try (ObjectOutputStream out = new ObjectOutputStream (new FileOutputStream (file))){
 
@@ -81,7 +82,6 @@ public class StorageUnit
 
     public void printList ()
     {
-        load ();
         if (requestsStorage.getClientRequests ().size () == 0)
             System.out.println ("List is Empty");
         else
