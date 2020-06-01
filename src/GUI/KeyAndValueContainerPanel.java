@@ -11,7 +11,6 @@ import java.awt.*;
 public class KeyAndValueContainerPanel extends JPanel
 {
     private KeyAndValuePanel keyAndValuePanel; // keyAndValue panel
-    private Request request;
 
     /**
      * create a new Header Panel
@@ -23,19 +22,18 @@ public class KeyAndValueContainerPanel extends JPanel
         if (theme == null)
             throw new NullPointerException ("inValid input");
         setLayout (new BorderLayout ());
-        this.request = request;
         if (type == 1)
             keyAndValuePanel = new KeyAndValuePanel ("header", "value",theme,"Header",
-                request);
+                request,this);
         else if (type == 2)
             keyAndValuePanel = new KeyAndValuePanel ("name", "value",theme,
-                    "MultiPart",request);
+                    "MultiPart",request,this);
         else if (type == 3)
             keyAndValuePanel = new KeyAndValuePanel ("name", "value",theme,
-                    "UrlEncoded",request);
+                    "UrlEncoded",request,this);
         else if (type == 4)
             keyAndValuePanel = new KeyAndValuePanel ("name", "value",theme,"Query",
-                    request);
+                    request,this);
 
         add(ScrollPaneAdder.fetchToJScrollPane (keyAndValuePanel,theme),BorderLayout.CENTER);
     }

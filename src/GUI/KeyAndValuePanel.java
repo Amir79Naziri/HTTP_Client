@@ -26,6 +26,9 @@ public class KeyAndValuePanel extends JPanel
     private Theme theme; // theme
     private String type;
     private Request request;
+    private JPanel owner;
+
+
 
     /**
      * creates a new keyAndValue panel
@@ -33,7 +36,8 @@ public class KeyAndValuePanel extends JPanel
      * @param value value
      * @param theme theme
      */
-    public KeyAndValuePanel (String key, String value, Theme theme,String type, Request request)
+    public KeyAndValuePanel (String key, String value, Theme theme, String type, Request request,
+                             JPanel owner)
     {
         super();
         if (key == null || value == null || theme == null)
@@ -43,6 +47,7 @@ public class KeyAndValuePanel extends JPanel
         this.key = key;
         this.value = value;
         this.type = type;
+        this.owner = owner;
         this.request = request;
         setLayout (new BoxLayout (this,BoxLayout.Y_AXIS));
         setBackground (theme.getBackGroundColorV4 ());
@@ -62,6 +67,10 @@ public class KeyAndValuePanel extends JPanel
         popupMenu = new JPopupMenu ();
         popupMenu.add (deleteAll);
         popupMenu.add (toggleDescription);
+    }
+
+    public JPanel getOwner () {
+        return owner;
     }
 
     /**
@@ -143,6 +152,7 @@ public class KeyAndValuePanel extends JPanel
                         request.getClientRequest ().addQuery (keyAndValue.getKey ().getText (),
                                 keyAndValue.getValue ().getText ());
                     }
+
                 break;
             case "Header" :
                 updateList ();
@@ -178,10 +188,17 @@ public class KeyAndValuePanel extends JPanel
         }
     }
 
+    public String getType () {
+        return type;
+    }
 
     public void updateList ()
     {
         keyAndValues.removeIf (keyAndValue -> keyAndValue.isDeleted ());
+    }
+
+    public Request getRequest () {
+        return request;
     }
 
     /**
@@ -195,6 +212,14 @@ public class KeyAndValuePanel extends JPanel
             if (e.getSource () == deleteAll)
             {
                 deleteAll ();
+                properData ();
+                if (getOwner () instanceof QueryPanel)
+                {
+                    QueryPanel queryPanel = (QueryPanel) getOwner ();
+                    queryPanel.getPreviewURLText ().
+                            setText (getRequest ().getClientRequest ().getUrl ()
+                                    + getRequest ().getClientRequest ().getQueryDataString ());
+                }
             }
             else if (e.getSource () == toggleDescription)
                 toggleAllDescription ();
@@ -210,6 +235,13 @@ public class KeyAndValuePanel extends JPanel
             {
                 addDefaultNewKeyAndValue ();
                 properData ();
+                if (getOwner () instanceof QueryPanel)
+                {
+                    QueryPanel queryPanel = (QueryPanel) getOwner ();
+                    queryPanel.getPreviewURLText ().
+                            setText (getRequest ().getClientRequest ().getUrl ()
+                                    + getRequest ().getClientRequest ().getQueryDataString ());
+                }
             }
         }
     }

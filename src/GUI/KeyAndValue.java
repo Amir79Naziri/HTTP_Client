@@ -304,7 +304,13 @@ public class KeyAndValue extends JPanel
                 setVisible (false);
                 delete ();
                 owner.properData ();
-
+                if (owner.getOwner () instanceof QueryPanel)
+                {
+                    QueryPanel queryPanel = (QueryPanel)owner.getOwner ();
+                    queryPanel.getPreviewURLText ().
+                            setText (owner.getRequest ().getClientRequest ().getUrl ()
+                            + owner.getRequest ().getClientRequest ().getQueryDataString ());
+                }
             }
         }
 
@@ -324,6 +330,13 @@ public class KeyAndValue extends JPanel
                 describe.setForeground (theme.getForeGroundColorV2 ());
             }
             owner.properData ();
+            if (owner.getOwner () instanceof QueryPanel)
+            {
+                QueryPanel queryPanel = (QueryPanel)owner.getOwner ();
+                queryPanel.getPreviewURLText ().
+                        setText (owner.getRequest ().getClientRequest ().getUrl ()
+                                + owner.getRequest ().getClientRequest ().getQueryDataString ());
+            }
             repaint ();
         }
 
@@ -352,6 +365,13 @@ public class KeyAndValue extends JPanel
         @Override
         public void keyReleased (KeyEvent e) {
             owner.properData ();
+            if (owner.getOwner () instanceof QueryPanel)
+            {
+                QueryPanel queryPanel = (QueryPanel)owner.getOwner ();
+                queryPanel.getPreviewURLText ().
+                        setText (owner.getRequest ().getClientRequest ().getUrl ()
+                                + owner.getRequest ().getClientRequest ().getQueryDataString ());
+            }
         }
     }
 

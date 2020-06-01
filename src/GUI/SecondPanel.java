@@ -223,7 +223,6 @@ public class SecondPanel extends JPanel
             else
             {
                 String a = url.getText ();
-
                 try{
                     request.getClientRequest ().setUrl (a);
                     queryPanel.getPreviewURLText ().setText (a +
@@ -332,8 +331,8 @@ public class SecondPanel extends JPanel
         return true;
     }
 
-    //TODO : you can add this to keyAndValue when deleting , adding , or activating
-    //TODO : add save headers and .... to jurl too
+
+
     //TODO : add jurl -S request to list
 
 
