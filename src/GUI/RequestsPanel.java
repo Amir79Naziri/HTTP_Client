@@ -27,7 +27,7 @@ public class RequestsPanel extends JPanel
      * @param gui gui
      * @param theme theme
      */
-    public RequestsPanel (GUI gui, Theme theme)
+    public RequestsPanel (GUI gui, Theme theme, ArrayList<ClientRequest> clientRequests)
     {
         super();
         if (theme == null || gui == null)
@@ -37,6 +37,11 @@ public class RequestsPanel extends JPanel
         setLayout (new BoxLayout (this,BoxLayout.Y_AXIS));
         setBackground (theme.getBackGroundColorV2 ());
         requests = new ArrayList<> ();
+
+        if (clientRequests != null)
+            for (ClientRequest clientRequest : clientRequests)
+                addRequest (clientRequest.getRequestType (),
+                        clientRequest.getName (),clientRequest);
     }
 
     /**
@@ -60,6 +65,19 @@ public class RequestsPanel extends JPanel
         request.setVisible (true);
     }
 
+    private void addRequest (RequestType type, String name, ClientRequest clientRequest)
+    {
+        if (type == null || name == null)
+            throw new NullPointerException ("inValid input");
+
+        Request request = new Request (type,name,clientRequest,gui,theme);
+        MouseHandler mouseHandler = new MouseHandler ();
+        request.addMouseListener (mouseHandler);
+        requests.add (request);
+        add(request);
+        request.setVisible (false);
+        request.setVisible (true);
+    }
     /**
      * @return list of requests
      */
@@ -117,5 +135,11 @@ public class RequestsPanel extends JPanel
                 }
             }
         }
+    }
+
+    public void properRequestsForClosing ()
+    {
+        for (Request request : requests)
+            request.getSecondPanel ().initializeForSend (false);
     }
 }

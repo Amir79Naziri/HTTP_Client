@@ -5,6 +5,7 @@ import GUI.Request;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class StorageUnit
 {
@@ -79,6 +80,11 @@ public class StorageUnit
         return requestsStorage.size ();
     }
 
+
+    public ArrayList<ClientRequest> getClientRequests ()
+    {
+        return requestsStorage.getClientRequests ();
+    }
 
     public void printList ()
     {

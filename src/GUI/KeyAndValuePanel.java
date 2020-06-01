@@ -1,7 +1,5 @@
 package GUI;
 
-import Client.ClientRequest;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 
 /**
  * this class represents a key and value panel
@@ -72,8 +70,20 @@ public class KeyAndValuePanel extends JPanel
     /**
      * add a new key and value
      */
-    public void addNewKeyAndValue ()
+    public void addDefaultNewKeyAndValue ()
     {
+        configureNewKeyAndValue (key, value);
+    }
+
+    /**
+     * add a new key and value
+     */
+    private void addNewKeyAndValue (String key, String value)
+    {
+        configureNewKeyAndValue (key, value);
+    }
+
+    private void configureNewKeyAndValue (String key, String value) {
         KeyAndValue keyAndValue = new KeyAndValue (key, value,true,
                 fixedKeyAndValue.isPanelDescVisible (),theme);
         getKeyAndValues ().add (keyAndValue);
@@ -108,6 +118,13 @@ public class KeyAndValuePanel extends JPanel
     }
 
 
+    public void properBack (HashMap<String,String> data)
+    {
+        if (data == null)
+            return;
+        for (String key : data.keySet ())
+            addNewKeyAndValue (key,value);
+    }
 
 
 
@@ -140,7 +157,7 @@ public class KeyAndValuePanel extends JPanel
             e.getComponent () == fixedKeyAndValue.getKey () || e.getComponent () ==
             fixedKeyAndValue.getDescribe ())
             {
-                addNewKeyAndValue ();
+                addDefaultNewKeyAndValue ();
             }
         }
     }

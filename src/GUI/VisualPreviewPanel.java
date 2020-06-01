@@ -34,11 +34,14 @@ public class VisualPreviewPanel extends JPanel
         if (theme == null)
             throw new NullPointerException ("inValid input");
         this.theme = theme;
+        JPanel panel = new JPanel (new FlowLayout (FlowLayout.CENTER));
         imageLabel = new JLabel ();
+        panel.add (imageLabel);
         setLayout (new BorderLayout());
+        panel.setBackground (theme.getBackGroundColorV4 ());
         setBackground (theme.getBackGroundColorV4 ());
         addTextArea ();
-        add(imageLabel,BorderLayout.CENTER);
+        add(panel,BorderLayout.CENTER);
     }
 
     /**

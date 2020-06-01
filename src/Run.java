@@ -23,18 +23,8 @@ public class Run
         {
             e.printStackTrace ();
         }
-        GUI gui = new GUI ();
-        gui.setBaseFrameVisible ();
-//
-//
-////
+
         Controller.startProgram ();
-
-
-
-
-
-
 
     }
 }

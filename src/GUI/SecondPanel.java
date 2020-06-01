@@ -1,8 +1,7 @@
 package GUI;
 
-import Client.ClientRequest;
 import Client.RequestType;
-import ControlUnit.Controller;
+
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -32,7 +31,7 @@ public class SecondPanel extends JPanel
     private JsonPanel jsonPanel;
     private BearerPanel bearerPanel;
     private BinaryFilePanel binaryFilePanel;
-
+    private JComboBox<String> bodyType;
     private GUI gui; // gui
     private Request request; // request which has this panel
     private Theme theme; // theme
@@ -59,7 +58,22 @@ public class SecondPanel extends JPanel
         programThirdPanel = new NullPanel (2,theme);
         setLayout (new BorderLayout ());
         createURLPanel ();
+        String[] bodyTypes = {"MultiPart ","form url encoded","JSON ", "Binary File"};
+        bodyType = new JComboBox<> (bodyTypes);
         createBasePanel ();
+        switch (request.getClientRequest ().getMessageBodyType ())
+        {
+            case 1 :
+                bodyType.setSelectedIndex (0);
+                break;
+            case 2 :
+                bodyType.setSelectedIndex (3);
+                break;
+            case 3 :
+                bodyType.setSelectedIndex (2);
+                break;
+        }
+        properBack ();
     }
 
     /**
@@ -130,32 +144,31 @@ public class SecondPanel extends JPanel
         bearerPanel = new BearerPanel (theme);
         binaryFilePanel = new BinaryFilePanel (theme);
 
-        String[] bodyTypes = {"MultiPart ","form url encoded","JSON ", "Binary File"};
-        JComboBox<String> body = new JComboBox<> (bodyTypes);
-        body.addItemListener (new ItemListener () {
+
+        bodyType.addItemListener (new ItemListener () {
             @Override
             public void itemStateChanged (ItemEvent e) {
 
-                if (body.getSelectedIndex () == 0)
+                if (bodyType.getSelectedIndex () == 0)
                 {
                     tabbedPane.setComponentAt (0, multiPartPanel);
                     request.getClientRequest ().setMessageBodyType (1);
                     binaryFilePanel.clearPath ();
                     urlEncoded.getKeyAndValuePanel ().deleteAll ();
                 }
-                else if (body.getSelectedIndex () == 1)
+                else if (bodyType.getSelectedIndex () == 1)
                 {
                     tabbedPane.setComponentAt (0,urlEncoded);
                     request.getClientRequest ().setMessageBodyType (3);
                     multiPartPanel.getKeyAndValuePanel ().deleteAll ();
                     binaryFilePanel.clearPath ();
                 }
-                else if (body.getSelectedIndex () == 2)
+                else if (bodyType.getSelectedIndex () == 2)
                 {
                     tabbedPane.setComponentAt (0,jsonPanel);
 
                 }
-                else if (body.getSelectedIndex () == 3)
+                else if (bodyType.getSelectedIndex () == 3)
                 {
                     tabbedPane.setComponentAt (0,binaryFilePanel);
                     request.getClientRequest ().setMessageBodyType (2);
@@ -165,16 +178,16 @@ public class SecondPanel extends JPanel
                 repaint ();
             }
         });
-        body.addActionListener (new ActionListener () {
+        bodyType.addActionListener (new ActionListener () {
             @Override
             public void actionPerformed (ActionEvent e) {
                 tabbedPane.setSelectedIndex (0);
             }
         });
-        body.setBackground (Color.GRAY);
+        bodyType.setBackground (Color.GRAY);
 
         tabbedPane.add (multiPartPanel);
-        tabbedPane.setTabComponentAt (0,body);
+        tabbedPane.setTabComponentAt (0,bodyType);
         tabbedPane.addTab ("Bearer",bearerPanel);
         tabbedPane.addTab ("Query",queryPanel);
         tabbedPane.addTab ("Header",headerPanel);
@@ -200,7 +213,7 @@ public class SecondPanel extends JPanel
         public void keyReleased (KeyEvent e) {
             if (e.getKeyCode () == KeyEvent.VK_ENTER)
             {
-                if (initializeForSend ())
+                if (initializeForSend (true))
                 {
                     gui.setThirdPanel (mainThirdPanel);
                     programThirdPanel = mainThirdPanel;
@@ -228,13 +241,13 @@ public class SecondPanel extends JPanel
         public void actionPerformed (ActionEvent e) {
             if (e.getSource () == send) {
 
-                if (initializeForSend ())
+                if (initializeForSend (true))
                 {
                     gui.setThirdPanel (mainThirdPanel);
                     programThirdPanel = mainThirdPanel;
-//                    mainThirdPanel.execute ();
+                    mainThirdPanel.execute ();
                 } else
-                    System.out.println ("Some thing went wrong");
+                    System.out.println ("Some thing went wrong in initialize For Send ");
             }
         }
 
@@ -274,7 +287,7 @@ public class SecondPanel extends JPanel
         }
     }
 
-    private boolean initializeForSend ()
+    public boolean initializeForSend (boolean isForSending)
     {
         properHeaders ();
         properQuery ();
@@ -282,36 +295,42 @@ public class SecondPanel extends JPanel
         {
             switch (request.getClientRequest ().getMessageBodyType ())
             {
-                case 0 :
+                case 1 :
                     properMultiPart ();
                     break;
-                case 1 :
+                case 2 :
                     File file;
-                    if (binaryFilePanel.getPath () != null)
-                    {
-                        file = new File (binaryFilePanel.getPath ().toString ());
-                        if (!file.exists ())
-                        {
+                    if (isForSending) {
+                        if (binaryFilePanel.getPath () != null) {
+                            file = new File (binaryFilePanel.getPath ().toString ());
+                            if (!file.exists ()) {
+                                JOptionPane.showMessageDialog (this,
+                                        "Invalid File !",
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+                                return false;
+                            }
+                        } else {
                             JOptionPane.showMessageDialog (this,
-                                    "Invalid File !","Error",JOptionPane.ERROR_MESSAGE);
+                                    "Invalid File !", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
                             return false;
                         }
-                    } else
-                    {
-                        JOptionPane.showMessageDialog (this,
-                                "Invalid File !","Error",JOptionPane.ERROR_MESSAGE);
-                        return false;
-                    }
 
-                    request.getClientRequest ().addUploadBinaryFile (
-                            new File (binaryFilePanel.getPath ().toString ()));
+
+                        request.getClientRequest ().addUploadBinaryFile (
+                                new File (binaryFilePanel.getPath ().toString ()));
+                    }
                     break;
-                case 2 :
+                case 3 :
                     properUrlEncoded ();
             }
         }
         return true;
     }
+
+    //TODO : you can add this to keyAndValue when deleting , adding , or activating
+    //TODO : add save headers and .... to jurl too
+    //TODO : add jurl -S request to list
 
     private void properHeaders ()
     {
@@ -364,4 +383,18 @@ public class SecondPanel extends JPanel
             }
     }
 
+    private void properBack ()
+    {
+        url.setText (request.getClientRequest ().getUrl ());
+        headerPanel.getKeyAndValuePanel ().properBack
+                (request.getClientRequest ().getCustomHeaders ());
+        queryPanel.getKeyAndValuePanel ().properBack (request.getClientRequest ()
+        .getQueryData ());
+
+        multiPartPanel.getKeyAndValuePanel ().properBack (request.getClientRequest ()
+                .getFormData ());
+        urlEncoded.getKeyAndValuePanel ().properBack (request.getClientRequest ()
+        .getFormDataEncoded ());
+        binaryFilePanel.setPath (request.getClientRequest ().getUploadBinaryFilePath ());
+    }
 }

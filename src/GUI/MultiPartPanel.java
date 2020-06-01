@@ -31,7 +31,7 @@ public class MultiPartPanel extends JPanel
      */
     public void addNewKeyAndValue ()
     {
-        keyAndValuePanel.addNewKeyAndValue ();
+        keyAndValuePanel.addDefaultNewKeyAndValue ();
     }
 
     /**

@@ -1,6 +1,7 @@
 package GUI;
 
 import Client.RequestType;
+import ControlUnit.Controller;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -128,7 +129,7 @@ public class FirstPanel extends JPanel
     {
         if (gui == null)
             throw new NullPointerException ("inValid input");
-        requestsPanel = new RequestsPanel (gui,theme);
+        requestsPanel = new RequestsPanel (gui,theme, Controller.clientRequests ());
         JScrollPane scrollPane = new JScrollPane
                 (requestsPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

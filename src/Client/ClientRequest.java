@@ -5,6 +5,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 
+import java.nio.file.Path;
 import java.util.*;
 
 public class ClientRequest implements Serializable, Runnable
@@ -104,7 +105,7 @@ public class ClientRequest implements Serializable, Runnable
 
 
 
-    public String getQueryData () {
+    public String getQueryDataString () {
         int counter = 0;
         StringBuilder stringBuilder = new StringBuilder ();
         for (String key : queryData.keySet ())
@@ -122,6 +123,10 @@ public class ClientRequest implements Serializable, Runnable
         return stringBuilder.toString ();
     }
 
+    public HashMap<String,String> getQueryData ()
+    {
+        return queryData;
+    }
 
     public void addFormUrlData (String inputFormUrl)
     {
@@ -154,7 +159,7 @@ public class ClientRequest implements Serializable, Runnable
     }
 
 
-    public String getFormDataEncoded () {
+    public String getFormDataEncodedString () {
         int counter = 0;
         StringBuilder stringBuilder = new StringBuilder ();
         for (String key : formDataEncoded.keySet ())
@@ -173,6 +178,10 @@ public class ClientRequest implements Serializable, Runnable
         return stringBuilder.toString ();
     }
 
+    public HashMap<String, String> getFormDataEncoded () {
+        return formDataEncoded;
+    }
+
     public void clearCustomHeaders ()
     {
         customHeaders.clear ();
@@ -181,6 +190,13 @@ public class ClientRequest implements Serializable, Runnable
     public void clearQuery ()
     {
         queryData.clear ();
+    }
+
+    public Path getUploadBinaryFilePath () {
+        if (uploadBinaryFile != null)
+            return uploadBinaryFile.toPath ();
+        else
+            return null;
     }
 
     public void clearBody ()
@@ -196,7 +212,7 @@ public class ClientRequest implements Serializable, Runnable
 
         HttpURLConnection connection;
         if ((connection = httpConnection.connectionInitializer
-                (getCustomHeaders (), getQueryData ())) != null)
+                (getCustomHeaders (), getQueryDataString ())) != null)
         {
             switch (httpConnection.getRequestType ())
             {
@@ -204,7 +220,7 @@ public class ClientRequest implements Serializable, Runnable
                 case POST:
                 case PUT:
                 case DELETE:httpConnection.sendAndGet (connection,messageBodyType,
-                        getFormData (),uploadBinaryFile,getFormDataEncoded ());
+                        getFormData (),uploadBinaryFile, getFormDataEncodedString ());
             }
         }
     }
@@ -279,6 +295,11 @@ public class ClientRequest implements Serializable, Runnable
         httpConnection.setUrl (url);
     }
 
+    public String getUrl ()
+    {
+        return httpConnection.getUrl ().toString ();
+    }
+
     public void setRequestType (String requestType)
     {
         if (requestType == null)
@@ -296,6 +317,10 @@ public class ClientRequest implements Serializable, Runnable
             case "GET" :
             default : httpConnection.setRequestType (RequestType.GET);
         }
+    }
+
+    public String getName () {
+        return name;
     }
 
     public RequestType getRequestType ()

@@ -130,11 +130,12 @@ public class BinaryFilePanel extends JPanel
     }
 
     /**
+     * @param path  path
      * do task on path
      */
-    private void pathHandler ()
+    private void pathHandler (Path path)
     {
-        path = useFileChooser ();
+        this.path = path;
 
 
         if (path != null && Files.exists (path))
@@ -161,7 +162,7 @@ public class BinaryFilePanel extends JPanel
         @Override
         public void actionPerformed (ActionEvent e) {
             if (e.getSource () == chooseFile)
-                pathHandler ();
+                pathHandler (useFileChooser ());
             else if (e.getSource () == resetFile)
             {
                 clearPath ();
@@ -174,6 +175,10 @@ public class BinaryFilePanel extends JPanel
         fileAddress.setText ("No file selected");
         path = null;
         resetFile.setEnabled (false);
+    }
+
+    public void setPath (Path path) {
+        pathHandler (path);
     }
 
     public Path getPath () {

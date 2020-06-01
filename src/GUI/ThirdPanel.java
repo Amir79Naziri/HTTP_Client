@@ -24,7 +24,6 @@ public class ThirdPanel extends JPanel
     private ResultHeaderPanel resultHeaderPanel;
     private Theme theme; // theme
     private Request request;
-    private ResponseCalculator responseCalculator;
 
     /**
      * creates new Third panel
@@ -48,8 +47,9 @@ public class ThirdPanel extends JPanel
     private void addHeaderStatuses ()
     {
         JPanel headerStatus = new JPanel ();
-        headerStatus.setLayout (new BoxLayout (headerStatus,BoxLayout.X_AXIS));
-        headerStatus.add (Box.createHorizontalStrut (20));
+        GridBagLayout layout = new GridBagLayout ();
+        GridBagConstraints constraints = new GridBagConstraints ();
+        headerStatus.setLayout (layout);
         headerStatus.setBackground (Color.WHITE);
         headerStatus.setPreferredSize (new Dimension (200,55));
 
@@ -66,12 +66,21 @@ public class ThirdPanel extends JPanel
         size.setBackground (Color.GRAY);
         createLabel (size,50);
 
-        headerStatus.add (statusMessage);
-        headerStatus.add (Box.createHorizontalStrut (15));
-        headerStatus.add (time);
-        headerStatus.add (Box.createHorizontalStrut (15));
-        headerStatus.add (size);
+        constraints.weightx = 0.1f;
+        constraints.ipadx = 17;
+        constraints.ipady = 8;
+        GridBagAdder.addComponent (statusMessage,0,0,4,layout,constraints,
+                headerStatus);
 
+        GridBagAdder.addComponent (time,0,4,3,layout,constraints,headerStatus);
+
+        GridBagAdder.addComponent (size,0,7,3,layout,constraints,headerStatus);
+
+
+        GridBagAdder.addComponent (new JLabel (),0,10,3,layout,constraints,
+                headerStatus);
+        GridBagAdder.addComponent (new JLabel (),0,13,3,layout,constraints,
+                headerStatus);
         add(headerStatus,BorderLayout.NORTH);
     }
 
@@ -135,8 +144,9 @@ public class ThirdPanel extends JPanel
 
     public void execute ()
     {
-        responseCalculator = new ResponseCalculator (request,statusMessage,time,
-                size,rawPanel,resultHeaderPanel,visualPreviewPanel);
+        ResponseCalculator responseCalculator = new ResponseCalculator
+                (request, statusMessage, time, size, rawPanel,
+                        resultHeaderPanel, visualPreviewPanel);
         responseCalculator.execute ();
     }
 

@@ -6,6 +6,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.InputMismatchException;
+
+import ControlUnit.Controller;
 import Storage.OptionData;
 
 /**
@@ -353,20 +355,12 @@ public class GUI
                         getOptionPanel (),"Option",JOptionPane.PLAIN_MESSAGE);
             } else if (e.getSource () == exit)
             {
-                saveOptionData ();
-                if (optionData.isHideInSystemTray () && SystemTray.isSupported ()) {
-                    try {
-                        systemTray.add (trayIcon);
-                        baseFrame.setVisible (false);
-                    } catch (AWTException ex) {
-                        ex.printStackTrace ();
-                    }
+                closeOperation ();
 
-                } else
-                    System.exit (0);
             } else if (e.getSource () == instantlyExit)
             {
                 saveOptionData ();
+                Controller.saveUpdates ();
                 System.exit (0);
             } else if (e.getSource () == toggleFullScreen)
             {
@@ -409,6 +403,10 @@ public class GUI
 
         @Override
         public void windowClosing (WindowEvent e) {
+            closeOperation ();
+        }
+
+        private void closeOperation () {
             saveOptionData ();
             if (optionData.isHideInSystemTray () && SystemTray.isSupported ()) {
                 try {
@@ -419,7 +417,10 @@ public class GUI
                 }
 
             } else
+            {
+                Controller.saveUpdates ();
                 System.exit (0);
+            }
         }
     }
 }
