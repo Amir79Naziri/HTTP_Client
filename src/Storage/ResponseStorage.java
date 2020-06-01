@@ -13,9 +13,11 @@ public class ResponseStorage implements Serializable
     private Map<String, List<String>> responseHeaders;
     private String readLength;
     private long responseTime;
+    private boolean valid; // if first time : false  OW true
 
     public ResponseStorage ()
     {
+        valid = false;
         reset ();
     }
 
@@ -32,31 +34,37 @@ public class ResponseStorage implements Serializable
 
     public void setResponseMessage (String responseMessage) {
         this.responseMessage = responseMessage;
+        valid = true;
     }
 
     public void setReadLength (String readLength) {
         this.readLength = readLength;
+        valid = true;
     }
 
     public void setResponseCode (int responseCode) {
         this.responseCode = responseCode;
+        valid = true;
     }
 
     public void setResponseHeaders (Map<String, List<String>> responseHeaders) {
         this.responseHeaders = responseHeaders;
+        valid = true;
     }
 
     public void setResponseTextRawData (String responseRawData) {
         this.responseTextRawData = responseRawData;
-
+        valid = true;
     }
 
     public void setResponseBinaryRawData (byte[] responseBinaryRawData) {
         this.responseBinaryRawData = responseBinaryRawData;
+        valid = true;
     }
 
     public void setResponseTime (long responseTime) {
         this.responseTime = responseTime;
+        valid = true;
     }
 
 
@@ -86,6 +94,10 @@ public class ResponseStorage implements Serializable
 
     public Map<String, List<String>> getResponseHeaders () {
         return responseHeaders;
+    }
+
+    public boolean isValid () {
+        return valid;
     }
 
     public void printTimeAndReadDetails ()

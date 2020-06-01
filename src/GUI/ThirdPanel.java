@@ -1,5 +1,7 @@
 package GUI;
 
+import Storage.ResponseStorage;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -39,6 +41,8 @@ public class ThirdPanel extends JPanel
         setLayout (new BorderLayout ());
         addHeaderStatuses ();
         addBasePanel ();
+        if (request.getClientRequest ().getResponseStorage ().isValid ())
+            properBack ();
     }
 
     /**
@@ -53,8 +57,8 @@ public class ThirdPanel extends JPanel
         headerStatus.setBackground (Color.WHITE);
         headerStatus.setPreferredSize (new Dimension (200,55));
 
-        statusMessage = new JLabel ("ERROR");
-        statusMessage.setBackground (new Color (189, 24, 15));
+        statusMessage = new JLabel ("Connecting");
+        statusMessage.setBackground (new Color (189, 143, 17));
         createLabel (statusMessage,60);
 
 
@@ -144,11 +148,83 @@ public class ThirdPanel extends JPanel
 
     public void execute ()
     {
-        ResponseCalculator responseCalculator = new ResponseCalculator
-                (request, statusMessage, time, size, rawPanel,
-                        resultHeaderPanel, visualPreviewPanel);
+        ResponseCalculator responseCalculator = new ResponseCalculator (this);
         responseCalculator.execute ();
     }
 
+    public void properBack ()
+    {
+        ResponseStorage responseStorage
+                = request.getClientRequest ().getResponseStorage ();
+        String responseCode = responseStorage.getResponseCode () + "";
+        if (responseCode.matches ("2(.*)"))
+            statusMessage.setBackground (new Color (52, 174, 22));
+        else if (responseCode.equals ("0"))
+            statusMessage.setBackground (new Color (189, 24, 15));
+        else
+            statusMessage.setBackground (new Color (133, 94, 8));
 
+        if (responseStorage.getResponseCode () == 0)
+            statusMessage.setText (responseStorage.getResponseMessage ());
+        else if (responseStorage.getResponseMessage () == null)
+            statusMessage.setText (responseStorage.getResponseCode () + "");
+        else
+            statusMessage.setText (responseStorage.getResponseCode ()
+                    + " " + responseStorage.getResponseMessage ());
+
+        size.setText (responseStorage.getReadLength ());
+        time.setText (responseStorage.getResponseTime () + "ms");
+        rawPanel.getTextArea ().setText (responseStorage.getResponseTextRawData ());
+
+
+        resultHeaderPanel.clear ();
+
+        if (responseStorage.getResponseHeaders () != null)
+        {
+            for (String key : responseStorage.getResponseHeaders ().keySet ())
+                for (String value : responseStorage.getResponseHeaders ().get (key))
+                {
+                    if (key != null) {
+                        resultHeaderPanel.addResultKeyAndValue (key, value);
+
+                        if (key.equals ("Content-Type") && value.split (";")[0].
+                                equals ("image/png"))
+                        {
+                            visualPreviewPanel.addImage
+                                    (responseStorage.getResponseBinaryRawData ());
+                        } else
+                            visualPreviewPanel.removeImage ();
+                    }
+                }
+        }
+    }
+
+
+    public JLabel getSizeLabel () {
+        return size;
+    }
+
+    public JLabel getStatusMessage () {
+        return statusMessage;
+    }
+
+    public JLabel getTime () {
+        return time;
+    }
+
+    public RawPanel getRawPanel () {
+        return rawPanel;
+    }
+
+    public ResultHeaderPanel getResultHeaderPanel () {
+        return resultHeaderPanel;
+    }
+
+    public Request getRequest () {
+        return request;
+    }
+
+    public VisualPreviewPanel getVisualPreviewPanel () {
+        return visualPreviewPanel;
+    }
 }

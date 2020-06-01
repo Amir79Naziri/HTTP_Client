@@ -54,7 +54,13 @@ public class SecondPanel extends JPanel
         mainThirdPanel = new ThirdPanel (theme,request);
         this.gui = gui;
         this.request = request;
-        programThirdPanel = new NullPanel (2,theme);
+        if (!request.getClientRequest ().getResponseStorage ().isValid ())
+            programThirdPanel = new NullPanel (2,theme);
+        else
+        {
+            gui.setThirdPanel (mainThirdPanel);
+            programThirdPanel = mainThirdPanel;
+        }
         setLayout (new BorderLayout ());
         createURLPanel ();
         String[] bodyTypes = {"MultiPart ","form url encoded","JSON ", "Binary File"};
