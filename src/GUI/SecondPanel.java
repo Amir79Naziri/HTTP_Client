@@ -9,7 +9,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
 
 /**
  * this class represents secondPanel in program
@@ -25,9 +24,9 @@ public class SecondPanel extends JPanel
     // private int messageBody;
     // panel's in second Panel
     private QueryPanel queryPanel;
-    private HeaderPanel headerPanel;
-    private MultiPartPanel multiPartPanel;
-    private MultiPartPanel urlEncoded;
+    private KeyAndValueContainerPanel headerPanel;
+    private KeyAndValueContainerPanel multiPartPanel;
+    private KeyAndValueContainerPanel urlEncodedPanel;
     private JsonPanel jsonPanel;
     private BearerPanel bearerPanel;
     private BinaryFilePanel binaryFilePanel;
@@ -136,14 +135,15 @@ public class SecondPanel extends JPanel
         tabbedPane.setTabLayoutPolicy (JTabbedPane.SCROLL_TAB_LAYOUT);
 
 
-        queryPanel = new QueryPanel (theme);
-        headerPanel = new HeaderPanel (theme);
-        urlEncoded = new MultiPartPanel (theme);
-        multiPartPanel = new MultiPartPanel (theme);
+        queryPanel = new QueryPanel (theme,request);
+        headerPanel = new KeyAndValueContainerPanel (theme,request,1);
+        multiPartPanel = new KeyAndValueContainerPanel (theme,request,2);
+        urlEncodedPanel = new KeyAndValueContainerPanel (theme,request,3);
         jsonPanel = new JsonPanel (theme);
         bearerPanel = new BearerPanel (theme);
         binaryFilePanel = new BinaryFilePanel (theme);
-
+        queryPanel.getPreviewURLText ().setText (request.getClientRequest ().getUrl()
+        + request.getClientRequest ().getQueryDataString ());
 
         bodyType.addItemListener (new ItemListener () {
             @Override
@@ -154,11 +154,11 @@ public class SecondPanel extends JPanel
                     tabbedPane.setComponentAt (0, multiPartPanel);
                     request.getClientRequest ().setMessageBodyType (1);
                     binaryFilePanel.clearPath ();
-                    urlEncoded.getKeyAndValuePanel ().deleteAll ();
+                    urlEncodedPanel.getKeyAndValuePanel ().deleteAll ();
                 }
                 else if (bodyType.getSelectedIndex () == 1)
                 {
-                    tabbedPane.setComponentAt (0,urlEncoded);
+                    tabbedPane.setComponentAt (0, urlEncodedPanel);
                     request.getClientRequest ().setMessageBodyType (3);
                     multiPartPanel.getKeyAndValuePanel ().deleteAll ();
                     binaryFilePanel.clearPath ();
@@ -172,8 +172,8 @@ public class SecondPanel extends JPanel
                 {
                     tabbedPane.setComponentAt (0,binaryFilePanel);
                     request.getClientRequest ().setMessageBodyType (2);
-                    urlEncoded.getKeyAndValuePanel ().deleteAll ();
-                    urlEncoded.getKeyAndValuePanel ().deleteAll ();
+                    urlEncodedPanel.getKeyAndValuePanel ().deleteAll ();
+                    urlEncodedPanel.getKeyAndValuePanel ().deleteAll ();
                 }
                 repaint ();
             }
@@ -190,7 +190,7 @@ public class SecondPanel extends JPanel
         tabbedPane.setTabComponentAt (0,bodyType);
         tabbedPane.addTab ("Bearer",bearerPanel);
         tabbedPane.addTab ("Query",queryPanel);
-        tabbedPane.addTab ("Header",headerPanel);
+        tabbedPane.addTab ("Header", headerPanel);
 
         add (tabbedPane,BorderLayout.CENTER);
     }
@@ -223,13 +223,17 @@ public class SecondPanel extends JPanel
             else
             {
                 String a = url.getText ();
-                queryPanel.getPreviewURLText ().setText (a);
+
                 try{
                     request.getClientRequest ().setUrl (a);
+                    queryPanel.getPreviewURLText ().setText (a +
+                            request.getClientRequest ().getQueryDataString ());
                 } catch (MalformedURLException ex)
                 {
                     try {
                         request.getClientRequest ().setUrl ("http://" + a);
+                        queryPanel.getPreviewURLText ().setText ("http://" + a +
+                                request.getClientRequest ().getQueryDataString ());
                     } catch (MalformedURLException ignore)
                     {
                     }
@@ -289,14 +293,14 @@ public class SecondPanel extends JPanel
 
     public boolean initializeForSend (boolean isForSending)
     {
-        properHeaders ();
-        properQuery ();
+        headerPanel.getKeyAndValuePanel ().properData ();
+        queryPanel.getKeyAndValuePanel ().properData ();
         if (request.getClientRequest ().getRequestType () != RequestType.GET)
         {
             switch (request.getClientRequest ().getMessageBodyType ())
             {
                 case 1 :
-                    properMultiPart ();
+                    multiPartPanel.getKeyAndValuePanel ().properData ();
                     break;
                 case 2 :
                     File file;
@@ -322,7 +326,7 @@ public class SecondPanel extends JPanel
                     }
                     break;
                 case 3 :
-                    properUrlEncoded ();
+                    urlEncodedPanel.getKeyAndValuePanel ().properData ();
             }
         }
         return true;
@@ -332,56 +336,7 @@ public class SecondPanel extends JPanel
     //TODO : add save headers and .... to jurl too
     //TODO : add jurl -S request to list
 
-    private void properHeaders ()
-    {
 
-        headerPanel.getKeyAndValuePanel ().updateList ();
-        request.getClientRequest ().clearCustomHeaders ();
-        for (KeyAndValue keyAndValue : headerPanel.getKeyAndValuePanel ().getKeyAndValues ())
-            if (keyAndValue.isActive ())
-            {
-                request.getClientRequest ().addCustomHeader (keyAndValue.getKey ().getText (),
-                        keyAndValue.getValue ().getText ());
-            }
-    }
-
-    private void properQuery ()
-    {
-
-        queryPanel.getKeyAndValuePanel ().updateList ();
-        request.getClientRequest ().clearQuery ();
-        for (KeyAndValue keyAndValue : queryPanel.getKeyAndValuePanel ().getKeyAndValues ())
-            if (keyAndValue.isActive ())
-            {
-                request.getClientRequest ().addQuery (keyAndValue.getKey ().getText (),
-                        keyAndValue.getValue ().getText ());
-            }
-    }
-
-    private void properMultiPart ()
-    {
-        multiPartPanel.getKeyAndValuePanel ().updateList ();
-        request.getClientRequest ().clearBody ();
-        for (KeyAndValue keyAndValue : multiPartPanel.getKeyAndValuePanel ().getKeyAndValues ())
-            if (keyAndValue.isActive ())
-            {
-                request.getClientRequest ().addFormUrlData (keyAndValue.getKey ().getText (),
-                        keyAndValue.getValue ().getText ());
-            }
-    }
-
-    private void properUrlEncoded ()
-    {
-        urlEncoded.getKeyAndValuePanel ().updateList ();
-        request.getClientRequest ().clearBody ();
-        for (KeyAndValue keyAndValue : urlEncoded.getKeyAndValuePanel ().getKeyAndValues ())
-            if (keyAndValue.isActive ())
-            {
-                request.getClientRequest ().addFormUrlDataEncoded
-                        (keyAndValue.getKey ().getText (),
-                        keyAndValue.getValue ().getText ());
-            }
-    }
 
     private void properBack ()
     {
@@ -393,7 +348,7 @@ public class SecondPanel extends JPanel
 
         multiPartPanel.getKeyAndValuePanel ().properBack (request.getClientRequest ()
                 .getFormData ());
-        urlEncoded.getKeyAndValuePanel ().properBack (request.getClientRequest ()
+        urlEncodedPanel.getKeyAndValuePanel ().properBack (request.getClientRequest ()
         .getFormDataEncoded ());
         binaryFilePanel.setPath (request.getClientRequest ().getUploadBinaryFilePath ());
     }

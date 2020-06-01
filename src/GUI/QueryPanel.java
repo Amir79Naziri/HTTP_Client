@@ -13,10 +13,9 @@ import java.awt.event.ActionListener;
  *
  * @author Amir Naziri
  */
-public class QueryPanel extends JPanel
+public class QueryPanel extends KeyAndValueContainerPanel
 {
     private JTextField previewURLText; // preview textField
-    private KeyAndValuePanel keyAndValuePanel; // keyAndValue panel
     private JButton importFromURL; // import form button
     private Theme theme;
 
@@ -25,16 +24,13 @@ public class QueryPanel extends JPanel
      * creates a GUI.QueryPanel
      * @param theme theme
      */
-    public QueryPanel (Theme theme)
+    public QueryPanel (Theme theme,Request request)
     {
-        super();
+        super(theme,request,4);
         if (theme == null)
             throw new NullPointerException ("inValid input");
         this.theme = theme;
-        setLayout (new BorderLayout ());
         addURLPreview ();
-        keyAndValuePanel = new KeyAndValuePanel ("name", "value",theme);
-        add (ScrollPaneAdder.fetchToJScrollPane (keyAndValuePanel,theme),BorderLayout.CENTER);
         addImportFromPanel ();
     }
 
@@ -112,14 +108,5 @@ public class QueryPanel extends JPanel
      */
     public JTextField getPreviewURLText () {
         return previewURLText;
-    }
-
-
-
-    /**
-     * @return keyAndValuePanel
-     */
-    public KeyAndValuePanel getKeyAndValuePanel () {
-        return keyAndValuePanel;
     }
 }

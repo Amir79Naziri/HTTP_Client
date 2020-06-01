@@ -24,6 +24,8 @@ public class KeyAndValuePanel extends JPanel
     private String key; // key
     private String value; // value
     private Theme theme; // theme
+    private String type;
+    private Request request;
 
     /**
      * creates a new keyAndValue panel
@@ -31,7 +33,7 @@ public class KeyAndValuePanel extends JPanel
      * @param value value
      * @param theme theme
      */
-    public KeyAndValuePanel (String key, String value, Theme theme)
+    public KeyAndValuePanel (String key, String value, Theme theme,String type, Request request)
     {
         super();
         if (key == null || value == null || theme == null)
@@ -40,10 +42,12 @@ public class KeyAndValuePanel extends JPanel
         keyAndValues = new ArrayList<> ();
         this.key = key;
         this.value = value;
+        this.type = type;
+        this.request = request;
         setLayout (new BoxLayout (this,BoxLayout.Y_AXIS));
         setBackground (theme.getBackGroundColorV4 ());
         fixedKeyAndValue = new KeyAndValue ("New " + key, "New " + value,
-                false,false,theme);
+                false,false,theme,this);
         add(fixedKeyAndValue);
         ComponentHandler componentHandler = new ComponentHandler ();
         fixedKeyAndValue.getKey ().addMouseListener (componentHandler);
@@ -85,7 +89,7 @@ public class KeyAndValuePanel extends JPanel
 
     private void configureNewKeyAndValue (String key, String value) {
         KeyAndValue keyAndValue = new KeyAndValue (key, value,true,
-                fixedKeyAndValue.isPanelDescVisible (),theme);
+                fixedKeyAndValue.isPanelDescVisible (),theme,this);
         getKeyAndValues ().add (keyAndValue);
         add (keyAndValue,keyAndValues.size () - 1);
         JSeparator separator = new JSeparator ();
@@ -126,6 +130,53 @@ public class KeyAndValuePanel extends JPanel
             addNewKeyAndValue (key,value);
     }
 
+    public void properData ()
+    {
+        switch (type)
+        {
+            case "Query" :
+                updateList ();
+                request.getClientRequest ().clearQuery ();
+                for (KeyAndValue keyAndValue : getKeyAndValues ())
+                    if (keyAndValue.isActive ())
+                    {
+                        request.getClientRequest ().addQuery (keyAndValue.getKey ().getText (),
+                                keyAndValue.getValue ().getText ());
+                    }
+                break;
+            case "Header" :
+                updateList ();
+                request.getClientRequest ().clearCustomHeaders ();
+                for (KeyAndValue keyAndValue : getKeyAndValues ())
+                    if (keyAndValue.isActive ())
+                    {
+                        request.getClientRequest ().addCustomHeader (keyAndValue.getKey ().getText (),
+                                keyAndValue.getValue ().getText ());
+                    }
+                break;
+            case "MultiPart" :
+                updateList ();
+                request.getClientRequest ().clearBody ();
+                for (KeyAndValue keyAndValue : getKeyAndValues ())
+                    if (keyAndValue.isActive ())
+                    {
+                        request.getClientRequest ().addFormUrlData (keyAndValue.getKey ().getText (),
+                                keyAndValue.getValue ().getText ());
+                    }
+                break;
+            case "UrlEncoded" :
+                updateList ();
+                request.getClientRequest ().clearBody ();
+                for (KeyAndValue keyAndValue : getKeyAndValues ())
+                    if (keyAndValue.isActive ())
+                    {
+                        request.getClientRequest ().addFormUrlDataEncoded
+                                (keyAndValue.getKey ().getText (),
+                                        keyAndValue.getValue ().getText ());
+                    }
+                break;
+        }
+    }
 
 
     public void updateList ()
@@ -158,6 +209,7 @@ public class KeyAndValuePanel extends JPanel
             fixedKeyAndValue.getDescribe ())
             {
                 addDefaultNewKeyAndValue ();
+                properData ();
             }
         }
     }

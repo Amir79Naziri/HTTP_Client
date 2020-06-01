@@ -26,6 +26,7 @@ public class KeyAndValue extends JPanel
     private GridBagConstraints constraints; // constrains
     private boolean isDeleted; // is Deleted
     private Theme theme; // theme
+    private KeyAndValuePanel owner;
 
 
     /**
@@ -37,13 +38,14 @@ public class KeyAndValue extends JPanel
      * @param theme  theme
      */
     public KeyAndValue (String keyName, String valueName, boolean isEditable,
-                        boolean showDescription, Theme theme)
+                        boolean showDescription, Theme theme, KeyAndValuePanel owner)
     {
         super();
         if (keyName == null || valueName == null || theme == null)
             throw new NullPointerException ("inValid input");
         this.theme = theme;
         isDeleted = false;
+        this.owner = owner;
         this.showDescription = showDescription;
         constraints = new GridBagConstraints ();
         layout = new GridBagLayout ();
@@ -87,11 +89,13 @@ public class KeyAndValue extends JPanel
         settings.setFocusable (false);
         settings.setFocusPainted (false);
         ComponentHandler componentHandler = new ComponentHandler ();
+        KeyHandler keyHandler = new KeyHandler ();
         JPanel panelKey = new JPanel ();
         key = new JTextField (keyName);
         createTextPanel (panelKey, key, theme);
 
         key.addMouseListener (componentHandler);
+        key.addKeyListener (keyHandler);
 
 
         JPanel panelValue = new JPanel ();
@@ -100,6 +104,7 @@ public class KeyAndValue extends JPanel
         createTextPanel (panelValue, value,theme);
 
         value.addMouseListener (componentHandler);
+        value.addKeyListener (keyHandler);
 
         panelDesc = new JPanel ();
         panelDesc.setBackground (theme.getBackGroundColorV4 ());
@@ -122,7 +127,7 @@ public class KeyAndValue extends JPanel
         delete.setPreferredSize (new Dimension (16,16));
         delete.setBackground (theme.getBackGroundColorV4 ());
         delete.setFocusPainted (false);
-        delete.addActionListener (new ComponentHandler ());
+        delete.addActionListener (componentHandler);
         delete.setBackground (theme.getBackGroundColorV4 ());
 
 
@@ -298,6 +303,7 @@ public class KeyAndValue extends JPanel
             {
                 setVisible (false);
                 delete ();
+                owner.properData ();
 
             }
         }
@@ -317,6 +323,7 @@ public class KeyAndValue extends JPanel
                 value.setForeground (theme.getForeGroundColorV2 ());
                 describe.setForeground (theme.getForeGroundColorV2 ());
             }
+            owner.properData ();
             repaint ();
         }
 
@@ -337,6 +344,14 @@ public class KeyAndValue extends JPanel
                 JTextField textField = (JTextField)(e.getComponent ());
                 textField.setFont (new Font ("Arial",Font.PLAIN,11));
             }
+        }
+    }
+
+    private class KeyHandler extends KeyAdapter
+    {
+        @Override
+        public void keyReleased (KeyEvent e) {
+            owner.properData ();
         }
     }
 
