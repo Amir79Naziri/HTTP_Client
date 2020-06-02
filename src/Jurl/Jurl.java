@@ -15,12 +15,6 @@ public class Jurl
 
 
 
-    public Jurl ()
-    {
-        inputProcessor = new InputProcessor ();
-        storageUnit = new StorageUnit ();
-    }
-
     public Jurl (StorageUnit storageUnit)
     {
         this.storageUnit = storageUnit;
@@ -42,7 +36,7 @@ public class Jurl
                 }
             } catch (MalformedURLException e)
             {
-                e.printStackTrace ();
+                System.out.println ("inValid url");
             }
         }
     }
@@ -128,6 +122,7 @@ public class Jurl
             if (tasks.containsKey (ReservedWord.SAVE_V2))
             {
                 storageUnit.addRequest (clientRequest);
+                //TODO : Add to GUI too
             }
             clientRequests.add (clientRequest);
 

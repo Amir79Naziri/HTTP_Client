@@ -61,6 +61,8 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
             return true;
         }
 
+        System.out.println (thirdPanel.getRequest ().getClientRequest ().getRequestType ());
+
         return true;
     }
 

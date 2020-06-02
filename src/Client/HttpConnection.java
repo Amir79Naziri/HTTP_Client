@@ -180,6 +180,10 @@ public class HttpConnection implements Serializable
             responseStorage.setResponseMessage (connection.getResponseMessage ());
             responseStorage.setResponseHeaders (connection.getHeaderFields ());
 
+
+
+
+
             String contentType = "text/html";
             if (connection.getContentType () != null)
                  contentType = connection.getContentType ().split (";")[0];
@@ -223,8 +227,8 @@ public class HttpConnection implements Serializable
                                 new SimpleDateFormat (
                                         "yyyy.MM.dd  HH.mm.ss").format (new Date ())
                                 + ".js";
-                        textReader (connection.getInputStream ());
                     }
+                    textReader (connection.getInputStream ());
             }
 
         }catch (IOException e)

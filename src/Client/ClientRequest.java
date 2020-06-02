@@ -240,23 +240,30 @@ public class ClientRequest implements Serializable, Runnable
     @Override
     public String toString () {
 
-        StringBuilder stringBuilder = new StringBuilder ();
-        int counter1 = 0;
-        for (String key : customHeaders.keySet ())
-        {
-            if (counter1 == 0)
-                stringBuilder.append (key).append (": ");
-            else
-                stringBuilder.append ("  ").append (key).append (": ");
-            counter1++;
-
-            stringBuilder.append (customHeaders.get (key));
-        }
-
         return "name: " + name + " | " +
                 "url: " + httpConnection.getUrl ().toString () + " | " +
                 "method: " + httpConnection.getRequestType () + " | " +
-                "headers: " + stringBuilder.toString ();
+                "headers: " + readyForShowInToString (customHeaders) + " | " +
+                "Query params: " + readyForShowInToString (queryData);
+    }
+
+    private String readyForShowInToString (HashMap<String,String> list)
+    {
+        if (list == null)
+            throw new NullPointerException ("inValid input");
+        StringBuilder stringBuilder = new StringBuilder ();
+        int counter = 0;
+        for (String key : list.keySet ())
+        {
+            if (counter == 0)
+                stringBuilder.append (key).append (": ");
+            else
+                stringBuilder.append ("  ").append (key).append (": ");
+            counter++;
+
+            stringBuilder.append (list.get (key));
+        }
+        return stringBuilder.toString ();
     }
 
     public void setName (String name) {

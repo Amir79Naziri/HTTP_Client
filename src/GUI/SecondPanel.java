@@ -34,7 +34,7 @@ public class SecondPanel extends JPanel
     private GUI gui; // gui
     private Request request; // request which has this panel
     private Theme theme; // theme
-
+    private boolean firstTimeChangeBody;
     private JPanel programThirdPanel; // third panel which user will see , it is null
     // panel at first
     private final ThirdPanel mainThirdPanel; // main third panel for  request
@@ -66,6 +66,7 @@ public class SecondPanel extends JPanel
         String[] bodyTypes = {"MultiPart ","form url encoded","JSON ", "Binary File"};
         bodyType = new JComboBox<> (bodyTypes);
         createBasePanel ();
+        firstTimeChangeBody = false;
         switch (request.getClientRequest ().getMessageBodyType ())
         {
             case 1 :
@@ -78,6 +79,7 @@ public class SecondPanel extends JPanel
                 bodyType.setSelectedIndex (1);
                 break;
         }
+        firstTimeChangeBody = true;
         properBack ();
     }
 
@@ -155,33 +157,56 @@ public class SecondPanel extends JPanel
             @Override
             public void itemStateChanged (ItemEvent e) {
 
-                if (bodyType.getSelectedIndex () == 0)
+                if (e.getStateChange () == ItemEvent.SELECTED)
                 {
-                    tabbedPane.setComponentAt (0, multiPartPanel);
-                    request.getClientRequest ().setMessageBodyType (1);
-                    binaryFilePanel.clearPath ();
-                    urlEncodedPanel.getKeyAndValuePanel ().deleteAll ();
-                }
-                else if (bodyType.getSelectedIndex () == 1)
-                {
-                    tabbedPane.setComponentAt (0, urlEncodedPanel);
-                    request.getClientRequest ().setMessageBodyType (3);
-                    multiPartPanel.getKeyAndValuePanel ().deleteAll ();
-                    binaryFilePanel.clearPath ();
-                }
-                else if (bodyType.getSelectedIndex () == 2)
-                {
-                    tabbedPane.setComponentAt (0,jsonPanel);
+                    int res;
+                    if (firstTimeChangeBody) {
+                        res = JOptionPane.showOptionDialog (gui.getBaseFrame (),
+                                "Current body will be lost. Are you sure wou want " +
+                                        "to continue?", "Switch Body Type",
+                                JOptionPane.OK_CANCEL_OPTION,
+                                JOptionPane.PLAIN_MESSAGE, null,
+                                null, null);
+                    } else
+                        res = 0;
+                    if (res == 0)
+                    {
+                        if (bodyType.getSelectedIndex () == 0) {
+                            tabbedPane.setComponentAt (0, multiPartPanel);
+                            request.getClientRequest ().setMessageBodyType (1);
+                            binaryFilePanel.clearPath ();
+                            urlEncodedPanel.getKeyAndValuePanel ().deleteAll ();
+                        } else if (bodyType.getSelectedIndex () == 1) {
+                            tabbedPane.setComponentAt (0, urlEncodedPanel);
+                            request.getClientRequest ().setMessageBodyType (3);
+                            multiPartPanel.getKeyAndValuePanel ().deleteAll ();
+                            binaryFilePanel.clearPath ();
+                        } else if (bodyType.getSelectedIndex () == 2) {
+                            tabbedPane.setComponentAt (0, jsonPanel);
+
+                        } else if (bodyType.getSelectedIndex () == 3) {
+                            tabbedPane.setComponentAt (0, binaryFilePanel);
+                            request.getClientRequest ().setMessageBodyType (2);
+                            urlEncodedPanel.getKeyAndValuePanel ().deleteAll ();
+                            urlEncodedPanel.getKeyAndValuePanel ().deleteAll ();
+                        }
+                    } else
+                    {
+                        firstTimeChangeBody = false;
+                        switch (request.getClientRequest ().getMessageBodyType ())
+                        {
+                            case 1 : bodyType.setSelectedIndex (0);
+                                break;
+                            case 2 : bodyType.setSelectedIndex (3);
+                                break;
+                            case 3 : bodyType.setSelectedIndex (1);
+                        }
+                        firstTimeChangeBody = true;
+                    }
 
                 }
-                else if (bodyType.getSelectedIndex () == 3)
-                {
-                    tabbedPane.setComponentAt (0,binaryFilePanel);
-                    request.getClientRequest ().setMessageBodyType (2);
-                    urlEncodedPanel.getKeyAndValuePanel ().deleteAll ();
-                    urlEncodedPanel.getKeyAndValuePanel ().deleteAll ();
-                }
                 repaint ();
+
             }
         });
         bodyType.addActionListener (new ActionListener () {

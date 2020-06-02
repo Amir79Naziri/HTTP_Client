@@ -102,7 +102,9 @@ public class BinaryFilePanel extends JPanel
         int res = fileChooser.showOpenDialog (this);
 
         if (res == JFileChooser.CANCEL_OPTION)
-            return null;
+        {
+            return path;
+        }
 
         return fileChooser.getSelectedFile ().toPath ();
     }

@@ -30,7 +30,6 @@ public class ThirdPanel extends JPanel
     private Theme theme; // theme
     private Request request;
     private JProgressBar progressBar;
-    private JButton cancel;
     private ResponseCalculator responseCalculator;
     private JPanel progressPanel;
 
@@ -128,7 +127,7 @@ public class ThirdPanel extends JPanel
         progressBar.setBorder (new EmptyBorder (1,1,1,1));
         progressBar.setForeground (theme.getBackGroundColorV2 ());
         progressBar.setBackground (theme.getBackGroundColorV4 ());
-        cancel = new JButton ("Cancel");
+        JButton cancel = new JButton ("Cancel");
         cancel.setBackground (theme.getBackGroundColorV4 ());
         cancel.setForeground (theme.getForeGroundColorV2 ());
         cancel.addActionListener (new ActionListener () {
