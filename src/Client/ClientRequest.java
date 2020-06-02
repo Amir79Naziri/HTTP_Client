@@ -338,4 +338,9 @@ public class ClientRequest implements Serializable, Runnable
     {
         return httpConnection.getRequestType ();
     }
+
+    public boolean isShouldSaveOutputInFile ()
+    {
+        return httpConnection.isSaveRawDataOnFile ();
+    }
 }

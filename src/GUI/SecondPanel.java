@@ -115,7 +115,23 @@ public class SecondPanel extends JPanel
         save = new JCheckBox ("Save Output");
         save.setFont (new Font ("Arial",Font.PLAIN,11));
         save.setBackground (Color.WHITE);
-        save.setSelected (false);
+        if (request.getClientRequest ().isShouldSaveOutputInFile ())
+            save.setSelected (true);
+        else
+            save.setSelected (false);
+        save.addItemListener (new ItemListener () {
+            @Override
+            public void itemStateChanged (ItemEvent e) {
+                if (!save.isSelected ())
+                    request.getClientRequest ().setShouldSaveOutputInFile
+                            (false,
+                            null);
+                else
+                    request.getClientRequest ().setShouldSaveOutputInFile
+                            (true,
+                            null);
+            }
+        });
 
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.insets = new Insets (10,10,10,10);
@@ -358,6 +374,19 @@ public class SecondPanel extends JPanel
                 case 3 :
                     urlEncodedPanel.getKeyAndValuePanel ().properData ();
             }
+        }
+        if (save.isSelected () && isForSending) {
+            String name =
+                    JOptionPane.showInputDialog (gui.getBaseFrame (),
+                            "Name of Output file (By keeping this Empty " +
+                                    "Program will consider a name for it)",
+                            "Save Output", JOptionPane.PLAIN_MESSAGE);
+            if (name == null || name.length () == 0)
+                request.getClientRequest ().setShouldSaveOutputInFile (
+                        true,null);
+            else
+                request.getClientRequest ().setShouldSaveOutputInFile (
+                        true,name);
         }
         return true;
     }

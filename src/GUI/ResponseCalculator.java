@@ -60,9 +60,6 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
             thirdPanel.getProgressPanel ().setVisible (false);
             return true;
         }
-
-        System.out.println (thirdPanel.getRequest ().getClientRequest ().getRequestType ());
-
         return true;
     }
 

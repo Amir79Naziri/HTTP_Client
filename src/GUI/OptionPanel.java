@@ -65,7 +65,7 @@ public class OptionPanel extends JPanel
             hideInSystemTray.setSelected (true);
 
 
-        JLabel label = new JLabel ("GUI.Theme :  ");
+        JLabel label = new JLabel ("Theme :  ");
 
         String[] themes = {"Dark", "White"};
         String[] themes2 = {"White", "Dark"};

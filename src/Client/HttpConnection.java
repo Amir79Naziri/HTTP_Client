@@ -412,4 +412,8 @@ public class HttpConnection implements Serializable
             responseStorage.printHeaders ();
         responseStorage.printRawResponse ();
     }
+
+    public boolean isSaveRawDataOnFile () {
+        return saveRawDataOnFile;
+    }
 }
