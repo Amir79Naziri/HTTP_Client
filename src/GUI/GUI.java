@@ -62,7 +62,7 @@ public class GUI
         baseFrame = new JFrame ("HTTP client");
         baseFrame.setIconImage (new ImageIcon ("images/baseIcon.png").getImage ());
         baseFrame.setLocation (100,80);
-        baseFrame.setMinimumSize (new Dimension (1000,650));
+        baseFrame.setMinimumSize (new Dimension (1100,650));
         baseFrame.setSize (1350,670);
         baseFrame.addWindowListener (new ComponentHandler ());
         baseFrame.setLayout (new BorderLayout ());
@@ -335,8 +335,29 @@ public class GUI
                         JOptionPane.PLAIN_MESSAGE);
             } else if (e.getSource () == help || e.getSource () == trayHelp)
             {
+                String help = " Usage: jurl url [options...]" + "\n" +
+                        " do not write <> for your input , this is just for obvious input" + "\n" +
+                        " -d, --data <\"key1=value1&key2=value2&.....\">" +
+                        " (message body) MultiPart form" + "\n" +
+                        " -M, --method <method> HTTP method " + "\n" +
+                        " -H, --headers <\"key1;value1:key2;value2:...\">" +
+                        " Pass custom header(s) to server" + "\n" +
+                        " -i, --include       Include protocol response headers in the output" + "\n" +
+                        " -h, --help          This help text" + "\n" +
+                        " -f                   Follow redirect" + "\n" +
+                        " -O, --output <file> Write response body to file instead of stdout\n" +
+                        "                     if you don't mention any name it will be output_[CurrentDate]" + "\n" +
+                        " -S, --save           This will save the request" + "\n" +
+                        " -j, --json  <\"{data1:details,data2:details,....}\">" + "\n" +
+                        " --upload <absolute path>   upload file" + "\n" +
+                        " -Q <\"key1=value1&key2=value2&.....\"> add query data" + "\n" +
+                        " --name <name of request>   change name of request" + "\n" +
+                        " --close                     close program" + "\n" +
+                        " --dataEncoded <\"key1=value1&key2=value2&.....\">" +
+                        " (message body) form url encoded form"
+                        ;
                 JOptionPane.showMessageDialog (baseFrame
-                        , "help information", "Help",
+                        ,help, "Help",
                         JOptionPane.PLAIN_MESSAGE);
             } else if (e.getSource () == toggleSideBar)
             {
@@ -363,6 +384,7 @@ public class GUI
                 Controller.saveUpdates ();
                 System.exit (0);
             } else if (e.getSource () == toggleFullScreen)
+                // TODO : debug in fullScreen when open a new frame
             {
                 GraphicsDevice g = GraphicsEnvironment.getLocalGraphicsEnvironment ().
                         getDefaultScreenDevice ();
@@ -389,9 +411,14 @@ public class GUI
                 AddNewRequestPanel addNewRequestPanel = new AddNewRequestPanel ();
                 int res =
                         JOptionPane.showOptionDialog (baseFrame,
-                                addNewRequestPanel,"New GUI.Request",
+                                addNewRequestPanel,"New Request",
                                 JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,null,
                                 null,null);
+                if (isFullScreen)
+                {
+                    baseFrame.setVisible (false);
+                    baseFrame.setVisible (true);
+                }
                 if (res == 0) {
                     getFirstPanel ().addRequest
                             (addNewRequestPanel.getNameOfNewRequest (),

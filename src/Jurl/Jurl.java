@@ -158,7 +158,7 @@ public class Jurl
         System.out.println (" -Q <\"key1=value1&key2=value2&.....\"> add query data");
         System.out.println (" --name <name of request>   change name of request");
         System.out.println (" --close                     close program");
-        System.out.println ("--dataEncoded <\"key1=value1&key2=value2&.....\">" +
+        System.out.println (" --dataEncoded <\"key1=value1&key2=value2&.....\">" +
                 " (message body) form url encoded form");
     }
 }

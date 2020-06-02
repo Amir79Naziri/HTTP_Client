@@ -24,7 +24,7 @@ public class ResponseStorage implements Serializable
     public void reset ()
     {
         responseTextRawData = "Error: URL using bad/illegal format or missing URL";
-        readLength = "0";
+        readLength = "0 B";
         responseTime = 0;
         responseMessage = "ERROR";
         responseCode = 0;

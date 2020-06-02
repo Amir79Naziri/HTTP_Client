@@ -25,6 +25,7 @@ public class Request extends JPanel
     private JLabel nameLabel; // name label
     private ClientRequest clientRequest;
 
+
     /**
      * create a new request
      * @param requestType request type

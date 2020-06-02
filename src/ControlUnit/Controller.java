@@ -38,6 +38,12 @@ public class Controller
         storageUnit.save ();
     }
 
+    public static void changeFollowRedirect (boolean followRedirect)
+    {
+        for (ClientRequest clientRequest : storageUnit.getClientRequests ())
+            clientRequest.setFollowRedirect (followRedirect);
+    }
+
     public static ArrayList<ClientRequest> clientRequests ()
     {
         return storageUnit.getClientRequests ();

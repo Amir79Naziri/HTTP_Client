@@ -1,5 +1,6 @@
 package GUI;
 
+import ControlUnit.Controller;
 import Storage.OptionData;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -116,10 +117,12 @@ public class OptionPanel extends JPanel
             } else if (e.getSource () == followRedirect && followRedirect.isSelected ())
             {
                 data.setFollowRedirect (true);
+                Controller.changeFollowRedirect (true);
 
             } else if (e.getSource () == followRedirect && !(followRedirect.isSelected ()))
             {
                 data.setFollowRedirect (false);
+                Controller.changeFollowRedirect (false);
 
             } else if (e.getSource () == themeChoose)
             {

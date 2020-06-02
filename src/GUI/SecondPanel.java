@@ -75,7 +75,7 @@ public class SecondPanel extends JPanel
                 bodyType.setSelectedIndex (3);
                 break;
             case 3 :
-                bodyType.setSelectedIndex (2);
+                bodyType.setSelectedIndex (1);
                 break;
         }
         properBack ();

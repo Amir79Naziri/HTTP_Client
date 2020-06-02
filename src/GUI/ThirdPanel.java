@@ -3,11 +3,14 @@ package GUI;
 import Storage.ResponseStorage;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 
 /**
@@ -26,6 +29,10 @@ public class ThirdPanel extends JPanel
     private ResultHeaderPanel resultHeaderPanel;
     private Theme theme; // theme
     private Request request;
+    private JProgressBar progressBar;
+    private JButton cancel;
+    private ResponseCalculator responseCalculator;
+    private JPanel progressPanel;
 
     /**
      * creates new Third panel
@@ -41,8 +48,10 @@ public class ThirdPanel extends JPanel
         setLayout (new BorderLayout ());
         addHeaderStatuses ();
         addBasePanel ();
+        addProgressPanel ();
         if (request.getClientRequest ().getResponseStorage ().isValid ())
             properBack ();
+
     }
 
     /**
@@ -57,6 +66,8 @@ public class ThirdPanel extends JPanel
         headerStatus.setBackground (Color.WHITE);
         headerStatus.setPreferredSize (new Dimension (200,55));
 
+
+
         statusMessage = new JLabel ("Connecting");
         statusMessage.setBackground (new Color (189, 143, 17));
         createLabel (statusMessage,60);
@@ -70,9 +81,13 @@ public class ThirdPanel extends JPanel
         size.setBackground (Color.GRAY);
         createLabel (size,50);
 
+
+
+
         constraints.weightx = 0.1f;
-        constraints.ipadx = 17;
+        constraints.ipadx = 18;
         constraints.ipady = 8;
+
         GridBagAdder.addComponent (statusMessage,0,0,4,layout,constraints,
                 headerStatus);
 
@@ -83,9 +98,59 @@ public class ThirdPanel extends JPanel
 
         GridBagAdder.addComponent (new JLabel (),0,10,3,layout,constraints,
                 headerStatus);
-        GridBagAdder.addComponent (new JLabel (),0,13,3,layout,constraints,
+        GridBagAdder.addComponent (new JLabel (),0,13,1,layout,constraints,
                 headerStatus);
+
         add(headerStatus,BorderLayout.NORTH);
+    }
+
+    private void statusClear ()
+    {
+        time = new JLabel ("0 B");
+        size = new JLabel ("0 ms");
+        visualPreviewPanel.removeImage ();
+        rawPanel.getTextArea ().setText ("Error: URL using bad/illegal format or missing URL");
+
+    }
+
+    private void addProgressPanel ()
+    {
+        GridBagConstraints constraints = new GridBagConstraints ();
+        GridBagLayout layout = new GridBagLayout ();
+        progressPanel = new JPanel ();
+        progressPanel.setBorder (new EmptyBorder (5,5,5,5));
+        progressPanel.setLayout (layout);
+        progressPanel.setBackground (theme.getBackGroundColorV4 ());
+
+
+        progressBar = new JProgressBar ();
+
+        progressBar.setBorder (new EmptyBorder (1,1,1,1));
+        progressBar.setForeground (theme.getBackGroundColorV2 ());
+        progressBar.setBackground (theme.getBackGroundColorV4 ());
+        cancel = new JButton ("Cancel");
+        cancel.setBackground (theme.getBackGroundColorV4 ());
+        cancel.setForeground (theme.getForeGroundColorV2 ());
+        cancel.addActionListener (new ActionListener () {
+            @Override
+            public void actionPerformed (ActionEvent e) {
+                responseCalculator.cancel (true);
+            }
+        });
+
+        constraints.weightx = 0.1f;
+        constraints.ipadx = 22;
+        constraints.ipady = -12;
+        GridBagAdder.addComponent (progressBar,0,0,5,layout,constraints,
+                progressPanel);
+        constraints.weightx = 0.0f;
+        constraints.ipadx = 0;
+        constraints.ipady = 0;
+        GridBagAdder.addComponent (cancel,0,5,1,layout,constraints,
+                progressPanel);
+        add(progressPanel,BorderLayout.SOUTH);
+        progressPanel.setVisible (false);
+
     }
 
     /**
@@ -148,7 +213,21 @@ public class ThirdPanel extends JPanel
 
     public void execute ()
     {
-        ResponseCalculator responseCalculator = new ResponseCalculator (this);
+        if (responseCalculator != null)
+            responseCalculator.cancel (true);
+        responseCalculator = new ResponseCalculator (this);
+        responseCalculator.addPropertyChangeListener (new PropertyChangeListener () {
+        @Override
+        public void propertyChange (PropertyChangeEvent evt) {
+            if (evt.getPropertyName().equals("progress"))
+            {
+                int newValue = (Integer) evt.getNewValue();
+                progressBar.setValue(newValue);
+            }
+        }
+    });
+        progressPanel.setVisible (true);
+        progressBar.setValue (2);
         responseCalculator.execute ();
     }
 
@@ -165,7 +244,10 @@ public class ThirdPanel extends JPanel
             statusMessage.setBackground (new Color (133, 94, 8));
 
         if (responseStorage.getResponseCode () == 0)
+        {
             statusMessage.setText (responseStorage.getResponseMessage ());
+        }
+
         else if (responseStorage.getResponseMessage () == null)
             statusMessage.setText (responseStorage.getResponseCode () + "");
         else
@@ -200,31 +282,16 @@ public class ThirdPanel extends JPanel
     }
 
 
-    public JLabel getSizeLabel () {
-        return size;
-    }
-
-    public JLabel getStatusMessage () {
-        return statusMessage;
-    }
-
-    public JLabel getTime () {
-        return time;
-    }
-
-    public RawPanel getRawPanel () {
-        return rawPanel;
-    }
-
-    public ResultHeaderPanel getResultHeaderPanel () {
-        return resultHeaderPanel;
-    }
 
     public Request getRequest () {
         return request;
     }
 
-    public VisualPreviewPanel getVisualPreviewPanel () {
-        return visualPreviewPanel;
+    public JPanel getProgressPanel () {
+        return progressPanel;
+    }
+
+    public JLabel getStatusMessage () {
+        return statusMessage;
     }
 }

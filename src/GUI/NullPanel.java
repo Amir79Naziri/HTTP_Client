@@ -35,9 +35,9 @@ public class NullPanel extends JPanel
         center.setBackground (theme.getBackGroundColorV4 ());
         label.setHorizontalAlignment (SwingConstants.CENTER);
         if (type == 1)
-            label.setText (" Click Or Add New GUI.Request ");
+            label.setText (" Click Or Add New Request ");
         else
-            label.setText (" Click Send Button for a GUI.Request ");
+            label.setText (" Click Send Button for a Request ");
         label.setOpaque (true);
         label.setFont (new Font ("Arial",Font.PLAIN,15));
         label.setForeground (theme.getForeGroundColorV2 ());

@@ -20,8 +20,10 @@ public class ClientRequest implements Serializable, Runnable
     private int messageBodyType;
 
 
+
     public ClientRequest (String url, boolean followRedirect) throws MalformedURLException
     {
+
         this.name = "MyRequest";
         customHeaders = new HashMap<> ();
         formData = new HashMap<> ();
@@ -223,6 +225,7 @@ public class ClientRequest implements Serializable, Runnable
                         getFormData (),uploadBinaryFile, getFormDataEncodedString ());
             }
         }
+
     }
 
     public ResponseStorage getResponseStorage () {
@@ -232,6 +235,7 @@ public class ClientRequest implements Serializable, Runnable
     public int getMessageBodyType () {
         return messageBodyType;
     }
+
 
     @Override
     public String toString () {
