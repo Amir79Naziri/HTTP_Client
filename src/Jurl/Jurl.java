@@ -2,7 +2,7 @@ package Jurl;
 
 import Client.ClientRequest;
 import ControlUnit.Controller;
-import Storage.StorageUnit;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -11,13 +11,12 @@ import java.util.TreeMap;
 public class Jurl
 {
     private InputProcessor inputProcessor;
-    private StorageUnit storageUnit;
 
 
 
-    public Jurl (StorageUnit storageUnit)
+
+    public Jurl ()
     {
-        this.storageUnit = storageUnit;
         inputProcessor = new InputProcessor ();
     }
 
@@ -60,13 +59,13 @@ public class Jurl
                         for (String arg : tasks.get (reservedWord))
                         {
                             ClientRequest clientRequest =
-                                    storageUnit.getClientRequest (Integer.parseInt (arg));
+                                    Controller.getClientRequest (Integer.parseInt (arg));
                             if (clientRequest != null)
                                 clientRequests.add (clientRequest);
                         }
                         return clientRequests;
                     case HELP_V2: help (); return null;
-                    case LIST: storageUnit.printList (); return null;
+                    case LIST: Controller.printList (); return null;
 
                 }
             }
@@ -121,8 +120,8 @@ public class Jurl
             }
             if (tasks.containsKey (ReservedWord.SAVE_V2))
             {
-                storageUnit.addRequest (clientRequest);
-                //TODO : Add to GUI too
+                Controller.addNewClientRequest (clientRequest);
+                Controller.addClientRequestToGuiDirectly (clientRequest);
             }
             clientRequests.add (clientRequest);
 

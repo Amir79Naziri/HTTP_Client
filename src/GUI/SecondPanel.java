@@ -1,8 +1,6 @@
 package GUI;
 
 import Client.RequestType;
-
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;

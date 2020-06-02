@@ -136,7 +136,7 @@ public class KeyAndValuePanel extends JPanel
         if (data == null)
             return;
         for (String key : data.keySet ())
-            addNewKeyAndValue (key,value);
+            addNewKeyAndValue (key,data.get (key));
     }
 
     public void properData ()

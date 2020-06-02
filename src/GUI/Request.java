@@ -74,7 +74,7 @@ public class Request extends JPanel
                     gui.setThirdPanel (new NullPanel (2,theme));
                     gui.setSecondPanel (new NullPanel (1,theme));
                 }
-                Controller.removeRequest (clientRequest);
+                Controller.removeClientRequest (clientRequest);
             }
         });
 

@@ -56,7 +56,7 @@ public class RequestsPanel extends JPanel
         ClientRequest clientRequest = new ClientRequest (gui.getOptionData ().isFollowRedirect (),
                 name,type);
         Request request = new Request (type,name,clientRequest,gui,theme);
-        Controller.addNewRequest (clientRequest);
+        Controller.addNewClientRequest (clientRequest);
         MouseHandler mouseHandler = new MouseHandler ();
         request.addMouseListener (mouseHandler);
         requests.add (request);
@@ -65,7 +65,7 @@ public class RequestsPanel extends JPanel
         request.setVisible (true);
     }
 
-    private void addRequest (RequestType type, String name, ClientRequest clientRequest)
+    public void addRequest (RequestType type, String name, ClientRequest clientRequest)
     {
         if (type == null || name == null)
             throw new NullPointerException ("inValid input");
