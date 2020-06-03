@@ -117,20 +117,7 @@ public class SecondPanel extends JPanel
             save.setSelected (true);
         else
             save.setSelected (false);
-        save.addItemListener (new ItemListener () {
-            @Override
-            public void itemStateChanged (ItemEvent e) {
-                if (!save.isSelected ())
-                    request.getClientRequest ().setShouldSaveOutputInFile
-                            (false,
-                            null);
-                else
-                    request.getClientRequest ().setShouldSaveOutputInFile
-                            (true,
-                            null);
-            }
-        });
-
+        save.addItemListener (componentHandler);
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.insets = new Insets (10,10,10,10);
         constraints.ipady = 10;
@@ -295,7 +282,7 @@ public class SecondPanel extends JPanel
                     programThirdPanel = mainThirdPanel;
                     mainThirdPanel.execute ();
                 } else
-                    System.out.println ("Some thing went wrong in initialize For Send ");
+                    System.err.println ("\nSome thing went wrong in initialize For Send\n");
             }
         }
 
@@ -330,8 +317,17 @@ public class SecondPanel extends JPanel
                                 setRequestType (RequestType.DELETE.toString ());
                         break;
                 }
+            } else if (e.getSource () == save)
+            {
+                if (!save.isSelected ())
+                    request.getClientRequest ().setShouldSaveOutputInFile
+                            (false,
+                                    null);
+                else
+                    request.getClientRequest ().setShouldSaveOutputInFile
+                            (true,
+                                    null);
             }
-            //TODO : create save panel and add functionality
         }
     }
 
@@ -379,7 +375,9 @@ public class SecondPanel extends JPanel
                             "Name of Output file (By keeping this Empty " +
                                     "Program will consider a name for it)",
                             "Save Output", JOptionPane.PLAIN_MESSAGE);
-            if (name == null || name.length () == 0)
+            if (name == null)
+                return false;
+            if (name.length () == 0)
                 request.getClientRequest ().setShouldSaveOutputInFile (
                         true,null);
             else
@@ -388,11 +386,6 @@ public class SecondPanel extends JPanel
         }
         return true;
     }
-
-
-
-    //TODO : add jurl -S request to list
-
 
 
     private void properBack ()

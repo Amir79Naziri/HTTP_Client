@@ -181,9 +181,6 @@ public class HttpConnection implements Serializable
             responseStorage.setResponseHeaders (connection.getHeaderFields ());
 
 
-
-
-
             String contentType = "text/html";
             if (connection.getContentType () != null)
                  contentType = connection.getContentType ().split (";")[0];

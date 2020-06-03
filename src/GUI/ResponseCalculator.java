@@ -21,21 +21,6 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
 
         Thread thread = new Thread (thirdPanel.getRequest ().getClientRequest ());
         thread.start ();
-//        Thread thread = new Thread (new Runnable () {
-//            @Override
-//            public void run () {
-//                for (int i = 0; i < 40; i++)
-//                {
-//                    try {
-//                        Thread.sleep (1000);
-//                    } catch (InterruptedException e)
-//                    {
-//                        System.err.println ("aaa");
-//                    }
-//                }
-//            }
-//        });
-//        thread.start ();
 
         try {
             int i = 2;

@@ -35,7 +35,6 @@ public class StorageUnit
 
     public ClientRequest getClientRequest (int index)
     {
-        //TODO : change in bounds
         try{
             if (index - 1 < 0 || index - 1 >= requestsStorage.size ())
                 throw new IndexOutOfBoundsException ("index should be in range 0 to " +

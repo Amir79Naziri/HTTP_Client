@@ -246,7 +246,6 @@ public class ThirdPanel extends JPanel
         {
             statusMessage.setText (responseStorage.getResponseMessage ());
         }
-
         else if (responseStorage.getResponseMessage () == null)
             statusMessage.setText (responseStorage.getResponseCode () + "");
         else
