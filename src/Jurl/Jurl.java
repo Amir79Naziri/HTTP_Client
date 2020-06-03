@@ -35,7 +35,12 @@ public class Jurl
                 }
             } catch (MalformedURLException e)
             {
-                System.out.println ("inValid url");
+                System.err.println ("inValid url");
+            } catch (InterruptedException e)
+            {
+                System.out.println (e.getMessage ());
+                Controller.saveUpdates ();
+                System.exit (0);
             }
         }
     }
@@ -44,8 +49,7 @@ public class Jurl
 
     private ArrayList<ClientRequest> createClientRequest (TreeMap<ReservedWord,
                                     ArrayList<String>> tasks, String url, int inputType)
-            throws MalformedURLException
-    {
+            throws MalformedURLException, InterruptedException {
         ArrayList<ClientRequest> clientRequests = new ArrayList<> ();
 
         if (inputType == 1)
@@ -54,7 +58,7 @@ public class Jurl
             {
                 switch (reservedWord)
                 {
-                    case CLOSE: System.exit (0);
+                    case CLOSE: throw new InterruptedException ("Program finished");
                     case FIRE:
                         for (String arg : tasks.get (reservedWord))
                         {
