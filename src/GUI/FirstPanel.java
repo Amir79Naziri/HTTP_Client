@@ -194,6 +194,7 @@ public class FirstPanel extends JPanel
 
             if (e.getSource () == addRequest)
             {
+                gui.getBaseFrame ().requestFocusInWindow ();
                 AddNewRequestPanel addNewRequestPanel = new AddNewRequestPanel ();
                 int res =
                         JOptionPane.showOptionDialog (gui.getBaseFrame (),

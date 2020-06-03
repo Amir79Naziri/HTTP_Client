@@ -3,6 +3,7 @@ import ControlUnit.Controller;
 import javax.swing.*;
 
 
+
 /**
  * this class build for test
  */
@@ -19,6 +20,5 @@ public class Run
         }
 
         Controller.startProgram ();
-
     }
 }

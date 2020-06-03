@@ -161,6 +161,7 @@ public class SecondPanel extends JPanel
                 if (e.getStateChange () == ItemEvent.SELECTED)
                 {
                     int res;
+                    gui.getBaseFrame ().requestFocusInWindow ();
                     if (firstTimeChangeBody) {
                         res = JOptionPane.showOptionDialog (gui.getBaseFrame (),
                                 "Current body will be lost. Are you sure wou want " +

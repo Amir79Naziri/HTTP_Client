@@ -180,6 +180,8 @@ public class HttpConnection implements Serializable
             responseStorage.setResponseMessage (connection.getResponseMessage ());
             responseStorage.setResponseHeaders (connection.getHeaderFields ());
 
+            //TODO : follow redirect
+
 
             String contentType = "text/html";
             if (connection.getContentType () != null)
@@ -264,6 +266,8 @@ public class HttpConnection implements Serializable
 
     private void textReader (InputStream serverInputStream) throws IOException
     {
+        if (serverInputStream == null)
+            throw new IOException ("serverInputStream is null");
         Scanner out = new Scanner (serverInputStream);
         StringBuilder content = new StringBuilder ();
         while (out.hasNext ()) {
@@ -286,6 +290,8 @@ public class HttpConnection implements Serializable
     private void binaryReader (InputStream serverInputStream,
                                boolean shouldSave) throws IOException
     {
+        if (serverInputStream == null)
+            throw new IOException ("serverInputStream is null");
         BufferedInputStream in= new BufferedInputStream (serverInputStream);
         responseStorage.setResponseBinaryRawData (in.readAllBytes ());
         responseStorage.setReadLength (BinaryFilePanel.makeSizeReadable (

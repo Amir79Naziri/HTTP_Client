@@ -326,7 +326,7 @@ public class GUI
         public void actionPerformed (ActionEvent e) {
             if (e.getSource () == about || e.getSource () == trayAbout)
             {
-
+                baseFrame.requestFocusInWindow ();
                 JOptionPane.showMessageDialog (baseFrame,
                         "Developer Information :\t\t\n" +
                                 "Name : Amirreza Naziri\n" +
@@ -335,6 +335,7 @@ public class GUI
                         JOptionPane.PLAIN_MESSAGE);
             } else if (e.getSource () == help || e.getSource () == trayHelp)
             {
+                baseFrame.requestFocusInWindow ();
                 String help = " Usage: jurl url [options...]" + "\n" +
                         " do not write <> for your input , this is just for obvious input" + "\n" +
                         " -d, --data <\"key1=value1&key2=value2&.....\">" +
@@ -361,6 +362,7 @@ public class GUI
                         JOptionPane.PLAIN_MESSAGE);
             } else if (e.getSource () == toggleSideBar)
             {
+                baseFrame.requestFocusInWindow ();
                 if (getFirstPanel ().isVisible ())
                 {
                     getFirstPanel ().setVisible (false);
@@ -372,53 +374,55 @@ public class GUI
                 }
             } else if (e.getSource () == option)
             {
-                JOptionPane.showMessageDialog (null,
+                baseFrame.requestFocusInWindow ();
+                JOptionPane.showMessageDialog (baseFrame,
                         getOptionPanel (),"Option",JOptionPane.PLAIN_MESSAGE);
             } else if (e.getSource () == exit)
             {
+                baseFrame.requestFocusInWindow ();
                 closeOperation ();
 
             } else if (e.getSource () == instantlyExit)
             {
+                baseFrame.requestFocusInWindow ();
                 saveOptionData ();
                 Controller.saveUpdates ();
                 System.exit (0);
             } else if (e.getSource () == toggleFullScreen)
-                // TODO : debug in fullScreen when open a new frame
             {
-                GraphicsDevice g = GraphicsEnvironment.getLocalGraphicsEnvironment ().
-                        getDefaultScreenDevice ();
+                baseFrame.requestFocusInWindow ();
+//                GraphicsDevice g = GraphicsEnvironment.getLocalGraphicsEnvironment ().
+//                        getDefaultScreenDevice ();
                 if (!isFullScreen)
                 {
-                    baseFrame.dispose ();
-                    baseFrame.setUndecorated (true);
-
-                    g.setFullScreenWindow (baseFrame);
+//                    baseFrame.dispose ();
+//                    baseFrame.setUndecorated (true);
+                    baseFrame.setSize (Toolkit.getDefaultToolkit ().getScreenSize ());
+                    baseFrame.setLocation (0,0);
+//                    g.setFullScreenWindow (baseFrame);
                     isFullScreen = true;
                 } else {
 
-                    baseFrame.dispose ();
-                    baseFrame.setUndecorated (false);
-                    baseFrame.setVisible (true);
-                    g.setFullScreenWindow (null);
+//                    baseFrame.dispose ();
+//                    baseFrame.setUndecorated (false);
+//                    baseFrame.setVisible (true);
+//                    g.setFullScreenWindow (null);
                     baseFrame.setLocation (100,80);
-                    baseFrame.setMinimumSize (new Dimension (1000,650));
+//                    baseFrame.setMinimumSize (new Dimension (1000,650));
                     baseFrame.setSize (1350,670);
                     isFullScreen = false;
                 }
             } else if (e.getSource () == addNew)
             {
+                baseFrame.requestFocusInWindow ();
                 AddNewRequestPanel addNewRequestPanel = new AddNewRequestPanel ();
+                getBaseFrame ().requestFocusInWindow ();
                 int res =
                         JOptionPane.showOptionDialog (baseFrame,
                                 addNewRequestPanel,"New Request",
                                 JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,null,
                                 null,null);
-                if (isFullScreen)
-                {
-                    baseFrame.setVisible (false);
-                    baseFrame.setVisible (true);
-                }
+
                 if (res == 0) {
                     getFirstPanel ().addRequest
                             (addNewRequestPanel.getNameOfNewRequest (),

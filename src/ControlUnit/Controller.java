@@ -40,6 +40,7 @@ public class Controller
     {
         storageUnit.printList ();
     }
+
     public static void saveUpdates ()
     {
         gui.getFirstPanel ().getRequestsPanel ().properRequestsForClosing ();
