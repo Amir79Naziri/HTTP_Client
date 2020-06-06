@@ -14,36 +14,23 @@ import java.util.*;
 public class HttpConnection implements Serializable
 {
 
-
-
     private ResponseStorage responseStorage;
-    private RequestType requestType;
-    private boolean followRedirect;
     private boolean showHeadersInResponse;
     private boolean saveRawDataOnFile;
     private String addressOfFileForSaveOutput;
 
 
-    public HttpConnection (boolean followRedirect)
+    public HttpConnection ()
     {
-        this.requestType = RequestType.GET;
-        this.followRedirect = followRedirect;
         showHeadersInResponse = false;
         responseStorage = new ResponseStorage ();
     }
 
-    public HttpConnection (boolean followRedirect, RequestType requestType)
-
-    {
-        this.requestType = requestType;
-        this.followRedirect = followRedirect;
-        showHeadersInResponse = false;
-        responseStorage = new ResponseStorage ();
-    }
 
 
     public HttpURLConnection connectionInitializer
-            (HashMap<String, String> headers, String queryData, String url)
+            (HashMap<String, String> headers, String queryData, String url,
+             RequestType requestType)
     {
 
         try {
@@ -110,7 +97,8 @@ public class HttpConnection implements Serializable
         connection.disconnect ();
     }
 
-    public void onlyGet (HttpURLConnection connection) throws FollowRedirectException
+    public void onlyGet (HttpURLConnection connection,
+                         boolean followRedirect) throws FollowRedirectException
     {
         if (connection == null)
             throw new NullPointerException ("inValid input");
@@ -119,7 +107,7 @@ public class HttpConnection implements Serializable
         if (connectToServer (connection))
         {
             // reading
-            readFromServer (connection);
+            readFromServer (connection,followRedirect);
         }
         responseStorage.setResponseTime ((System.currentTimeMillis () - startTime));
 
@@ -128,7 +116,8 @@ public class HttpConnection implements Serializable
 
     public void sendAndGet (HttpURLConnection connection, int messageBodyType,
                             HashMap<String,String> multipartData,
-                            File file, String formUrlEncodedData)
+                            File binaryFileUpload, String formUrlEncodedData,
+                            boolean followRedirect)
             throws FollowRedirectException
     {
         if (connection == null)
@@ -143,7 +132,7 @@ public class HttpConnection implements Serializable
                     "multipart/form-data; boundary=" + boundary);
         } else if (messageBodyType == 2)
         {
-            if (file == null || !file.exists () || !file.isAbsolute ()) {
+            if (binaryFileUpload == null || !binaryFileUpload.exists () || !binaryFileUpload.isAbsolute ()) {
                 {
                     System.out.println ("File is not Valid");
                     return;
@@ -161,10 +150,10 @@ public class HttpConnection implements Serializable
         if (connectToServer (connection))
         {
             //writing
-            writeToServer (connection,messageBodyType,multipartData,file,boundary,formUrlEncodedData);
+            writeToServer (connection,messageBodyType,multipartData,binaryFileUpload,boundary,formUrlEncodedData);
 
             // reading
-            readFromServer (connection);
+            readFromServer (connection,followRedirect);
         }
 
 
@@ -173,7 +162,8 @@ public class HttpConnection implements Serializable
     }
 
 
-    private void readFromServer (HttpURLConnection connection) throws FollowRedirectException
+    private void readFromServer (HttpURLConnection connection,
+                                 boolean followRedirect) throws FollowRedirectException
     {
         if (connection == null)
             throw new NullPointerException ("inValid input");
@@ -378,12 +368,6 @@ public class HttpConnection implements Serializable
     }
 
 
-    public void setRequestType (RequestType requestType) {
-        this.requestType = requestType;
-    }
-
-
-
 
     public void setSaveRawDataOnFile (boolean saveRawDataOnFile) {
         this.saveRawDataOnFile = saveRawDataOnFile;
@@ -401,17 +385,6 @@ public class HttpConnection implements Serializable
         this.showHeadersInResponse = showHeadersInResponse;
     }
 
-
-    public void setFollowRedirect (boolean followRedirect) {
-        this.followRedirect = followRedirect;
-    }
-
-
-
-
-    public RequestType getRequestType () {
-        return requestType;
-    }
 
     public ResponseStorage getResponseStorage () {
         return responseStorage;

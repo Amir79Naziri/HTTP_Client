@@ -56,6 +56,9 @@ public class QueryPanel extends KeyAndValueContainerPanel
         previewURLText.setBorder (BorderFactory.createCompoundBorder (
                 new LineBorder (Color.GRAY,1,true),
                 new EmptyBorder (1,5,1,5)));
+        previewURLText.setMaximumSize (new Dimension (
+                previewURLText.getPreferredSize ().width + 20,
+                previewURLText.getPreferredSize ().height));
 
         JButton copy = new JButton ("Copy");
         copy.setBackground (theme.getBackGroundColorV4 ());

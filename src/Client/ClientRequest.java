@@ -12,6 +12,8 @@ import java.util.*;
 public class ClientRequest implements Serializable, Runnable
 {
     private URL url;
+    private boolean followRedirect;
+    private RequestType requestType;
     private HttpConnection httpConnection;
     private String name;
     private HashMap<String,String> customHeaders;
@@ -28,22 +30,26 @@ public class ClientRequest implements Serializable, Runnable
 
         this.url = new URL (url);
         this.name = "MyRequest";
+        this.followRedirect = followRedirect;
+        requestType = RequestType.GET;
         customHeaders = new HashMap<> ();
         formData = new HashMap<> ();
         formDataEncoded = new HashMap<> ();
         queryData = new HashMap<> ();
-        httpConnection = new HttpConnection (followRedirect);
+        httpConnection = new HttpConnection ();
         messageBodyType = 1;
     }
 
     public ClientRequest (boolean followRedirect, String name, RequestType requestType)
     {
         this.name = name;
+        this.followRedirect = followRedirect;
         customHeaders = new HashMap<> ();
         formData = new HashMap<> ();
         formDataEncoded = new HashMap<> ();
         queryData = new HashMap<> ();
-        httpConnection = new HttpConnection (followRedirect,requestType);
+        this.requestType = requestType;
+        httpConnection = new HttpConnection ();
         try {
             this.url = new URL ("https://api.myproduct.com/v1/users");
         } catch (MalformedURLException ignore)
@@ -220,17 +226,19 @@ public class ClientRequest implements Serializable, Runnable
         while (true)
         {
             if ((connection = httpConnection.connectionInitializer
-                    (getCustomHeaders (), getQueryDataString (),url)) != null)
+                    (getCustomHeaders (), getQueryDataString (),url,
+                            getRequestType ())) != null)
             {
                 try {
-                    switch (httpConnection.getRequestType ())
+                    switch (getRequestType ())
                     {
                         case GET:
-                            httpConnection.onlyGet (connection); return;
+                            httpConnection.onlyGet (connection,followRedirect); return;
                         case POST:
                         case PUT:
                         case DELETE:httpConnection.sendAndGet (connection,messageBodyType,
-                                getFormData (),uploadBinaryFile, getFormDataEncodedString ());
+                                getFormData (),uploadBinaryFile,
+                                getFormDataEncodedString (),followRedirect);
                     }
                     return;
                 } catch (FollowRedirectException e)
@@ -256,7 +264,7 @@ public class ClientRequest implements Serializable, Runnable
 
         return "name: " + name + " | " +
                 "url: " + url.toString () + " | " +
-                "method: " + httpConnection.getRequestType () + " | " +
+                "method: " + getRequestType () + " | " +
                 "headers: " + readyForShowInToString (customHeaders) + " | " +
                 "Query params: " + readyForShowInToString (queryData);
     }
@@ -295,8 +303,8 @@ public class ClientRequest implements Serializable, Runnable
 
     public void setFollowRedirect (boolean followRedirection)
     {
-        httpConnection.
-                setFollowRedirect (followRedirection);
+        this.followRedirect =
+                followRedirection;
     }
 
     public void setShowHeadersInResponse (boolean showHeadersInResponse)
@@ -329,18 +337,18 @@ public class ClientRequest implements Serializable, Runnable
     {
         if (requestType == null)
         {
-            httpConnection.setRequestType (RequestType.GET);
+            this.requestType = RequestType.GET;
             return;
         }
 
         switch (requestType)
         {
-            case "POST" : httpConnection.setRequestType (RequestType.POST); break;
-            case "DELETE" : httpConnection.setRequestType (RequestType.DELETE); break;
-            case "PATCH" : httpConnection.setRequestType (RequestType.PATCH); break;
-            case "PUT" : httpConnection.setRequestType (RequestType.PUT); break;
+            case "POST" : this.requestType = RequestType.POST; break;
+            case "DELETE" : this.requestType = RequestType.DELETE; break;
+            case "PATCH" : this.requestType = RequestType.PATCH; break;
+            case "PUT" : this.requestType = RequestType.PUT; break;
             case "GET" :
-            default : httpConnection.setRequestType (RequestType.GET);
+            default : this.requestType = RequestType.GET;
         }
     }
 
@@ -350,7 +358,7 @@ public class ClientRequest implements Serializable, Runnable
 
     public RequestType getRequestType ()
     {
-        return httpConnection.getRequestType ();
+        return requestType;
     }
 
     public boolean isShouldSaveOutputInFile ()
