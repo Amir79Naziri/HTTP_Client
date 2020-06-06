@@ -5,11 +5,13 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.*;
 
 public class ClientRequest implements Serializable, Runnable
 {
+    private URL url;
     private HttpConnection httpConnection;
     private String name;
     private HashMap<String,String> customHeaders;
@@ -24,12 +26,13 @@ public class ClientRequest implements Serializable, Runnable
     public ClientRequest (String url, boolean followRedirect) throws MalformedURLException
     {
 
+        this.url = new URL (url);
         this.name = "MyRequest";
         customHeaders = new HashMap<> ();
         formData = new HashMap<> ();
         formDataEncoded = new HashMap<> ();
         queryData = new HashMap<> ();
-        httpConnection = new HttpConnection (url,followRedirect);
+        httpConnection = new HttpConnection (followRedirect);
         messageBodyType = 1;
     }
 
@@ -40,8 +43,9 @@ public class ClientRequest implements Serializable, Runnable
         formData = new HashMap<> ();
         formDataEncoded = new HashMap<> ();
         queryData = new HashMap<> ();
+        httpConnection = new HttpConnection (followRedirect,requestType);
         try {
-            httpConnection = new HttpConnection (followRedirect,requestType);
+            this.url = new URL ("https://api.myproduct.com/v1/users");
         } catch (MalformedURLException ignore)
         {
         }
@@ -104,7 +108,6 @@ public class ClientRequest implements Serializable, Runnable
     {
         queryData.put (key,value);
     }
-
 
 
     public String getQueryDataString () {
@@ -213,16 +216,27 @@ public class ClientRequest implements Serializable, Runnable
     {
 
         HttpURLConnection connection;
-        if ((connection = httpConnection.connectionInitializer
-                (getCustomHeaders (), getQueryDataString ())) != null)
+        String url = getUrl ();
+        while (true)
         {
-            switch (httpConnection.getRequestType ())
+            if ((connection = httpConnection.connectionInitializer
+                    (getCustomHeaders (), getQueryDataString (),url)) != null)
             {
-                case GET: httpConnection.onlyGet (connection); return;
-                case POST:
-                case PUT:
-                case DELETE:httpConnection.sendAndGet (connection,messageBodyType,
-                        getFormData (),uploadBinaryFile, getFormDataEncodedString ());
+                try {
+                    switch (httpConnection.getRequestType ())
+                    {
+                        case GET:
+                            httpConnection.onlyGet (connection); return;
+                        case POST:
+                        case PUT:
+                        case DELETE:httpConnection.sendAndGet (connection,messageBodyType,
+                                getFormData (),uploadBinaryFile, getFormDataEncodedString ());
+                    }
+                    return;
+                } catch (FollowRedirectException e)
+                {
+                    url = e.getNewUrl ();
+                }
             }
         }
 
@@ -241,7 +255,7 @@ public class ClientRequest implements Serializable, Runnable
     public String toString () {
 
         return "name: " + name + " | " +
-                "url: " + httpConnection.getUrl ().toString () + " | " +
+                "url: " + url.toString () + " | " +
                 "method: " + httpConnection.getRequestType () + " | " +
                 "headers: " + readyForShowInToString (customHeaders) + " | " +
                 "Query params: " + readyForShowInToString (queryData);
@@ -303,12 +317,12 @@ public class ClientRequest implements Serializable, Runnable
 
     public void setUrl (String url) throws MalformedURLException
     {
-        httpConnection.setUrl (url);
+        this.url = new URL (url);
     }
 
     public String getUrl ()
     {
-        return httpConnection.getUrl ().toString ();
+        return url.toString ();
     }
 
     public void setRequestType (String requestType)

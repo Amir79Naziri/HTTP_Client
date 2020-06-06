@@ -11,6 +11,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.*;
+import java.util.Scanner;
+import java.util.concurrent.ArrayBlockingQueue;
 
 
 /**
@@ -103,13 +106,15 @@ public class ThirdPanel extends JPanel
         add(headerStatus,BorderLayout.NORTH);
     }
 
-    private void statusClear ()
+    public void statusUnknown (String result)
     {
         time = new JLabel ("0 B");
         size = new JLabel ("0 ms");
+        statusMessage.setText (result);
+        statusMessage.setBackground (new Color (189, 24, 15));
         visualPreviewPanel.removeImage ();
-        rawPanel.getTextArea ().setText ("Error: URL using bad/illegal format or missing URL");
-
+        rawPanel.getTextArea ().setText (
+                "Error: URL using bad/illegal format or missing URL");
     }
 
     private void addProgressPanel ()
@@ -238,15 +243,13 @@ public class ThirdPanel extends JPanel
         if (responseCode.matches ("2(.*)"))
             statusMessage.setBackground (new Color (52, 174, 22));
         else if (responseCode.equals ("0"))
-            statusMessage.setBackground (new Color (189, 24, 15));
+        {
+            statusUnknown ("Error");
+        }
         else
             statusMessage.setBackground (new Color (133, 94, 8));
 
-        if (responseStorage.getResponseCode () == 0)
-        {
-            statusMessage.setText (responseStorage.getResponseMessage ());
-        }
-        else if (responseStorage.getResponseMessage () == null)
+        if (responseStorage.getResponseMessage () == null)
             statusMessage.setText (responseStorage.getResponseCode () + "");
         else
             statusMessage.setText (responseStorage.getResponseCode ()
@@ -258,6 +261,7 @@ public class ThirdPanel extends JPanel
 
 
         resultHeaderPanel.clear ();
+        visualPreviewPanel.removeImage ();
 
         if (responseStorage.getResponseHeaders () != null)
         {
@@ -272,8 +276,7 @@ public class ThirdPanel extends JPanel
                         {
                             visualPreviewPanel.addImage
                                     (responseStorage.getResponseBinaryRawData ());
-                        } else
-                            visualPreviewPanel.removeImage ();
+                        }
                     }
                 }
         }

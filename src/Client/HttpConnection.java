@@ -15,7 +15,7 @@ public class HttpConnection implements Serializable
 {
 
 
-    private URL url;
+
     private ResponseStorage responseStorage;
     private RequestType requestType;
     private boolean followRedirect;
@@ -24,9 +24,8 @@ public class HttpConnection implements Serializable
     private String addressOfFileForSaveOutput;
 
 
-    public HttpConnection (String url, boolean followRedirect) throws MalformedURLException
+    public HttpConnection (boolean followRedirect)
     {
-        this.url = new URL (url);
         this.requestType = RequestType.GET;
         this.followRedirect = followRedirect;
         showHeadersInResponse = false;
@@ -34,9 +33,8 @@ public class HttpConnection implements Serializable
     }
 
     public HttpConnection (boolean followRedirect, RequestType requestType)
-            throws MalformedURLException
+
     {
-        url = new URL ("https://api.myproduct.com/v1/users");
         this.requestType = requestType;
         this.followRedirect = followRedirect;
         showHeadersInResponse = false;
@@ -45,11 +43,11 @@ public class HttpConnection implements Serializable
 
 
     public HttpURLConnection connectionInitializer
-            (HashMap<String, String> headers, String queryData)
+            (HashMap<String, String> headers, String queryData, String url)
     {
 
         try {
-            URL connectionUrl = new URL (getUrl () + "" + queryData);
+            URL connectionUrl = new URL (url + "" + queryData);
             HttpURLConnection connection;
             if (("http").equals (connectionUrl.getProtocol ()))
                 connection = (HttpURLConnection) connectionUrl.openConnection ();
@@ -60,10 +58,12 @@ public class HttpConnection implements Serializable
                 return null;
             }
 
-            if (followRedirect)
-                connection.setInstanceFollowRedirects (true);
-            else
-                connection.setInstanceFollowRedirects (false);
+
+            connection.setInstanceFollowRedirects (false);
+
+            connection.setConnectTimeout (45000);
+
+
 
             connection.setRequestMethod (requestType.toString ());
 
@@ -106,16 +106,16 @@ public class HttpConnection implements Serializable
     {
         if (connection == null)
             throw new NullPointerException ("inValid input");
-        printResult ();
+        printResult (connection.getURL ().toString ());
         connection.disconnect ();
     }
 
-    public void onlyGet (HttpURLConnection connection)
+    public void onlyGet (HttpURLConnection connection) throws FollowRedirectException
     {
         if (connection == null)
             throw new NullPointerException ("inValid input");
         long startTime = System.currentTimeMillis ();
-        connection.setDoInput(true);
+
         if (connectToServer (connection))
         {
             // reading
@@ -129,6 +129,7 @@ public class HttpConnection implements Serializable
     public void sendAndGet (HttpURLConnection connection, int messageBodyType,
                             HashMap<String,String> multipartData,
                             File file, String formUrlEncodedData)
+            throws FollowRedirectException
     {
         if (connection == null)
             throw new NullPointerException ("inValid input");
@@ -172,7 +173,8 @@ public class HttpConnection implements Serializable
     }
 
 
-    private void readFromServer (HttpURLConnection connection) {
+    private void readFromServer (HttpURLConnection connection) throws FollowRedirectException
+    {
         if (connection == null)
             throw new NullPointerException ("inValid input");
         try {
@@ -180,7 +182,19 @@ public class HttpConnection implements Serializable
             responseStorage.setResponseMessage (connection.getResponseMessage ());
             responseStorage.setResponseHeaders (connection.getHeaderFields ());
 
-            //TODO : follow redirect
+            if (followRedirect &&
+                    (responseStorage.getResponseCode () ==
+                            HttpURLConnection.HTTP_SEE_OTHER ||
+                            responseStorage.getResponseCode () ==
+                                    HttpURLConnection.HTTP_MOVED_TEMP ||
+                            responseStorage.getResponseCode () ==
+                                    HttpURLConnection.HTTP_MOVED_PERM))
+            {
+                String newURL = connection.getHeaderField ("Location");
+                connection.disconnect ();
+                throw new FollowRedirectException (newURL);
+            }
+
 
 
             String contentType = "text/html";
@@ -233,6 +247,7 @@ public class HttpConnection implements Serializable
         }catch (IOException e)
         {
             try {
+                System.out.println (249);
                 textReader (connection.getErrorStream ());
             } catch (IOException ex)
             {
@@ -268,10 +283,11 @@ public class HttpConnection implements Serializable
     {
         if (serverInputStream == null)
             throw new IOException ("serverInputStream is null");
-        Scanner out = new Scanner (serverInputStream);
+        BufferedReader out = new BufferedReader (new InputStreamReader (serverInputStream));
+        String line;
         StringBuilder content = new StringBuilder ();
-        while (out.hasNext ()) {
-            content.append (out.nextLine ()).append ('\n');
+        while ((line = out.readLine ()) != null) {
+            content.append (line).append ('\n');
         }
         out.close ();
         responseStorage.setResponseTextRawData (content.toString ());
@@ -367,10 +383,7 @@ public class HttpConnection implements Serializable
     }
 
 
-    public void setUrl (String url) throws MalformedURLException
-    {
-        this.url = new URL (url);
-    }
+
 
     public void setSaveRawDataOnFile (boolean saveRawDataOnFile) {
         this.saveRawDataOnFile = saveRawDataOnFile;
@@ -394,9 +407,7 @@ public class HttpConnection implements Serializable
     }
 
 
-    public URL getUrl () {
-        return url;
-    }
+
 
     public RequestType getRequestType () {
         return requestType;
@@ -406,7 +417,7 @@ public class HttpConnection implements Serializable
         return responseStorage;
     }
 
-    private synchronized void printResult ()
+    private synchronized void printResult (String url)
     {
         responseStorage.printTimeAndReadDetails ();
         System.out.println ();

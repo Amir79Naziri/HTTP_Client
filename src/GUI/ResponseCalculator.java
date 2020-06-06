@@ -7,6 +7,7 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
 {
 
     private ThirdPanel thirdPanel;
+    private boolean correctExecute;
 
 
 
@@ -14,6 +15,7 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
     {
         super();
         this.thirdPanel = thirdPanel;
+        correctExecute = false;
     }
 
     @Override
@@ -35,7 +37,9 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
             setProgress (100);
             Thread.sleep (1000);
             thirdPanel.getProgressPanel ().setVisible (false);
-        } catch (InterruptedException ignore)
+            correctExecute = true;
+            return true;
+        } catch (InterruptedException e)
         {
             thread.interrupt ();
             thirdPanel.getRequest ().getClientRequest ().getResponseStorage ().reset ();
@@ -43,16 +47,22 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
                     setResponseMessage ("Canceled");
             setProgress (0);
             thirdPanel.getProgressPanel ().setVisible (false);
-            return true;
+            correctExecute = false;
+            return false;
         }
-        return true;
+
     }
 
 
 
     @Override
     protected void done () {
-        thirdPanel.properBack ();
+        if (correctExecute)
+            thirdPanel.properBack ();
+        else
+            thirdPanel.statusUnknown ("Cancelled");
+
+        correctExecute = false;
     }
 
 
