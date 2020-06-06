@@ -249,7 +249,9 @@ public class ThirdPanel extends JPanel
         else
             statusMessage.setBackground (new Color (133, 94, 8));
 
-        if (responseStorage.getResponseMessage () == null)
+        if (responseStorage.getResponseCode () == 0)
+            statusMessage.setText (responseStorage.getResponseMessage ());
+        else if (responseStorage.getResponseMessage () == null)
             statusMessage.setText (responseStorage.getResponseCode () + "");
         else
             statusMessage.setText (responseStorage.getResponseCode ()
