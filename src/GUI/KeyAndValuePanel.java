@@ -1,7 +1,6 @@
 package GUI;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -35,8 +34,12 @@ public class KeyAndValuePanel extends JPanel
      * @param key key
      * @param value value
      * @param theme theme
+     * @param owner owner panel
+     * @param request request
+     * @param type type of : header or Query or Bodies
      */
-    public KeyAndValuePanel (String key, String value, Theme theme, String type, Request request,
+    public KeyAndValuePanel (String key, String value, Theme theme,
+                             String type, Request request,
                              JPanel owner)
     {
         super();
@@ -96,13 +99,16 @@ public class KeyAndValuePanel extends JPanel
         configureNewKeyAndValue (key, value);
     }
 
+    /**
+     * configures first setup for a new Key and value
+     * @param key key
+     * @param value value
+     */
     private void configureNewKeyAndValue (String key, String value) {
         KeyAndValue keyAndValue = new KeyAndValue (key, value,true,
                 fixedKeyAndValue.isPanelDescVisible (),theme,this);
         getKeyAndValues ().add (keyAndValue);
         add (keyAndValue,keyAndValues.size () - 1);
-        JSeparator separator = new JSeparator ();
-        separator.setPreferredSize (new Dimension (200,1));
         keyAndValue.setVisible (false);
         keyAndValue.setVisible (true);
     }
@@ -130,7 +136,10 @@ public class KeyAndValuePanel extends JPanel
         keyAndValues.clear ();
     }
 
-
+    /**
+     * load request data on GUI
+     * @param data request data
+     */
     public void properBack (HashMap<String,String> data)
     {
         if (data == null)
@@ -139,6 +148,9 @@ public class KeyAndValuePanel extends JPanel
             addNewKeyAndValue (key,data.get (key));
     }
 
+    /**
+     * load GUI on request
+     */
     public void properData ()
     {
         switch (type)
@@ -188,15 +200,17 @@ public class KeyAndValuePanel extends JPanel
         }
     }
 
-    public String getType () {
-        return type;
-    }
-
+    /**
+     * update list : if a request deleted it will remove it from list
+     */
     public void updateList ()
     {
         keyAndValues.removeIf (keyAndValue -> keyAndValue.isDeleted ());
     }
 
+    /**
+     * @return request
+     */
     public Request getRequest () {
         return request;
     }

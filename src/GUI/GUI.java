@@ -310,7 +310,9 @@ public class GUI
         baseFrame.setVisible (true);
     }
 
-
+    /**
+     * @return option data
+     */
     public OptionData getOptionData ()
     {
         return optionData;

@@ -218,6 +218,9 @@ public class FirstPanel extends JPanel
         }
     }
 
+    /**
+     * @return request panel
+     */
     public RequestsPanel getRequestsPanel () {
         return requestsPanel;
     }

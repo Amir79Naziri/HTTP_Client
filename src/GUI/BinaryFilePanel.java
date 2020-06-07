@@ -172,6 +172,9 @@ public class BinaryFilePanel extends JPanel
         }
     }
 
+    /**
+     * reset the chosen path
+     */
     public void clearPath ()
     {
         fileAddress.setText ("No file selected");
@@ -179,10 +182,17 @@ public class BinaryFilePanel extends JPanel
         resetFile.setEnabled (false);
     }
 
+    /**
+     * sets new Path
+     * @param path path
+     */
     public void setPath (Path path) {
         pathHandler (path);
     }
 
+    /**
+     * @return path
+     */
     public Path getPath () {
         return path;
     }

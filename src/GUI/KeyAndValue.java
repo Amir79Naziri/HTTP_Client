@@ -1,7 +1,5 @@
 package GUI;
 
-import Client.ClientRequest;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -360,6 +358,9 @@ public class KeyAndValue extends JPanel
         }
     }
 
+    /**
+     * manage the key released
+     */
     private class KeyHandler extends KeyAdapter
     {
         @Override
@@ -374,7 +375,6 @@ public class KeyAndValue extends JPanel
             }
         }
     }
-
 
     @Override
     public Dimension getMaximumSize () {

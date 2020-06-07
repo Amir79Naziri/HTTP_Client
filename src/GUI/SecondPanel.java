@@ -398,9 +398,9 @@ public class SecondPanel extends JPanel
         .getQueryData ());
 
         multiPartPanel.getKeyAndValuePanel ().properBack (request.getClientRequest ()
-                .getFormData ());
+                .getFormUrlData ());
         urlEncodedPanel.getKeyAndValuePanel ().properBack (request.getClientRequest ()
-        .getFormDataEncoded ());
+        .getFormUrlDataEncoded ());
         binaryFilePanel.setPath (request.getClientRequest ().getUploadBinaryFilePath ());
     }
 }

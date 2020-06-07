@@ -4,11 +4,15 @@ import Storage.ResponseStorage;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.*;
 
+/**
+ * this class represents a ClientRequest
+ *
+ * @author Amir Naziri
+ */
 public class ClientRequest implements Serializable, Runnable
 {
     private URL url;
@@ -17,15 +21,21 @@ public class ClientRequest implements Serializable, Runnable
     private HttpConnection httpConnection;
     private String name;
     private HashMap<String,String> customHeaders;
-    private HashMap<String,String> formData;
-    private HashMap<String,String> formDataEncoded;
+    private HashMap<String,String> formUrlData; // multiPart
+    private HashMap<String,String> formUrlDataEncoded; // urlEncoded
     private HashMap<String,String> queryData;
-    private File uploadBinaryFile;
-    private int messageBodyType;
+    private File uploadBinaryFile; // upload file
+    private int messageBodyType; // 1 means multiPart  2 means Binary file
+                                 // 3 means urlEncoded
 
-
-
-    public ClientRequest (String url, boolean followRedirect) throws MalformedURLException
+    /**
+     * creates a new Client request
+     * @param url url
+     * @param followRedirect followRedirect
+     * @throws MalformedURLException when url is not valid
+     */
+    public ClientRequest (String url, boolean followRedirect)
+            throws MalformedURLException
     {
 
         this.url = new URL (url);
@@ -33,20 +43,27 @@ public class ClientRequest implements Serializable, Runnable
         this.followRedirect = followRedirect;
         requestType = RequestType.GET;
         customHeaders = new HashMap<> ();
-        formData = new HashMap<> ();
-        formDataEncoded = new HashMap<> ();
+        formUrlData = new HashMap<> ();
+        formUrlDataEncoded = new HashMap<> ();
         queryData = new HashMap<> ();
         httpConnection = new HttpConnection ();
         messageBodyType = 1;
     }
 
-    public ClientRequest (boolean followRedirect, String name, RequestType requestType)
+    /**
+     * creates a new Client request
+     * @param followRedirect followRedirect
+     * @param name name of request
+     * @param requestType requestType
+     */
+    public ClientRequest (boolean followRedirect, String name,
+                          RequestType requestType)
     {
         this.name = name;
         this.followRedirect = followRedirect;
         customHeaders = new HashMap<> ();
-        formData = new HashMap<> ();
-        formDataEncoded = new HashMap<> ();
+        formUrlData = new HashMap<> ();
+        formUrlDataEncoded = new HashMap<> ();
         queryData = new HashMap<> ();
         this.requestType = requestType;
         httpConnection = new HttpConnection ();
@@ -58,8 +75,15 @@ public class ClientRequest implements Serializable, Runnable
         messageBodyType = 1;
     }
 
+    /**
+     * parse the argument of headers , query, bodies ; if they are all in a String
+     * @param map map of headers , query , bodies
+     * @param input input String
+     * @param s separator for different keyValues from each other in input
+     * @param t separator for  key and value in a keyValue in input
+     */
     private static void addKeyAndValueType
-            (HashMap<String, String> list, String input, String s, String t)
+            (HashMap<String, String> map, String input, String s, String t)
     {
         if (input == null)
             return;
@@ -76,46 +100,71 @@ public class ClientRequest implements Serializable, Runnable
                 continue;
             String[] keyValue = header.split (t,2);
             if (keyValue.length >= 2)
-                list.put (keyValue[0],keyValue[1]);
+                map.put (keyValue[0],keyValue[1]);
         }
     }
 
+    /**
+     * add a binaryFile
+     * @param uploadBinaryFile binaryFile
+     */
     public void addUploadBinaryFile (File uploadBinaryFile) {
         this.uploadBinaryFile =
                 uploadBinaryFile;
     }
 
-
+    /**
+     * add custom header
+     * @param inputHeader input header
+     */
     public void addCustomHeader (String inputHeader)
     {
         addKeyAndValueType
                 (customHeaders,inputHeader, ";",":");
     }
 
+    /**
+     * add custom header
+     * @param key key
+     * @param value value
+     */
     public void addCustomHeader (String key, String value)
     {
-        customHeaders.put (key,value);
+        customHeaders.
+                put (key,value);
     }
 
-
-
+    /**
+     * @return map of custom headers
+     */
     public HashMap<String, String> getCustomHeaders () {
         return customHeaders;
     }
 
-
+    /**
+     * add query
+     * @param query input query
+     */
     public void addQuery (String query)
     {
         addKeyAndValueType
                 (queryData,query, "&","=");
     }
 
+    /**
+     * add query
+     * @param key key
+     * @param value value
+     */
     public void addQuery (String key,String value)
     {
         queryData.put (key,value);
     }
 
-
+    /**
+     * get Queries in form of a String for appending to Url
+     * @return query String
+     */
     public String getQueryDataString () {
         int counter = 0;
         StringBuilder stringBuilder = new StringBuilder ();
@@ -134,75 +183,113 @@ public class ClientRequest implements Serializable, Runnable
         return stringBuilder.toString ();
     }
 
+    /**
+     * @return map of queries
+     */
     public HashMap<String,String> getQueryData ()
     {
         return queryData;
     }
 
+    /**
+     * add multiPartData (form url data)
+     * @param inputFormUrl input multiPartData
+     */
     public void addFormUrlData (String inputFormUrl)
     {
         addKeyAndValueType
-                (formData,inputFormUrl, "&","=");
+                (formUrlData,inputFormUrl, "&","=");
     }
 
+    /**
+     * add multiPartData (form url data)
+     * @param key key
+     * @param value value
+     */
     public void addFormUrlData (String key, String value)
     {
-        formData.put (key,value);
+        formUrlData.
+                put (key,value);
     }
 
-
-
-    public HashMap<String,String> getFormData ()
+    /**
+     * @return map multipart (form url data)
+     */
+    public HashMap<String,String> getFormUrlData ()
     {
-        return formData;
+        return formUrlData;
     }
 
-
+    /**
+     * add Form Url Data Encoded
+     * @param inputFormUrlEncoded input FormUrlEncoded
+     */
     public void addFormUrlDataEncoded (String inputFormUrlEncoded)
     {
         addKeyAndValueType
-                (formDataEncoded,inputFormUrlEncoded, "&","=");
+                (formUrlDataEncoded,inputFormUrlEncoded, "&","=");
     }
 
+    /**
+     * add Form Url Data Encoded
+     * @param key key
+     * @param value value
+     */
     public void addFormUrlDataEncoded (String key, String value)
     {
-        formDataEncoded.put (key,value);
+        formUrlDataEncoded.
+                put (key,value);
     }
 
-
-    public String getFormDataEncodedString () {
+    /**
+     * @return String of key1=value1&key2=value2&......  for writing on server
+     */
+    public String getFormUrlDataEncodedString () {
         int counter = 0;
         StringBuilder stringBuilder = new StringBuilder ();
-        for (String key : formDataEncoded.keySet ())
+        for (String key : formUrlDataEncoded.keySet ())
         {
             if (counter == 0)
             {
-                stringBuilder.append (key).append ("=").append (formDataEncoded.get (key));
+                stringBuilder.append (key).append ("=").append (formUrlDataEncoded.get (key));
             }
             else
             {
                 stringBuilder.append ("&").append (key).append ("=").
-                        append (formDataEncoded.get (key));
+                        append (formUrlDataEncoded.get (key));
             }
             counter++;
         }
         return stringBuilder.toString ();
     }
 
-    public HashMap<String, String> getFormDataEncoded () {
-        return formDataEncoded;
+    /**
+     * @return map of FormUrlDataEncoded
+     */
+    public HashMap<String, String> getFormUrlDataEncoded ()
+    {
+        return formUrlDataEncoded;
     }
 
+    /**
+     * clear headers map
+     */
     public void clearCustomHeaders ()
     {
         customHeaders.clear ();
     }
 
+    /**
+     * clear query map
+     */
     public void clearQuery ()
     {
         queryData.clear ();
     }
 
+    /**
+     * @return path of upload binary file
+     */
     public Path getUploadBinaryFilePath () {
         if (uploadBinaryFile != null)
             return uploadBinaryFile.toPath ();
@@ -210,13 +297,19 @@ public class ClientRequest implements Serializable, Runnable
             return null;
     }
 
+    /**
+     * clears multipart , formUrlEncoded, and make binary file null
+     */
     public void clearBody ()
     {
-        formData.clear ();
-        formDataEncoded.clear ();
+        formUrlData.clear ();
+        formUrlDataEncoded.clear ();
         uploadBinaryFile = null;
     }
 
+    /**
+     * send request
+     */
     @Override
     public void run ()
     {
@@ -237,8 +330,8 @@ public class ClientRequest implements Serializable, Runnable
                         case POST:
                         case PUT:
                         case DELETE:httpConnection.sendAndGet (connection,messageBodyType,
-                                getFormData (),uploadBinaryFile,
-                                getFormDataEncodedString (),followRedirect);
+                                getFormUrlData (),uploadBinaryFile,
+                                getFormUrlDataEncodedString (),followRedirect);
                     }
                     return;
                 } catch (FollowRedirectException e)
@@ -250,10 +343,16 @@ public class ClientRequest implements Serializable, Runnable
 
     }
 
+    /**
+     * @return response storage
+     */
     public ResponseStorage getResponseStorage () {
         return httpConnection.getResponseStorage ();
     }
 
+    /**
+     * @return messageBody type
+     */
     public int getMessageBodyType () {
         return messageBodyType;
     }
@@ -269,13 +368,18 @@ public class ClientRequest implements Serializable, Runnable
                 "Query params: " + readyForShowInToString (queryData);
     }
 
-    private String readyForShowInToString (HashMap<String,String> list)
+    /**
+     * ready the headers and queries for showing on toString
+     * @param map input  headers, queries
+     * @return string in special format for showing in toString
+     */
+    private String readyForShowInToString (HashMap<String,String> map)
     {
-        if (list == null)
+        if (map == null)
             throw new NullPointerException ("inValid input");
         StringBuilder stringBuilder = new StringBuilder ();
         int counter = 0;
-        for (String key : list.keySet ())
+        for (String key : map.keySet ())
         {
             if (counter == 0)
                 stringBuilder.append (key).append (": ");
@@ -283,15 +387,23 @@ public class ClientRequest implements Serializable, Runnable
                 stringBuilder.append ("  ").append (key).append (": ");
             counter++;
 
-            stringBuilder.append (list.get (key));
+            stringBuilder.append (map.get (key));
         }
         return stringBuilder.toString ();
     }
 
+    /**
+     * set a name for Client request
+     * @param name name
+     */
     public void setName (String name) {
         this.name = name;
     }
 
+    /**
+     * set a messageType this will clear body
+     * @param messageBodyType input messageBodyType
+     */
     public void setMessageBodyType (int messageBodyType) {
         if (messageBodyType != this.messageBodyType)
         {
@@ -299,20 +411,33 @@ public class ClientRequest implements Serializable, Runnable
             clearBody ();
         }
     }
-    
 
+    /**
+     * set followRedirection
+     * @param followRedirection followRedirection
+     */
     public void setFollowRedirect (boolean followRedirection)
     {
         this.followRedirect =
                 followRedirection;
     }
 
+    /**
+     * show headers in response
+     * @param showHeadersInResponse showHeadersInResponse
+     */
     public void setShowHeadersInResponse (boolean showHeadersInResponse)
     {
         httpConnection.setShowHeadersInResponse (showHeadersInResponse);
     }
 
-    public void setShouldSaveOutputInFile (boolean shouldSaveOutputInFile, String nameOfFile)
+    /**
+     * set should save output in file
+     * @param shouldSaveOutputInFile shouldSaveOutputInFile
+     * @param nameOfFile nameOfFile (it can be null)
+     */
+    public void setShouldSaveOutputInFile (boolean shouldSaveOutputInFile,
+                                           String nameOfFile)
     {
         if (nameOfFile == null)
         {
@@ -323,16 +448,28 @@ public class ClientRequest implements Serializable, Runnable
         }
     }
 
+    /**
+     * set Url
+     * @param url url
+     * @throws MalformedURLException when a url is not Valid
+     */
     public void setUrl (String url) throws MalformedURLException
     {
         this.url = new URL (url);
     }
 
+    /**
+     * @return url
+     */
     public String getUrl ()
     {
         return url.toString ();
     }
 
+    /**
+     * set a request Type
+     * @param requestType requestType
+     */
     public void setRequestType (String requestType)
     {
         if (requestType == null)
@@ -352,15 +489,24 @@ public class ClientRequest implements Serializable, Runnable
         }
     }
 
+    /**
+     * @return name of request
+     */
     public String getName () {
         return name;
     }
 
+    /**
+     * @return request type
+     */
     public RequestType getRequestType ()
     {
         return requestType;
     }
 
+    /**
+     * @return is Should save output In file
+     */
     public boolean isShouldSaveOutputInFile ()
     {
         return httpConnection.isSaveRawDataOnFile ();

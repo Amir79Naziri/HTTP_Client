@@ -2,16 +2,24 @@ package Jurl;
 
 import java.util.*;
 
+/**
+ * this class represents a processor for parsing input by user
+ *
+ * @author Amir Naziri
+ */
 public class InputProcessor
 {
-    private String[] commands;
-    private TreeMap<ReservedWord,ArrayList<String>> tasks;
-    private String url;
-    private int inputType;
+    private String[] commands; // parses of input
+    private TreeMap<ReservedWord,ArrayList<String>> tasks; // map of reserveWords to
+                                                           // their arguments
+    private String url; // url
+    private int inputType; // type of input  1 means line without url
+                           // 2 means line with url
 
-
-
-    public void getLine ()
+    /**
+     * gets a new line and process on it
+     */
+    protected void getLine ()
     {
         tasks = new TreeMap<> ();
         url = null;
@@ -22,6 +30,9 @@ public class InputProcessor
         process ();
     }
 
+    /**
+     * process commands
+     */
     private void process ()
     {
         if (commands.length < 2)
@@ -87,6 +98,11 @@ public class InputProcessor
         }
     }
 
+    /**
+     * is input reserve word
+     * @param command input command
+     * @return if is reserveWord returns ReserveWord  else null
+     */
     private ReservedWord isReserveWord (String command)
     {
         if (command == null)
@@ -197,17 +213,17 @@ public class InputProcessor
         return args;
     }
 
-    public TreeMap<ReservedWord, ArrayList<String>> getTasks () {
+    protected TreeMap<ReservedWord, ArrayList<String>> getTasks () {
         return tasks;
     }
 
 
-    public String getUrl () {
+    protected String getUrl () {
         return url;
     }
 
 
-    public int getInputType () {
+    protected int getInputType () {
         return inputType;
     }
 }
