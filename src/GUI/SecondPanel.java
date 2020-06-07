@@ -43,7 +43,7 @@ public class SecondPanel extends JPanel
      * @param request owner request
      * @param theme theme
      */
-    public SecondPanel (GUI gui, Request request, Theme theme)
+    protected SecondPanel (GUI gui, Request request, Theme theme)
     {
         super();
         if (gui == null || request == null || theme == null)
@@ -231,7 +231,7 @@ public class SecondPanel extends JPanel
     /**
      * @return program third panel
      */
-    public JPanel getProgramThirdPanel () {
+    protected JPanel getProgramThirdPanel () {
         return programThirdPanel;
     }
 
@@ -282,8 +282,7 @@ public class SecondPanel extends JPanel
                     gui.setThirdPanel (mainThirdPanel);
                     programThirdPanel = mainThirdPanel;
                     mainThirdPanel.execute ();
-                } else
-                    System.err.println ("\nSome thing went wrong in initialize For Send\n");
+                }
             }
         }
 
@@ -332,7 +331,12 @@ public class SecondPanel extends JPanel
         }
     }
 
-    public boolean initializeForSend (boolean isForSending)
+    /**
+     * initialize a request by take every data from GUI
+     * @param isForSending isForSending true, isFor close false
+     * @return result
+     */
+    protected boolean initializeForSend (boolean isForSending)
     {
         headerPanel.getKeyAndValuePanel ().properData ();
         queryPanel.getKeyAndValuePanel ().properData ();
@@ -388,7 +392,9 @@ public class SecondPanel extends JPanel
         return true;
     }
 
-
+    /**
+     * load data from request on GUI
+     */
     private void properBack ()
     {
         url.setText (request.getClientRequest ().getUrl ());

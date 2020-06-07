@@ -2,25 +2,31 @@ package Jurl;
 
 import Client.ClientRequest;
 import ControlUnit.Controller;
-
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+/**
+ * this class represents commandLine part of app
+ *
+ * @author Amir Naziri
+ */
 public class Jurl
 {
     private InputProcessor inputProcessor;
 
-
-
-
+    /**
+     * creates a new Jurl
+     */
     public Jurl ()
     {
         inputProcessor = new InputProcessor ();
     }
 
-
+    /**
+     * starts new program
+     */
     public void startProgram ()
     {
         while (true) {
@@ -45,8 +51,15 @@ public class Jurl
         }
     }
 
-
-
+    /**
+     * creates client request base on User input
+     * @param tasks tasks
+     * @param url url
+     * @param inputType inputType
+     * @return list of client requests which decoded
+     * @throws MalformedURLException inValid url
+     * @throws InterruptedException it will thrown when program closed
+     */
     private ArrayList<ClientRequest> createClientRequest (TreeMap<ReservedWord,
                                     ArrayList<String>> tasks, String url, int inputType)
             throws MalformedURLException, InterruptedException {
@@ -125,7 +138,7 @@ public class Jurl
             if (tasks.containsKey (ReservedWord.SAVE_V2))
             {
                 Controller.addNewClientRequest (clientRequest);
-                Controller.addClientRequestToGuiDirectly (clientRequest);
+//                Controller.addClientRequestToGuiDirectly (clientRequest);
             }
             clientRequests.add (clientRequest);
 
@@ -134,8 +147,9 @@ public class Jurl
         return clientRequests;
     }
 
-
-
+    /**
+     * prints help details
+     */
     private void help ()
     {
         System.out.println (" Usage: jurl url [options...]");

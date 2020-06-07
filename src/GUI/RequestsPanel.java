@@ -3,7 +3,6 @@ package GUI;
 import Client.ClientRequest;
 import Client.RequestType;
 import ControlUnit.Controller;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -27,7 +26,7 @@ public class RequestsPanel extends JPanel
      * @param gui gui
      * @param theme theme
      */
-    public RequestsPanel (GUI gui, Theme theme, ArrayList<ClientRequest> clientRequests)
+    protected RequestsPanel (GUI gui, Theme theme, ArrayList<ClientRequest> clientRequests)
     {
         super();
         if (theme == null || gui == null)
@@ -49,7 +48,7 @@ public class RequestsPanel extends JPanel
      * @param type type of request
      * @param name name of request
      */
-    public void addNewRequest (RequestType type, String name)
+    protected void addNewRequest (RequestType type, String name)
     {
         if (type == null || name == null)
             throw new NullPointerException ("inValid input");
@@ -65,7 +64,13 @@ public class RequestsPanel extends JPanel
         request.setVisible (true);
     }
 
-    public void addRequest (RequestType type, String name, ClientRequest clientRequest)
+    /**
+     * add request (for loading)
+     * @param type type
+     * @param name name
+     * @param clientRequest clientRequest
+     */
+    private void addRequest (RequestType type, String name, ClientRequest clientRequest)
     {
         if (type == null || name == null)
             throw new NullPointerException ("inValid input");
@@ -78,10 +83,11 @@ public class RequestsPanel extends JPanel
         request.setVisible (false);
         request.setVisible (true);
     }
+
     /**
      * @return list of requests
      */
-    public ArrayList<Request> getRequests () {
+    protected ArrayList<Request> getRequests () {
         return requests;
     }
 
@@ -137,6 +143,9 @@ public class RequestsPanel extends JPanel
         }
     }
 
+    /**
+     * save headers, bodies, ... for closing app
+     */
     public void properRequestsForClosing ()
     {
         for (Request request : requests)

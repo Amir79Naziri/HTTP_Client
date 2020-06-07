@@ -26,7 +26,7 @@ public class OptionPanel extends JPanel
      * @param optionData optionData
      * @param gui gui
      */
-    public OptionPanel (OptionData optionData, GUI gui)
+    protected OptionPanel (OptionData optionData, GUI gui)
     {
         super();
         if (gui == null || optionData == null)
@@ -41,7 +41,7 @@ public class OptionPanel extends JPanel
     /**
      * create baseComponent in base Panel
      */
-    public void addBasePanel ()
+    private void addBasePanel ()
     {
         GridBagConstraints constraints = new GridBagConstraints ();
         GridBagLayout layout = new GridBagLayout ();
@@ -117,12 +117,12 @@ public class OptionPanel extends JPanel
             } else if (e.getSource () == followRedirect && followRedirect.isSelected ())
             {
                 data.setFollowRedirect (true);
-                Controller.changeFollowRedirect (true);
+                Controller.setFollowRedirectForAllClientRequests (true);
 
             } else if (e.getSource () == followRedirect && !(followRedirect.isSelected ()))
             {
                 data.setFollowRedirect (false);
-                Controller.changeFollowRedirect (false);
+                Controller.setFollowRedirectForAllClientRequests (false);
 
             } else if (e.getSource () == themeChoose)
             {
@@ -149,7 +149,4 @@ public class OptionPanel extends JPanel
         }
     }
 
-    public boolean getFollowRedirect () {
-        return followRedirect.isSelected ();
-    }
 }

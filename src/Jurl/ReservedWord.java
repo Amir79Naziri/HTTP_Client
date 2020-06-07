@@ -1,5 +1,10 @@
 package Jurl;
 
+/**
+ * this enum holds Reserve words
+ *
+ * @author Amir Naziri
+ */
 public enum ReservedWord
 {
 
@@ -29,15 +34,21 @@ public enum ReservedWord
     QUERY ("-Q");
 
 
-    private String commandString;
+    private String commandString; // command of a reserveWord
 
-
+    /**
+     * creates a new Reserve Word
+     * @param commandString command of a reserveWord
+     */
     ReservedWord (String commandString)
     {
         this.commandString = commandString;
     }
 
-    public String getCommandString () {
+    /**
+     * @return command of a reserveWord
+     */
+    protected String getCommandString () {
         return commandString;
     }
 }

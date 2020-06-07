@@ -18,7 +18,7 @@ public class RawPanel extends JPanel
      * create a new Raw panel
      * @param theme theme
      */
-    public RawPanel (Theme theme)
+    protected RawPanel (Theme theme)
     {
         super();
         if (theme == null)
@@ -54,7 +54,7 @@ public class RawPanel extends JPanel
     /**
      * @return textArea
      */
-    public JTextArea getTextArea () {
+    protected JTextArea getTextArea () {
         return textArea;
     }
 }

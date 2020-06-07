@@ -19,7 +19,7 @@ public class JsonPanel extends JPanel
      * creates a new JSON panel
      * @param theme theme
      */
-    public JsonPanel (Theme theme)
+    protected JsonPanel (Theme theme)
     {
         super();
         if (theme == null)

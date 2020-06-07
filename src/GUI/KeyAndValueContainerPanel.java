@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * this class build for representing Header panel in second Panel
+ * this class build for representing Header, bodies, ... panel in second Panel
  *
  * @author Amir Naziri
  */
@@ -15,8 +15,10 @@ public class KeyAndValueContainerPanel extends JPanel
     /**
      * create a new Header Panel
      * @param theme theme
+     * @param type type
+     * @param request request
      */
-    public KeyAndValueContainerPanel (Theme theme, Request request, int type)
+    protected KeyAndValueContainerPanel (Theme theme, Request request, int type)
     {
         super();
         if (theme == null)
@@ -42,7 +44,7 @@ public class KeyAndValueContainerPanel extends JPanel
     /**
      * @return keyAndValue panel
      */
-    public KeyAndValuePanel getKeyAndValuePanel () {
+    protected KeyAndValuePanel getKeyAndValuePanel () {
         return keyAndValuePanel;
     }
 

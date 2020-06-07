@@ -94,98 +94,98 @@ public enum Theme implements Serializable
     /**
      * @return backGroundColorV1
      */
-    public Color getBackGroundColorV1 () {
+    protected Color getBackGroundColorV1 () {
         return backGroundColorV1;
     }
 
     /**
      * @return backGroundColorV2
      */
-    public Color getBackGroundColorV2 () {
+    protected Color getBackGroundColorV2 () {
         return backGroundColorV2;
     }
 
     /**
      * @return backGroundColorV3
      */
-    public Color getBackGroundColorV3 () {
+    protected Color getBackGroundColorV3 () {
         return backGroundColorV3;
     }
 
     /**
      * @return backGroundColorV4
      */
-    public Color getBackGroundColorV4 () {
+    protected Color getBackGroundColorV4 () {
         return backGroundColorV4;
     }
 
     /**
      * @return foreGroundColorV1
      */
-    public Color getForeGroundColorV1 () {
+    protected Color getForeGroundColorV1 () {
         return foreGroundColorV1;
     }
 
     /**
      * @return foreGroundColorV2
      */
-    public Color getForeGroundColorV2 () {
+    protected Color getForeGroundColorV2 () {
         return foreGroundColorV2;
     }
 
     /**
      * @return foreGroundColorV3
      */
-    public Color getForeGroundColorV3 () {
+    protected Color getForeGroundColorV3 () {
         return foreGroundColorV3;
     }
 
     /**
      * @return backGroundColorV5
      */
-    public Color getBackGroundColorV5 () {
+    protected Color getBackGroundColorV5 () {
         return backGroundColorV5;
     }
 
     /**
      * @return addR1
      */
-    public ImageIcon getAddR1 () {
+    protected ImageIcon getAddR1 () {
         return addR1;
     }
 
     /**
      * @return addR2
      */
-    public ImageIcon getAddR2 () {
+    protected ImageIcon getAddR2 () {
         return addR2;
     }
 
     /**
      * @return data
      */
-    public ImageIcon getData () {
+    protected ImageIcon getData () {
         return data;
     }
 
     /**
      * @return trashR1
      */
-    public ImageIcon getTrashR1 () {
+    protected ImageIcon getTrashR1 () {
         return trashR1;
     }
 
     /**
      * @return trashR2
      */
-    public ImageIcon getTrashR2 () {
+    protected ImageIcon getTrashR2 () {
         return trashR2;
     }
 
     /**
      * @return gear
      */
-    public ImageIcon getGear () {
+    protected ImageIcon getGear () {
         return gear;
     }
 }

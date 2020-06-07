@@ -21,7 +21,7 @@ public class GridBagAdder
      * @param constraints constrains for layout
      * @param panel base panel
      */
-    public static void addComponent (JComponent component, int row, int col, int width,
+    protected static void addComponent (JComponent component, int row, int col, int width,
                                      GridBagLayout layout, GridBagConstraints constraints,
                                      JPanel panel) {
         if (layout == null || constraints  == null || component == null || panel == null)

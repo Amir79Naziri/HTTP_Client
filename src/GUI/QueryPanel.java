@@ -16,7 +16,6 @@ import java.awt.event.ActionListener;
 public class QueryPanel extends KeyAndValueContainerPanel
 {
     private JTextField previewURLText; // preview textField
-    private JButton importFromURL; // import form button
     private Theme theme;
 
 
@@ -24,7 +23,7 @@ public class QueryPanel extends KeyAndValueContainerPanel
      * creates a GUI.QueryPanel
      * @param theme theme
      */
-    public QueryPanel (Theme theme,Request request)
+    protected QueryPanel (Theme theme,Request request)
     {
         super(theme,request,4);
         if (theme == null)
@@ -99,7 +98,8 @@ public class QueryPanel extends KeyAndValueContainerPanel
         JPanel panel = new JPanel (new FlowLayout (FlowLayout.RIGHT));
         panel.setBackground (theme.getBackGroundColorV4 ());
 
-        importFromURL = new JButton ("Import From URL");
+        // import form button
+        JButton importFromURL = new JButton ("Import From URL");
         importFromURL.setForeground (theme.getForeGroundColorV2 ());
         importFromURL.setBackground (theme.getBackGroundColorV4 ());
         panel.add (importFromURL);
@@ -109,7 +109,7 @@ public class QueryPanel extends KeyAndValueContainerPanel
     /**
      * @return preview URL text
      */
-    public JTextField getPreviewURLText () {
+    protected JTextField getPreviewURLText () {
         return previewURLText;
     }
 }

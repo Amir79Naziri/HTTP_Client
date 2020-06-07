@@ -18,7 +18,7 @@ public class NullPanel extends JPanel
      *             2 for thirdPanel
      * @param theme theme
      */
-    public NullPanel (int type, Theme theme)
+    protected NullPanel (int type, Theme theme)
     {
         super();
         if (theme == null)

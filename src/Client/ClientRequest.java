@@ -2,7 +2,6 @@ package Client;
 
 import Storage.ResponseStorage;
 import java.io.*;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -16,17 +15,21 @@ import java.util.*;
 public class ClientRequest implements Serializable, Runnable
 {
     private URL url;
+    private ResponseStorage responseStorage;
     private boolean followRedirect;
     private RequestType requestType;
-    private HttpConnection httpConnection;
     private String name;
     private HashMap<String,String> customHeaders;
     private HashMap<String,String> formUrlData; // multiPart
     private HashMap<String,String> formUrlDataEncoded; // urlEncoded
     private HashMap<String,String> queryData;
     private File uploadBinaryFile; // upload file
+    private boolean shouldSaveResponseOnFile; // should save result in file
+    private String addressOfFileForSaveOutput; // address of file for save result
+    private boolean showHeadersInResponse;
     private int messageBodyType; // 1 means multiPart  2 means Binary file
                                  // 3 means urlEncoded
+
 
     /**
      * creates a new Client request
@@ -46,8 +49,11 @@ public class ClientRequest implements Serializable, Runnable
         formUrlData = new HashMap<> ();
         formUrlDataEncoded = new HashMap<> ();
         queryData = new HashMap<> ();
-        httpConnection = new HttpConnection ();
+        responseStorage = new ResponseStorage ();
         messageBodyType = 1;
+        shouldSaveResponseOnFile = false;
+        addressOfFileForSaveOutput = null;
+        showHeadersInResponse = false;
     }
 
     /**
@@ -66,7 +72,10 @@ public class ClientRequest implements Serializable, Runnable
         formUrlDataEncoded = new HashMap<> ();
         queryData = new HashMap<> ();
         this.requestType = requestType;
-        httpConnection = new HttpConnection ();
+        responseStorage = new ResponseStorage ();
+        shouldSaveResponseOnFile = false;
+        addressOfFileForSaveOutput = null;
+        showHeadersInResponse = false;
         try {
             this.url = new URL ("https://api.myproduct.com/v1/users");
         } catch (MalformedURLException ignore)
@@ -313,26 +322,29 @@ public class ClientRequest implements Serializable, Runnable
     @Override
     public void run ()
     {
-
-        HttpURLConnection connection;
+        HttpConnection httpConnection = new HttpConnection (responseStorage);
         String url = getUrl ();
-        while (true)
+        while (true) // TODO : Add limit
         {
-            if ((connection = httpConnection.connectionInitializer
+            if (httpConnection.connectionInitializer
                     (getCustomHeaders (), getQueryDataString (),url,
-                            getRequestType ())) != null)
+                            getRequestType ()))
             {
                 try {
                     switch (getRequestType ())
                     {
                         case GET:
-                            httpConnection.onlyGet (connection,followRedirect); return;
+                            httpConnection.onlyGet (followRedirect,
+                                    shouldSaveResponseOnFile,addressOfFileForSaveOutput);
+                            break;
                         case POST:
                         case PUT:
-                        case DELETE:httpConnection.sendAndGet (connection,messageBodyType,
+                        case DELETE:httpConnection.sendAndGet (messageBodyType,
                                 getFormUrlData (),uploadBinaryFile,
-                                getFormUrlDataEncodedString (),followRedirect);
+                                getFormUrlDataEncodedString (),followRedirect,
+                                shouldSaveResponseOnFile,addressOfFileForSaveOutput);
                     }
+                    printResult (url);
                     return;
                 } catch (FollowRedirectException e)
                 {
@@ -341,13 +353,28 @@ public class ClientRequest implements Serializable, Runnable
             }
         }
 
+
+    }
+
+    /**
+     * print result
+     * @param url url
+     */
+    private synchronized void printResult (String url)
+    {
+        responseStorage.printTimeAndReadDetails ();
+        System.out.println ();
+        System.out.println (url);
+        if (showHeadersInResponse)
+            responseStorage.printHeaders ();
+        responseStorage.printRawResponse ();
     }
 
     /**
      * @return response storage
      */
     public ResponseStorage getResponseStorage () {
-        return httpConnection.getResponseStorage ();
+        return responseStorage;
     }
 
     /**
@@ -428,7 +455,7 @@ public class ClientRequest implements Serializable, Runnable
      */
     public void setShowHeadersInResponse (boolean showHeadersInResponse)
     {
-        httpConnection.setShowHeadersInResponse (showHeadersInResponse);
+        this.showHeadersInResponse = showHeadersInResponse;
     }
 
     /**
@@ -441,10 +468,12 @@ public class ClientRequest implements Serializable, Runnable
     {
         if (nameOfFile == null)
         {
-            httpConnection.setSaveRawDataOnFile (shouldSaveOutputInFile);
+            this.shouldSaveResponseOnFile = shouldSaveOutputInFile;
+            this.addressOfFileForSaveOutput = null;
         } else
         {
-            httpConnection.setSaveRawDataOnFile (shouldSaveOutputInFile, nameOfFile);
+            this.shouldSaveResponseOnFile = shouldSaveOutputInFile;
+            this.addressOfFileForSaveOutput = "./data/RawData/" + nameOfFile;
         }
     }
 
@@ -509,6 +538,6 @@ public class ClientRequest implements Serializable, Runnable
      */
     public boolean isShouldSaveOutputInFile ()
     {
-        return httpConnection.isSaveRawDataOnFile ();
+        return shouldSaveResponseOnFile;
     }
 }

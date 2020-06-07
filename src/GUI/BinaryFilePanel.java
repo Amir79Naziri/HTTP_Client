@@ -26,7 +26,7 @@ public class BinaryFilePanel extends JPanel
      * creates a new binary file panel
      * @param theme theme
      */
-    public BinaryFilePanel (Theme theme)
+    protected BinaryFilePanel (Theme theme)
     {
         super();
         if (theme == null)
@@ -146,7 +146,8 @@ public class BinaryFilePanel extends JPanel
             StringBuilder stringBuilder = new StringBuilder ();
             stringBuilder.append (String.format ("%s",path)).append (" ");
             try{
-                stringBuilder.append (String.format ("(%s)",makeSizeReadable (Files.size (path))));
+                stringBuilder.append (
+                        String.format ("(%s)",makeSizeReadable (Files.size (path))));
             } catch (IOException e)
             {
                 e.printStackTrace ();
@@ -175,7 +176,7 @@ public class BinaryFilePanel extends JPanel
     /**
      * reset the chosen path
      */
-    public void clearPath ()
+    protected void clearPath ()
     {
         fileAddress.setText ("No file selected");
         path = null;
@@ -186,14 +187,14 @@ public class BinaryFilePanel extends JPanel
      * sets new Path
      * @param path path
      */
-    public void setPath (Path path) {
+    protected void setPath (Path path) {
         pathHandler (path);
     }
 
     /**
      * @return path
      */
-    public Path getPath () {
+    protected Path getPath () {
         return path;
     }
 }

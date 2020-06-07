@@ -38,7 +38,7 @@ public class KeyAndValuePanel extends JPanel
      * @param request request
      * @param type type of : header or Query or Bodies
      */
-    public KeyAndValuePanel (String key, String value, Theme theme,
+    protected KeyAndValuePanel (String key, String value, Theme theme,
                              String type, Request request,
                              JPanel owner)
     {
@@ -72,21 +72,24 @@ public class KeyAndValuePanel extends JPanel
         popupMenu.add (toggleDescription);
     }
 
-    public JPanel getOwner () {
+    /**
+     * @return owner panel
+     */
+    protected JPanel getOwner () {
         return owner;
     }
 
     /**
      * @return keyAndValue list
      */
-    public ArrayList<KeyAndValue> getKeyAndValues () {
+    protected ArrayList<KeyAndValue> getKeyAndValues () {
         return keyAndValues;
     }
 
     /**
      * add a new key and value
      */
-    public void addDefaultNewKeyAndValue ()
+    private void addDefaultNewKeyAndValue ()
     {
         configureNewKeyAndValue (key, value);
     }
@@ -116,7 +119,7 @@ public class KeyAndValuePanel extends JPanel
     /**
      * toggle description for keyAndValues
      */
-    public void toggleAllDescription ()
+    private void toggleAllDescription ()
     {
         for (KeyAndValue keyAndValue : keyAndValues)
             keyAndValue.toggleDescription ();
@@ -126,7 +129,7 @@ public class KeyAndValuePanel extends JPanel
     /**
      * delete all keyAndValues
      */
-    public void deleteAll ()
+    protected void deleteAll ()
     {
         for (KeyAndValue keyAndValue : keyAndValues)
         {
@@ -140,7 +143,7 @@ public class KeyAndValuePanel extends JPanel
      * load request data on GUI
      * @param data request data
      */
-    public void properBack (HashMap<String,String> data)
+    protected void properBack (HashMap<String,String> data)
     {
         if (data == null)
             return;
@@ -151,7 +154,7 @@ public class KeyAndValuePanel extends JPanel
     /**
      * load GUI on request
      */
-    public void properData ()
+    protected void properData ()
     {
         switch (type)
         {
@@ -203,7 +206,7 @@ public class KeyAndValuePanel extends JPanel
     /**
      * update list : if a request deleted it will remove it from list
      */
-    public void updateList ()
+    private void updateList ()
     {
         keyAndValues.removeIf (keyAndValue -> keyAndValue.isDeleted ());
     }
@@ -211,7 +214,7 @@ public class KeyAndValuePanel extends JPanel
     /**
      * @return request
      */
-    public Request getRequest () {
+    protected Request getRequest () {
         return request;
     }
 

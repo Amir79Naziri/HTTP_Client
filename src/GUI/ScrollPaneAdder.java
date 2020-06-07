@@ -18,7 +18,7 @@ public class ScrollPaneAdder
      * @param theme theme
      * @return scrollPane which has panel
      */
-    public static JScrollPane fetchToJScrollPane (JPanel panel, Theme theme)
+    protected static JScrollPane fetchToJScrollPane (JPanel panel, Theme theme)
     {
         if (panel == null || theme == null)
             throw new NullPointerException ("inValid input");

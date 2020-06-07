@@ -166,7 +166,12 @@ public class InputProcessor
             return null;
     }
 
-
+    /**
+     * find list of arguments for input reserve word
+     * @param reservedWord reservedWord
+     * @param nextIndex nextIndex from input reserve word
+     * @return list of arguments for input reserve
+     */
     private ArrayList<String> findArgumentForReserveWord (ReservedWord reservedWord,
                                                           int nextIndex)
     {
@@ -213,16 +218,23 @@ public class InputProcessor
         return args;
     }
 
+    /**
+     * @return tasks
+     */
     protected TreeMap<ReservedWord, ArrayList<String>> getTasks () {
         return tasks;
     }
 
-
+    /**
+     * @return url
+     */
     protected String getUrl () {
         return url;
     }
 
-
+    /**
+     * @return input type ; 1 means line without url, 2 means line with url
+     */
     protected int getInputType () {
         return inputType;
     }

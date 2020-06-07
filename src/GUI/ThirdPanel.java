@@ -40,7 +40,7 @@ public class ThirdPanel extends JPanel
      * creates new Third panel
      * @param theme theme
      */
-    public ThirdPanel (Theme theme, Request request)
+    protected ThirdPanel (Theme theme, Request request)
     {
         super();
         if (theme == null)
@@ -106,7 +106,11 @@ public class ThirdPanel extends JPanel
         add(headerStatus,BorderLayout.NORTH);
     }
 
-    public void statusUnknown (String result)
+    /**
+     * set status unknown in error and cancelled
+     * @param result cancelled of Error
+     */
+    protected void statusUnknown (String result)
     {
         time = new JLabel ("0 B");
         size = new JLabel ("0 ms");
@@ -117,6 +121,9 @@ public class ThirdPanel extends JPanel
                 "Error: URL using bad/illegal format or missing URL");
     }
 
+    /**
+     * add progress panel
+     */
     private void addProgressPanel ()
     {
         GridBagConstraints constraints = new GridBagConstraints ();
@@ -215,7 +222,10 @@ public class ThirdPanel extends JPanel
 
     }
 
-    public void execute ()
+    /**
+     * execute
+     */
+    protected void execute ()
     {
         if (responseCalculator != null)
             responseCalculator.cancel (true);
@@ -235,7 +245,10 @@ public class ThirdPanel extends JPanel
         responseCalculator.execute ();
     }
 
-    public void properBack ()
+    /**
+     * laod data from request on GUI
+     */
+    protected void properBack ()
     {
         ResponseStorage responseStorage
                 = request.getClientRequest ().getResponseStorage ();
@@ -284,17 +297,24 @@ public class ThirdPanel extends JPanel
         }
     }
 
-
-
-    public Request getRequest () {
+    /**
+     * @return request
+     */
+    protected Request getRequest () {
         return request;
     }
 
-    public JPanel getProgressPanel () {
+    /**
+     * @return progress panel
+     */
+    protected JPanel getProgressPanel () {
         return progressPanel;
     }
 
-    public JLabel getStatusMessage () {
+    /**
+     * @return status message label
+     */
+    protected JLabel getStatusMessage () {
         return statusMessage;
     }
 }

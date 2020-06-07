@@ -6,7 +6,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.InputMismatchException;
-
 import ControlUnit.Controller;
 import Storage.OptionData;
 
@@ -251,7 +250,7 @@ public class GUI
     /**
      * @return optionPanel
      */
-    public OptionPanel getOptionPanel () {
+    private OptionPanel getOptionPanel () {
         return optionPanel;
     }
 
@@ -265,14 +264,14 @@ public class GUI
     /**
      * @return baseFrame
      */
-    public JFrame getBaseFrame () {
+    protected JFrame getBaseFrame () {
         return baseFrame;
     }
 
     /**
      * @return splitPane
      */
-    public JSplitPane getSplitPane () {
+    private JSplitPane getSplitPane () {
         return splitPane;
     }
 
@@ -280,7 +279,7 @@ public class GUI
      * set Second Panel
      * @param secondPanel secondPanel
      */
-    public void setSecondPanel (JPanel secondPanel) {
+    protected void setSecondPanel (JPanel secondPanel) {
         if (secondPanel == null)
             throw new InputMismatchException ("inValid input");
         this.secondPanel = secondPanel;
@@ -293,7 +292,7 @@ public class GUI
      * sets thirdPanel
      * @param thirdPanel thirdPanel
      */
-    public void setThirdPanel (JPanel thirdPanel) {
+    protected void setThirdPanel (JPanel thirdPanel) {
         if (thirdPanel == null)
             throw new InputMismatchException ("inValid input");
         this.thirdPanel = thirdPanel;
@@ -313,7 +312,7 @@ public class GUI
     /**
      * @return option data
      */
-    public OptionData getOptionData ()
+    protected OptionData getOptionData ()
     {
         return optionData;
     }

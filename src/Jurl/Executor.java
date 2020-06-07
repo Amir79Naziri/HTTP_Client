@@ -20,7 +20,7 @@ public class Executor implements Runnable
      * creates a new Executor
      * @param clientRequests list of client requests
      */
-    public Executor (ArrayList<ClientRequest> clientRequests)
+    protected Executor (ArrayList<ClientRequest> clientRequests)
     {
         this.clientRequests = clientRequests;
         pool = Executors.newCachedThreadPool ();

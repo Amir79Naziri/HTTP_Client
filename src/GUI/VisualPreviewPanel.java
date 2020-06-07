@@ -1,7 +1,6 @@
 package GUI;
 
 import javax.imageio.ImageIO;
-import javax.print.DocFlavor;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -17,18 +16,18 @@ import java.io.IOException;
 public class VisualPreviewPanel extends JPanel
 {
 
-//    private JLabel imageLabel;
+
 
     private Theme theme; // theme
     private JLabel imageLabel;
-    JTextArea textArea;
+    private JTextArea textArea;
 
 
     /**
      * creates a new visual panel
      * @param theme theme
      */
-    public VisualPreviewPanel (Theme theme)
+    protected VisualPreviewPanel (Theme theme)
     {
         super();
         if (theme == null)
@@ -57,7 +56,10 @@ public class VisualPreviewPanel extends JPanel
         add (textArea,BorderLayout.NORTH);
     }
 
-    public void removeImage ()
+    /**
+     * remove image
+     */
+    protected void removeImage ()
     {
         this.setVisible (false);
         textArea.setVisible (true);
@@ -65,7 +67,11 @@ public class VisualPreviewPanel extends JPanel
         this.setVisible (true);
     }
 
-    public void addImage (byte[] data)  {
+    /**
+     * add image
+     * @param data data
+     */
+    protected void addImage (byte[] data)  {
 
         ByteArrayInputStream in = new ByteArrayInputStream (data);
         try{

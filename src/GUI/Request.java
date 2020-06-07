@@ -34,7 +34,7 @@ public class Request extends JPanel
      * @param gui gui
      * @param theme theme
      */
-    public Request (RequestType requestType, String name, ClientRequest clientRequest
+    protected Request (RequestType requestType, String name, ClientRequest clientRequest
             , GUI gui, Theme theme)
     {
         super();
@@ -86,6 +86,8 @@ public class Request extends JPanel
                 String name =
                         JOptionPane.showInputDialog (gui.getBaseFrame (),"New Name ",
                                 nameLabel.getText ());
+                if (name == null)
+                    return;
                 if (name.toCharArray ().length > 15)
                     name = name.substring (0,15);
                 nameLabel.setText (name);
@@ -106,7 +108,7 @@ public class Request extends JPanel
      * set a type for request
      * @param requestType request type
      */
-    public void setRequestType (RequestType requestType) {
+    protected void setRequestType (RequestType requestType) {
         if (requestType == null)
             throw new NullPointerException ("inValid input");
         this.requestType = requestType;
@@ -120,21 +122,21 @@ public class Request extends JPanel
      * is request deleted
      * @return isDeleted
      */
-    public boolean isDeleted () {
+    protected boolean isDeleted () {
         return isDeleted;
     }
 
     /**
      * setIsDelete true
      */
-    public void delete () {
+    private void delete () {
         isDeleted = true;
     }
 
     /**
      * @return popUpMenu
      */
-    public JPopupMenu getPopupMenu () {
+    protected JPopupMenu getPopupMenu () {
         return popupMenu;
     }
 
@@ -142,7 +144,7 @@ public class Request extends JPanel
      * set chose panel visibility
      * @param visibly visibly
      */
-    public void setChoseVisibly (boolean visibly) {
+    protected void setChoseVisibly (boolean visibly) {
         chose.setVisible (visibly);
     }
 
@@ -161,26 +163,18 @@ public class Request extends JPanel
         return new Dimension (350,38);
     }
 
-    /**
-     * is requestSelected
-     * @return is Selected
-     */
-    public boolean isSelected ()
-    {
-        return chose.isVisible ();
-    }
 
     /**
      * @return getSecond panel
      */
-    public SecondPanel getSecondPanel () {
+    protected SecondPanel getSecondPanel () {
         return secondPanel;
     }
 
     /**
      * @return name Label
      */
-    public JLabel getNameLabel () {
+    protected JLabel getNameLabel () {
         return nameLabel;
     }
 
@@ -188,12 +182,15 @@ public class Request extends JPanel
      * gets requestType
      * @return request type
      */
-    public RequestType getRequestType () {
+    protected RequestType getRequestType () {
         return requestType;
     }
 
-
-    public ClientRequest getClientRequest () {
+    /**
+     * get client request
+     * @return clientRequest
+     */
+    protected ClientRequest getClientRequest () {
         return clientRequest;
     }
 

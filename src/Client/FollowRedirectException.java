@@ -2,6 +2,8 @@ package Client;
 
 /**
  * this exception occurs when response code is 3** (redirection)
+ *
+ * @author Amir Naziri
  */
 public class FollowRedirectException extends Exception
 {

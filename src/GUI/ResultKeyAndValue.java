@@ -23,7 +23,7 @@ public class ResultKeyAndValue extends JPanel
      * @param backGround backGround color
      * @param colorThemeForForeGround  foreGround color
      */
-    public ResultKeyAndValue (String key, String value, Color backGround,
+    protected ResultKeyAndValue (String key, String value, Color backGround,
                               Color colorThemeForForeGround)
     {
         super();
@@ -78,14 +78,14 @@ public class ResultKeyAndValue extends JPanel
     /**
      * @return key TextArea
      */
-    public JTextArea getKey () {
+    protected JTextArea getKey () {
         return key;
     }
 
     /**
      * @return value TextArea
      */
-    public JTextArea getValue () {
+    protected JTextArea getValue () {
         return value;
     }
 

@@ -17,10 +17,10 @@ public class BearerPanel extends JPanel
     private Theme theme;
 
     /**
-     * creates a GUI.BearerPanel
+     * creates a BearerPanel
      * @param theme theme
      */
-    public BearerPanel (Theme theme)
+    protected BearerPanel (Theme theme)
     {
         super();
         if (theme == null)

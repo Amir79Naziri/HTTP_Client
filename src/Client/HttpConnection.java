@@ -1,6 +1,5 @@
 package Client;
 
-import GUI.BinaryFilePanel;
 import Storage.ResponseStorage;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
@@ -11,38 +10,51 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class HttpConnection implements Serializable
+/**
+ * this class represents a HttpConnector for connecting to server , read or write on it
+ *
+ * @author Amir Naziri
+ */
+public class HttpConnection
 {
 
     private ResponseStorage responseStorage;
-    private boolean showHeadersInResponse;
-    private boolean saveRawDataOnFile;
-    private String addressOfFileForSaveOutput;
+    private HttpURLConnection connection;
 
-
-    public HttpConnection ()
+    /**
+     * creates new HttpConnection
+     * @param responseStorage responseStorage
+     */
+    protected HttpConnection (ResponseStorage responseStorage)
     {
-        showHeadersInResponse = false;
-        responseStorage = new ResponseStorage ();
+        this.
+                responseStorage = responseStorage;
     }
 
-
-
-    public HttpURLConnection connectionInitializer
+    /**
+     * initialize connection to input url
+     * includes ; setting query, headers, check protocol, ...
+     * @param headers headers
+     * @param queryData queryData
+     * @param url url
+     * @param requestType requestType
+     * @return was successFull
+     */
+    protected boolean connectionInitializer
             (HashMap<String, String> headers, String queryData, String url,
              RequestType requestType)
     {
 
         try {
             URL connectionUrl = new URL (url + "" + queryData);
-            HttpURLConnection connection;
+
             if (("http").equals (connectionUrl.getProtocol ()))
                 connection = (HttpURLConnection) connectionUrl.openConnection ();
             else if (("https").equals (connectionUrl.getProtocol ()))
                 connection = (HttpsURLConnection) connectionUrl.openConnection ();
             else {
                 System.err.println ("UNDEFINED PROTOCOL");
-                return null;
+                return false;
             }
 
 
@@ -61,20 +73,24 @@ public class HttpConnection implements Serializable
 
             System.out.println ("Connection Initialized in : " + connection.getURL () +
                     "\nconnecting......");
-            return connection;
+            return true;
         }
         catch (MalformedURLException e)
         {
-            System.out.println ("Wrong url format");
-            return null;
+            System.err.println ("Wrong url format");
+            return false;
         }
         catch(IOException e) {
             System.err.println ("Failed to start Connecting");
-            return null;
+            return false;
         }
     }
 
-    private boolean connectToServer (HttpURLConnection connection) {
+    /**
+     * connects to server
+     * @return was successFull
+     */
+    private boolean connectToServer () {
         if (connection == null)
             throw new NullPointerException ("inValid input");
         try {
@@ -89,39 +105,64 @@ public class HttpConnection implements Serializable
         }
     }
 
-    private void disconnectServer (HttpURLConnection connection)
+    /**
+     * disconnect from server
+     */
+    private void disconnectServer ()
     {
         if (connection == null)
             throw new NullPointerException ("inValid input");
-        printResult (connection.getURL ().toString ());
         connection.disconnect ();
+        connection = null;
     }
 
-    public void onlyGet (HttpURLConnection connection,
-                         boolean followRedirect) throws FollowRedirectException
+    /**
+     * send a request which only want to receive from server
+     * @param followRedirect followRedirect
+     * @param shouldSaveResponseOnFile shouldSaveResponseOnFile
+     * @param addressOfFileForSaveOutput addressOfFileForSaveOutput
+     * @throws FollowRedirectException need to follow redirect
+     */
+    protected void onlyGet (boolean followRedirect,
+                         boolean shouldSaveResponseOnFile,
+                         String addressOfFileForSaveOutput
+                         ) throws FollowRedirectException
     {
         if (connection == null)
             throw new NullPointerException ("inValid input");
         long startTime = System.currentTimeMillis ();
 
-        if (connectToServer (connection))
+        if (connectToServer ())
         {
             // reading
-            readFromServer (connection,followRedirect);
+            readFromServer (followRedirect,
+                    shouldSaveResponseOnFile,addressOfFileForSaveOutput);
         }
         responseStorage.setResponseTime ((System.currentTimeMillis () - startTime));
 
-        disconnectServer (connection);
+        disconnectServer ();
     }
 
-    public void sendAndGet (HttpURLConnection connection, int messageBodyType,
+    /**
+     * send a request which has both write to server and read from server
+     * @param messageBodyType messageBodyType ; 1 multiPart, 2 binary upload, 3 formUrlEncoded
+     * @param multipartData multipartData
+     * @param binaryFileUpload binaryFileUpload
+     * @param formUrlEncodedData formUrlEncodedData
+     * @param followRedirect followRedirect
+     * @param shouldSaveResponseOnFile shouldSaveResponseOnFile
+     * @param addressOfFileForSaveOutput addressOfFileForSaveOutput
+     * @throws FollowRedirectException need to follow redirect
+     */
+    protected void sendAndGet (int messageBodyType,
                             HashMap<String,String> multipartData,
                             File binaryFileUpload, String formUrlEncodedData,
-                            boolean followRedirect)
-            throws FollowRedirectException
+                            boolean followRedirect,
+                            boolean shouldSaveResponseOnFile,
+                            String addressOfFileForSaveOutput
+                            ) throws FollowRedirectException
     {
-        if (connection == null)
-            throw new NullPointerException ("inValid input");
+
         long startTime = System.currentTimeMillis ();
         connection.setDoOutput (true);
         connection.setDoInput (true);
@@ -132,9 +173,10 @@ public class HttpConnection implements Serializable
                     "multipart/form-data; boundary=" + boundary);
         } else if (messageBodyType == 2)
         {
-            if (binaryFileUpload == null || !binaryFileUpload.exists () || !binaryFileUpload.isAbsolute ()) {
+            if (binaryFileUpload == null || !binaryFileUpload.exists () ||
+                    !binaryFileUpload.isAbsolute ()) {
                 {
-                    System.out.println ("File is not Valid");
+                    System.err.println ("File is not Valid");
                     return;
                 }
             }
@@ -147,23 +189,34 @@ public class HttpConnection implements Serializable
                     toString(formUrlEncodedData.getBytes (StandardCharsets.UTF_8).length));
         }
 
-        if (connectToServer (connection))
+        if (connectToServer ())
         {
             //writing
-            writeToServer (connection,messageBodyType,multipartData,binaryFileUpload,boundary,formUrlEncodedData);
+            writeToServer (messageBodyType,multipartData,binaryFileUpload,boundary,
+                    formUrlEncodedData);
 
             // reading
-            readFromServer (connection,followRedirect);
+            readFromServer (followRedirect,
+                    shouldSaveResponseOnFile,addressOfFileForSaveOutput);
         }
 
 
         responseStorage.setResponseTime ((System.currentTimeMillis () - startTime));
-        disconnectServer (connection);
+        disconnectServer ();
     }
 
 
-    private void readFromServer (HttpURLConnection connection,
-                                 boolean followRedirect) throws FollowRedirectException
+    /**
+     * read from server
+     * @param followRedirect followRedirect
+     * @param shouldSaveResponseOnFile shouldSaveResponseOnFile
+     * @param addressOfFileForSaveOutput addressOfFileForSaveOutput
+     * @throws FollowRedirectException need to follow redirect
+     */
+    private void readFromServer (boolean followRedirect,
+                                 boolean shouldSaveResponseOnFile,
+                                 String addressOfFileForSaveOutput
+                                 ) throws FollowRedirectException
     {
         if (connection == null)
             throw new NullPointerException ("inValid input");
@@ -193,52 +246,54 @@ public class HttpConnection implements Serializable
 
             switch (contentType) {
                 case "text/html":
-                    if (addressOfFileForSaveOutput == null) {
+                    if (shouldSaveResponseOnFile && addressOfFileForSaveOutput == null) {
                         addressOfFileForSaveOutput = "./data/RawData/Output_" +
                                 new SimpleDateFormat (
                                 "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".html";
                     }
-                    textReader (connection.getInputStream ());
+                    textReader (connection.getInputStream (),
+                            shouldSaveResponseOnFile,addressOfFileForSaveOutput);
                     break;
                 case "image/png":
-                    if (addressOfFileForSaveOutput == null) {
+                    if (shouldSaveResponseOnFile && addressOfFileForSaveOutput == null) {
                         addressOfFileForSaveOutput = "./data/RawData/Output_" +
                                 new SimpleDateFormat (
                                 "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".png";
                     }
-                    if (!saveRawDataOnFile) {
-                        {
+                    if (!shouldSaveResponseOnFile)
                             System.out.println ("you should use --output!");
-                            binaryReader (connection.getInputStream (),false);
-                        }
-                    } else {
-                        binaryReader (connection.getInputStream (),true);
-                    }
+
+                        binaryReader (connection.getInputStream (),
+                                shouldSaveResponseOnFile,addressOfFileForSaveOutput);
+
+
                     responseStorage.setResponseTextRawData ("File is Binary !");
                     break;
                 case "text/plain":
-                    if (addressOfFileForSaveOutput == null) {
+                    if (shouldSaveResponseOnFile && addressOfFileForSaveOutput == null) {
                         addressOfFileForSaveOutput = "./data/RawData/Output_" +
                                 new SimpleDateFormat (
                                 "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".txt";
                     }
-                    textReader (connection.getInputStream ());
+                    textReader (connection.getInputStream (),
+                            shouldSaveResponseOnFile,addressOfFileForSaveOutput);
                     break;
                 case "application/json":
-                    if (addressOfFileForSaveOutput == null) {
+                    if (shouldSaveResponseOnFile && addressOfFileForSaveOutput == null) {
                         addressOfFileForSaveOutput = "./data/RawData/Output_" +
                                 new SimpleDateFormat (
                                         "yyyy.MM.dd  HH.mm.ss").format (new Date ())
                                 + ".js";
                     }
-                    textReader (connection.getInputStream ());
+                    textReader (connection.getInputStream (),
+                            shouldSaveResponseOnFile,addressOfFileForSaveOutput);
             }
 
         }catch (IOException e)
         {
             try {
-                System.out.println (249);
-                textReader (connection.getErrorStream ());
+                textReader (connection.getErrorStream (),
+                        shouldSaveResponseOnFile,addressOfFileForSaveOutput);
             } catch (IOException ex)
             {
                 responseStorage.setResponseTextRawData ("Error:" +
@@ -247,8 +302,78 @@ public class HttpConnection implements Serializable
         }
     }
 
-    private void writeToServer (HttpURLConnection connection, int messageType,
-                                HashMap<String,String> multipartData, File file, String boundary,
+    /**
+     * read text / html or plain or Json   from server
+     * @param serverInputStream serverInputStream
+     * @param shouldSaveResponseOnFile shouldSaveResponseOnFile
+     * @param addressOfFileForSaveOutput addressOfFileForSaveOutput
+     * @throws IOException IOException
+     */
+    private void textReader (InputStream serverInputStream,
+                             boolean shouldSaveResponseOnFile,
+                             String addressOfFileForSaveOutput
+                            ) throws IOException
+    {
+        if (serverInputStream == null)
+            throw new IOException ("serverInputStream is null");
+        BufferedReader out = new BufferedReader (new InputStreamReader (serverInputStream));
+        String line;
+        StringBuilder content = new StringBuilder ();
+        while ((line = out.readLine ()) != null) {
+            content.append (line).append ('\n');
+        }
+        out.close ();
+        responseStorage.setResponseTextRawData (content.toString ());
+        responseStorage.setReadLength (content.toString ().getBytes ().length);
+        if (shouldSaveResponseOnFile)
+        {
+            BufferedOutputStream in = new BufferedOutputStream (new FileOutputStream (
+                    addressOfFileForSaveOutput));
+            in.write (content.toString ().getBytes ());
+            in.flush ();
+            in.close ();
+        }
+    }
+
+    /**
+     * read binary from server
+     * @param serverInputStream serverInputStream
+     * @param shouldSaveResponseOnFile shouldSaveResponseOnFile
+     * @param addressOfFileForSaveOutput addressOfFileForSaveOutput
+     * @throws IOException IOException
+     */
+    private void binaryReader (InputStream serverInputStream,
+                               boolean shouldSaveResponseOnFile,
+                               String addressOfFileForSaveOutput
+                              ) throws IOException
+    {
+        if (serverInputStream == null)
+            throw new IOException ("serverInputStream is null");
+        BufferedInputStream in= new BufferedInputStream (serverInputStream);
+        responseStorage.setResponseBinaryRawData (in.readAllBytes ());
+        responseStorage.setReadLength (responseStorage.getResponseBinaryRawData ().length);
+        in.close ();
+        if (shouldSaveResponseOnFile)
+        {
+            BufferedOutputStream out = new BufferedOutputStream (
+                    new FileOutputStream (addressOfFileForSaveOutput));
+            out.write (responseStorage.getResponseBinaryRawData ());
+            out.flush ();
+            out.close ();
+        }
+    }
+
+    /**
+     * write to server
+     * @param messageType messageBodyType ; 1 multiPart, 2 binary upload, 3 formUrlEncoded
+     * @param multipartData multipartData
+     * @param file binary file
+     * @param boundary boundary
+     * @param formUrlEncodedData formUrlEncodedData
+     */
+    private void writeToServer (int messageType,
+                                HashMap<String,String> multipartData, File file,
+                                String boundary,
                                 String formUrlEncodedData)
     {
         try {
@@ -264,55 +389,18 @@ public class HttpConnection implements Serializable
             }
         } catch (IOException e)
         {
-            System.out.println ("Couldn't write on Server ");
+            System.err.println ("Couldn't write on Server ");
         }
     }
 
 
-    private void textReader (InputStream serverInputStream) throws IOException
-    {
-        if (serverInputStream == null)
-            throw new IOException ("serverInputStream is null");
-        BufferedReader out = new BufferedReader (new InputStreamReader (serverInputStream));
-        String line;
-        StringBuilder content = new StringBuilder ();
-        while ((line = out.readLine ()) != null) {
-            content.append (line).append ('\n');
-        }
-        out.close ();
-        responseStorage.setResponseTextRawData (content.toString ());
-        responseStorage.setReadLength (BinaryFilePanel.
-                makeSizeReadable (content.toString ().getBytes ().length));
-        if (saveRawDataOnFile)
-        {
-            BufferedOutputStream in = new BufferedOutputStream (new FileOutputStream (
-                addressOfFileForSaveOutput));
-            in.write (content.toString ().getBytes ());
-            in.flush ();
-            in.close ();
-        }
-    }
-
-    private void binaryReader (InputStream serverInputStream,
-                               boolean shouldSave) throws IOException
-    {
-        if (serverInputStream == null)
-            throw new IOException ("serverInputStream is null");
-        BufferedInputStream in= new BufferedInputStream (serverInputStream);
-        responseStorage.setResponseBinaryRawData (in.readAllBytes ());
-        responseStorage.setReadLength (BinaryFilePanel.makeSizeReadable (
-                responseStorage.getResponseBinaryRawData ().length));
-        in.close ();
-        if (shouldSave)
-        {
-            BufferedOutputStream out = new BufferedOutputStream (
-                    new FileOutputStream (addressOfFileForSaveOutput));
-            out.write (responseStorage.getResponseBinaryRawData ());
-            out.flush ();
-            out.close ();
-        }
-    }
-
+    /**
+     * write form data (multiPart) to server
+     * @param serverOutPutSteam serverOutPutSteam
+     * @param boundary boundary
+     * @param body body
+     * @throws IOException IOException
+     */
     private void writeBinaryFormData (OutputStream serverOutPutSteam, String boundary,
                               HashMap<String,String> body) throws IOException
     {
@@ -346,7 +434,14 @@ public class HttpConnection implements Serializable
 
     }
 
-    private void writeBinaryFile (OutputStream serverOutPutStream, File file) throws IOException
+    /**
+     * write binary file to server
+     * @param serverOutPutStream serverOutPutStream
+     * @param file file
+     * @throws IOException IOException
+     */
+    private void writeBinaryFile (OutputStream serverOutPutStream, File file)
+                                    throws IOException
     {
         BufferedOutputStream out = new BufferedOutputStream (serverOutPutStream);
         BufferedInputStream in = new BufferedInputStream (new FileInputStream (file));
@@ -356,6 +451,12 @@ public class HttpConnection implements Serializable
         in.close ();
     }
 
+    /**
+     * write form data encoded
+     * @param serverOutPutStream serverOutPutStream
+     * @param formUrlEncodedData formUrlEncodedData
+     * @throws IOException IOException
+     */
     private void writeBinaryFormDataEncoded (OutputStream serverOutPutStream,
                                              String formUrlEncodedData) throws IOException
     {
@@ -365,42 +466,5 @@ public class HttpConnection implements Serializable
         out.write (formUrlEncodedData.getBytes (StandardCharsets.UTF_8));
         out.flush ();
         out.close ();
-    }
-
-
-
-    public void setSaveRawDataOnFile (boolean saveRawDataOnFile) {
-        this.saveRawDataOnFile = saveRawDataOnFile;
-        this.addressOfFileForSaveOutput = null;
-    }
-
-
-    public void setSaveRawDataOnFile (boolean saveRawDataOnFile, String nameOfFile) {
-        this.saveRawDataOnFile = saveRawDataOnFile;
-        this.addressOfFileForSaveOutput = "./data/RawData/" + nameOfFile;
-    }
-
-
-    public void setShowHeadersInResponse (boolean showHeadersInResponse) {
-        this.showHeadersInResponse = showHeadersInResponse;
-    }
-
-
-    public ResponseStorage getResponseStorage () {
-        return responseStorage;
-    }
-
-    private synchronized void printResult (String url)
-    {
-        responseStorage.printTimeAndReadDetails ();
-        System.out.println ();
-        System.out.println (url);
-        if (showHeadersInResponse)
-            responseStorage.printHeaders ();
-        responseStorage.printRawResponse ();
-    }
-
-    public boolean isSaveRawDataOnFile () {
-        return saveRawDataOnFile;
     }
 }

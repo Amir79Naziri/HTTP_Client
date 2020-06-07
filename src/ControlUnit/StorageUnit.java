@@ -1,31 +1,42 @@
-package Storage;
+package ControlUnit;
 
 import Client.ClientRequest;
-import GUI.Request;
-
+import Storage.RequestsStorage;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
+/**
+ * this class represent storage controller and handler
+ *
+ * @author Amir Naziri
+ */
 public class StorageUnit
 {
     private RequestsStorage requestsStorage;
-    private File file;
 
-    public StorageUnit ()
+    /**
+     * creates a new storage unit
+     */
+    protected StorageUnit ()
     {
-        file = new File ("./data/RequestList/requestsList.ser");
         requestsStorage = new RequestsStorage ();
         load ();
     }
 
-
+    /**
+     * adds new ClientRequest
+     * @param clientRequest clientRequest
+     */
     public void addRequest (ClientRequest clientRequest) // means add in app
     {
         requestsStorage.add (clientRequest);
         save ();
     }
 
+    /**
+     * removes Client Request
+     * @param clientRequest clientRequest
+     */
     public void removeRequest (ClientRequest clientRequest)
     {
 
@@ -33,6 +44,11 @@ public class StorageUnit
         save ();
     }
 
+    /**
+     * get client request
+     * @param index index
+     * @return client request
+     */
     public ClientRequest getClientRequest (int index)
     {
         try{
@@ -48,9 +64,14 @@ public class StorageUnit
         return requestsStorage.get (index - 1);
     }
 
+    /**
+     * save
+     */
     public void save ()
     {
-        try (ObjectOutputStream out = new ObjectOutputStream (new FileOutputStream (file))){
+        try (ObjectOutputStream out = new ObjectOutputStream (
+                new FileOutputStream (
+                        new File ("./data/RequestList/requestsList.ser")))){
 
             out.writeObject (requestsStorage);
         } catch (IOException e)
@@ -59,9 +80,14 @@ public class StorageUnit
         }
     }
 
+    /**
+     * load
+     */
     private void load ()
     {
-        try (ObjectInputStream in = new ObjectInputStream (new FileInputStream (file))){
+        try (ObjectInputStream in = new ObjectInputStream (
+                new FileInputStream (
+                        new File ("./data/RequestList/requestsList.ser")))){
             Object o = in.readObject ();
             requestsStorage =  (RequestsStorage)o;
 
@@ -74,17 +100,26 @@ public class StorageUnit
         }
     }
 
+    /**
+     * @return size of list
+     */
     public int size ()
     {
         return requestsStorage.size ();
     }
 
-
+    /**
+     * @return list of client requests
+     */
     public ArrayList<ClientRequest> getClientRequests ()
     {
+
         return requestsStorage.getClientRequests ();
     }
 
+    /**
+     * print list of request
+     */
     public void printList ()
     {
         if (requestsStorage.getClientRequests ().size () == 0)

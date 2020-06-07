@@ -2,16 +2,22 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 
-
+/**
+ * this class build for connecting process in GUI
+ *
+ * @author Amir Naziri
+ */
 public class ResponseCalculator extends SwingWorker<Boolean,Object>
 {
 
     private ThirdPanel thirdPanel;
-    private boolean correctExecute;
+    private boolean correctExecute; // did program executed correct
 
-
-
-    public ResponseCalculator (ThirdPanel thirdPanel)
+    /**
+     * creates new response calculator
+     * @param thirdPanel thirdPanel
+     */
+    protected ResponseCalculator (ThirdPanel thirdPanel)
     {
         super();
         this.thirdPanel = thirdPanel;
@@ -54,7 +60,6 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
     }
 
 
-
     @Override
     protected void done () {
         if (correctExecute)
@@ -64,6 +69,5 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
 
         correctExecute = false;
     }
-
 
 }

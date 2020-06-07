@@ -22,7 +22,7 @@ public class ResultHeaderPanel extends JPanel
      * creates new result header panel
      * @param theme theme
      */
-    public ResultHeaderPanel (Theme theme)
+    protected ResultHeaderPanel (Theme theme)
     {
         super();
         if (theme == null)
@@ -62,13 +62,6 @@ public class ResultHeaderPanel extends JPanel
     }
 
     /**
-     * @return list of result key and values panel
-     */
-    public ArrayList<ResultKeyAndValue> getResultKeyAndValues () {
-        return resultKeyAndValues;
-    }
-
-    /**
      * creates base panel for result key and values
      */
     private void addBasePanel ()
@@ -81,10 +74,6 @@ public class ResultHeaderPanel extends JPanel
                         theme.getForeGroundColorV2 ());
         basePanel.add(fixedResultKeyAndValue);
         add(ScrollPaneAdder.fetchToJScrollPane (basePanel,theme));
-
-
-
-
     }
 
     /**
@@ -92,7 +81,7 @@ public class ResultHeaderPanel extends JPanel
      * @param key key
      * @param value value
      */
-    public void addResultKeyAndValue (String key, String value)
+    protected void addResultKeyAndValue (String key, String value)
     {
         if (key == null || value == null)
             throw new NullPointerException ("inValid input");
@@ -115,7 +104,10 @@ public class ResultHeaderPanel extends JPanel
         }
     }
 
-    public void clear ()
+    /**
+     * clear headers
+     */
+    protected void clear ()
     {
         for (ResultKeyAndValue keyAndValue : resultKeyAndValues)
             keyAndValue.setVisible (false);

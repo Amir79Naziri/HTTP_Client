@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 /**
- * this class Build for showing Add New GUI.Request Panel.
+ * this class Build for showing Add New Request Panel.
  *
  * @author Amir Naziri
  */
@@ -17,12 +17,12 @@ public class AddNewRequestPanel extends JPanel
 
     private JComboBox<String> requestType; // type's of RequestTypes
     private JTextField textField; // name of request textField
-    private RequestType chosenRequestType; // chosen Client.RequestType
+    private RequestType chosenRequestType; // chosen RequestType
 
     /**
      * creates a new Add New GUI.Request Panel
      */
-    public AddNewRequestPanel () {
+    protected AddNewRequestPanel () {
         super ();
         setLayout (new BorderLayout (5, 5));
         setSize (600, 200);
@@ -32,7 +32,7 @@ public class AddNewRequestPanel extends JPanel
     /**
      * creating base Panel
      */
-    public void addBasePanel () {
+    private void addBasePanel () {
 
         GridBagLayout layout = new GridBagLayout ();
         GridBagConstraints constraints = new GridBagConstraints ();
@@ -105,11 +105,10 @@ public class AddNewRequestPanel extends JPanel
     }
 
 
-
     /**
      * @return Name of New request
      */
-    public String getNameOfNewRequest ()
+    protected String getNameOfNewRequest ()
     {
         return textField.getText ();
     }
@@ -117,7 +116,7 @@ public class AddNewRequestPanel extends JPanel
     /**
      * @return Client.RequestType of New GUI.Request
      */
-    public RequestType getChosenRequestType ()
+    protected RequestType getChosenRequestType ()
     {
         return chosenRequestType;
     }

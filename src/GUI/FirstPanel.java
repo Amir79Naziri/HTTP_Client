@@ -31,7 +31,7 @@ public class FirstPanel extends JPanel
      * @param gui gui
      * @param theme theme
      */
-    public FirstPanel (GUI gui, Theme theme)
+    protected FirstPanel (GUI gui, Theme theme)
     {
         super();
         if (gui == null || theme == null)
@@ -145,7 +145,7 @@ public class FirstPanel extends JPanel
      * @param name name of request
      * @param type type of request
      */
-    public void addRequest (String name, RequestType type)
+    protected void addRequest (String name, RequestType type)
     {
         if (name == null || type == null)
             throw new NullPointerException ("inValid input");
@@ -202,7 +202,7 @@ public class FirstPanel extends JPanel
                         JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,null,
                         null,null);
                 if (res == 0) {
-                    gui.getFirstPanel ().addRequest
+                    addRequest
                             (addNewRequestPanel.getNameOfNewRequest (),
                                     addNewRequestPanel.getChosenRequestType ()
                             );

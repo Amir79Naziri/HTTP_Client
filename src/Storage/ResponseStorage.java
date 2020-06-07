@@ -1,9 +1,15 @@
 package Storage;
 
+import GUI.BinaryFilePanel;
 import java.io.*;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * this class represents a storage which holds responses for owner clientRequest
+ *
+ * @author Amir Naziri
+ */
 public class ResponseStorage implements Serializable
 {
     private String responseTextRawData;
@@ -15,12 +21,18 @@ public class ResponseStorage implements Serializable
     private long responseTime;
     private boolean valid; // if first time : false  OW true
 
+    /**
+     * creates a new Response Storage
+     */
     public ResponseStorage ()
     {
         valid = false;
         reset ();
     }
 
+    /**
+     * reset everyThing
+     */
     public void reset ()
     {
         responseTextRawData = "Error: URL using bad/illegal format or missing URL";
@@ -32,74 +44,129 @@ public class ResponseStorage implements Serializable
         responseHeaders = null;
     }
 
+    /**
+     * set response message
+     * @param responseMessage responseMessage
+     */
     public void setResponseMessage (String responseMessage) {
         this.responseMessage = responseMessage;
         valid = true;
     }
 
-    public void setReadLength (String readLength) {
-        this.readLength = readLength;
+    /**
+     * sets readLength
+     * @param readLength readLength
+     */
+    public void setReadLength (long readLength) {
+
+        this.readLength = BinaryFilePanel.makeSizeReadable (readLength);
         valid = true;
     }
 
+    /**
+     * sets response code
+     * @param responseCode responseCode
+     */
     public void setResponseCode (int responseCode) {
         this.responseCode = responseCode;
         valid = true;
     }
 
+    /**
+     * sets response headers
+     * @param responseHeaders responseHeaders
+     */
     public void setResponseHeaders (Map<String, List<String>> responseHeaders) {
         this.responseHeaders = responseHeaders;
         valid = true;
     }
 
+    /**
+     * sets response text raw data
+     * @param responseRawData responseRawData
+     */
     public void setResponseTextRawData (String responseRawData) {
         this.responseTextRawData = responseRawData;
         valid = true;
     }
 
+    /**
+     * sets response binary raw data
+     * @param responseBinaryRawData responseBinaryRawData
+     */
     public void setResponseBinaryRawData (byte[] responseBinaryRawData) {
         this.responseBinaryRawData = responseBinaryRawData;
         valid = true;
     }
 
+    /**
+     * sets response time
+     * @param responseTime responseTime
+     */
     public void setResponseTime (long responseTime) {
         this.responseTime = responseTime;
         valid = true;
     }
 
-
+    /**
+     * @return responseTime
+     */
     public long getResponseTime () {
         return responseTime;
     }
 
+    /**
+     * @return readLength
+     */
     public String getReadLength () {
         return readLength;
     }
 
+    /**
+     * @return responseCode
+     */
     public int getResponseCode () {
         return responseCode;
     }
 
+    /**
+     * @return responseMessage
+     */
     public String getResponseMessage () {
         return responseMessage;
     }
 
+    /**
+     * @return responseTextRawData
+     */
     public String getResponseTextRawData () {
         return responseTextRawData;
     }
 
+    /**
+     * @return responseBinaryRawData
+     */
     public byte[] getResponseBinaryRawData () {
         return responseBinaryRawData;
     }
 
+    /**
+     * @return responseHeaders
+     */
     public Map<String, List<String>> getResponseHeaders () {
         return responseHeaders;
     }
 
+    /**
+     * @return isValid
+     */
     public boolean isValid () {
         return valid;
     }
 
+    /**
+     * print time and read length
+     */
     public void printTimeAndReadDetails ()
     {
         System.out.println ("\nread : " + getReadLength () + "  time : " +
@@ -107,6 +174,9 @@ public class ResponseStorage implements Serializable
 
     }
 
+    /**
+     * print response headers
+     */
     public void printHeaders ()
     {
         if (getResponseHeaders () != null)
@@ -135,6 +205,9 @@ public class ResponseStorage implements Serializable
 
     }
 
+    /**
+     * print text raw data
+     */
     public void printRawResponse ()
     {
         System.out.println (getResponseTextRawData ());

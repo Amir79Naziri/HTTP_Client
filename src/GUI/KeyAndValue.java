@@ -34,8 +34,9 @@ public class KeyAndValue extends JPanel
      * @param isEditable isEditable
      * @param showDescription  should show description
      * @param theme  theme
+     * @param owner  owner
      */
-    public KeyAndValue (String keyName, String valueName, boolean isEditable,
+    protected KeyAndValue (String keyName, String valueName, boolean isEditable,
                         boolean showDescription, Theme theme, KeyAndValuePanel owner)
     {
         super();
@@ -61,7 +62,7 @@ public class KeyAndValue extends JPanel
      * is deleted
      * @return is Deleted
      */
-    public boolean isDeleted () {
+    protected boolean isDeleted () {
         return isDeleted;
     }
 
@@ -69,7 +70,7 @@ public class KeyAndValue extends JPanel
     /**
      * sets IsDeleted true
      */
-    public void delete () {
+    protected void delete () {
         isDeleted = true;
     }
 
@@ -209,28 +210,28 @@ public class KeyAndValue extends JPanel
     /**
      * @return setting button
      */
-    public JButton getSettings () {
+    protected JButton getSettings () {
         return settings;
     }
 
     /**
      * @return key textField
      */
-    public JTextField getKey () {
+    protected JTextField getKey () {
         return key;
     }
 
     /**
      * @return value textField
      */
-    public JTextField getValue () {
+    protected JTextField getValue () {
         return value;
     }
 
     /**
      * @return isPanelDescVisible
      */
-    public boolean isPanelDescVisible ()
+    protected boolean isPanelDescVisible ()
     {
         return panelDesc.isVisible ();
     }
@@ -238,7 +239,7 @@ public class KeyAndValue extends JPanel
     /**
      * @return describeTextField
      */
-    public JTextField getDescribe () {
+    protected JTextField getDescribe () {
         return describe;
     }
 
@@ -248,7 +249,7 @@ public class KeyAndValue extends JPanel
      * @param textField textField
      * @param theme theme
      */
-    public static void createTextPanel (JPanel panel, JTextField textField,
+    protected static void createTextPanel (JPanel panel, JTextField textField,
                                         Theme theme) {
 
         if (panel == null || textField == null || theme == null)
@@ -277,7 +278,7 @@ public class KeyAndValue extends JPanel
     /**
      * toggle description
      */
-    public void toggleDescription ()
+    protected void toggleDescription ()
     {
         if (panelDesc.isVisible ())
             panelDesc.setVisible (false);
@@ -285,7 +286,10 @@ public class KeyAndValue extends JPanel
             panelDesc.setVisible (true);
     }
 
-    public boolean isActive () {
+    /**
+     * @return isActive
+     */
+    protected boolean isActive () {
         return active.isSelected ();
     }
 
