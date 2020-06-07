@@ -21,6 +21,7 @@ public class VisualPreviewPanel extends JPanel
     private Theme theme; // theme
     private JLabel imageLabel;
     private JTextArea textArea;
+    private JEditorPane editorPane;
 
 
     /**
@@ -35,7 +36,13 @@ public class VisualPreviewPanel extends JPanel
         this.theme = theme;
         JPanel panel = new JPanel (new FlowLayout (FlowLayout.CENTER));
         imageLabel = new JLabel ();
+        editorPane = new JEditorPane ();
+        editorPane.setEditable (false);
+        editorPane.setVisible (false);
         panel.add (imageLabel);
+        JPanel panel1 = new JPanel (new BorderLayout ());
+        panel1.add (editorPane,BorderLayout.CENTER);
+        panel.add (ScrollPaneAdder.fetchToJScrollPane (panel1,theme));
         setLayout (new BorderLayout());
         panel.setBackground (theme.getBackGroundColorV4 ());
         setBackground (theme.getBackGroundColorV4 ());
@@ -86,5 +93,29 @@ public class VisualPreviewPanel extends JPanel
             System.out.println ("some thing went wrong in loading image");
 
         }
+    }
+
+    /**
+     * add editor
+     * @param url url
+     * @throws IOException IOException
+     */
+    protected void addEditor (String url) throws IOException {
+        this.setVisible (false);
+        textArea.setVisible (false);
+        editorPane.setVisible (true);
+        this.setVisible (true);
+        editorPane.setPage (url);
+    }
+
+    /**
+     * remove editor
+     */
+    protected void removeEditor ()
+    {
+        this.setVisible (false);
+        textArea.setVisible (true);
+        editorPane.setVisible (false);
+        this.setVisible (true);
     }
 }

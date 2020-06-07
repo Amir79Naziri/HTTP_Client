@@ -324,7 +324,8 @@ public class ClientRequest implements Serializable, Runnable
     {
         HttpConnection httpConnection = new HttpConnection (responseStorage);
         String url = getUrl ();
-        while (true) // TODO : Add limit
+
+        while (true)
         {
             if (httpConnection.connectionInitializer
                     (getCustomHeaders (), getQueryDataString (),url,
@@ -351,6 +352,8 @@ public class ClientRequest implements Serializable, Runnable
                     url = e.getNewUrl ();
                 }
             }
+            else
+                return;
         }
 
 

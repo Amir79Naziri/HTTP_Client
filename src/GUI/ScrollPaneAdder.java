@@ -30,4 +30,6 @@ public class ScrollPaneAdder
         scrollPane.getVerticalScrollBar ().setPreferredSize (new Dimension (10,8));
         return scrollPane;
     }
+
+
 }

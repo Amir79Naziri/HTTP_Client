@@ -246,7 +246,7 @@ public class ThirdPanel extends JPanel
     }
 
     /**
-     * laod data from request on GUI
+     * load data from request on GUI
      */
     protected void properBack ()
     {
@@ -277,7 +277,7 @@ public class ThirdPanel extends JPanel
 
         resultHeaderPanel.clear ();
         visualPreviewPanel.removeImage ();
-
+        visualPreviewPanel.removeEditor ();
         if (responseStorage.getResponseHeaders () != null)
         {
             for (String key : responseStorage.getResponseHeaders ().keySet ())
@@ -291,6 +291,16 @@ public class ThirdPanel extends JPanel
                         {
                             visualPreviewPanel.addImage
                                     (responseStorage.getResponseBinaryRawData ());
+                        } else if (key.equals ("Content-Type") && value.split (";")[0].
+                                equals ("text/html"))
+                        {
+                           try{
+                               visualPreviewPanel.addEditor (request.getClientRequest ()
+                                       .getUrl () +
+                                       request.getClientRequest ().getQueryDataString ());
+                           } catch (IOException ignore)
+                           {
+                           }
                         }
                     }
                 }
