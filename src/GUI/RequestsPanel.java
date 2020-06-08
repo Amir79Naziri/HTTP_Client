@@ -25,6 +25,7 @@ public class RequestsPanel extends JPanel
      * creates a new requestPanel
      * @param gui gui
      * @param theme theme
+     * @param clientRequests clientRequests
      */
     protected RequestsPanel (GUI gui, Theme theme, ArrayList<ClientRequest> clientRequests)
     {

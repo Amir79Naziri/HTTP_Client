@@ -20,8 +20,9 @@ public class QueryPanel extends KeyAndValueContainerPanel
 
 
     /**
-     * creates a GUI.QueryPanel
+     * creates a QueryPanel
      * @param theme theme
+     * @param requestGui requestGui
      */
     protected QueryPanel (Theme theme, RequestGui requestGui)
     {

@@ -251,7 +251,7 @@ public class ClientRequest implements Serializable, Runnable
     }
 
     /**
-     * @return String of key1=value1&key2=value2&......  for writing on server
+     * @return String of formUrlEncoded for writing on server
      */
     public String getFormUrlDataEncodedString () {
         int counter = 0;
