@@ -17,10 +17,6 @@ public class ExtraData implements Serializable
     private HashMap<String,String> deActiveMultiMap;
     private HashMap<String,String> deActiveEncodedMap;
 
-    private HashMap<String,String> headersDescription;
-    private HashMap<String,String> queriesDescription;
-    private HashMap<String,String> multiMapDescription;
-    private HashMap<String,String> encodedMapDescription;
 
     private boolean isToggledHeadersDescription;
     private boolean isToggledQueriesDescription;
@@ -37,10 +33,6 @@ public class ExtraData implements Serializable
         deActiveMultiMap = new HashMap<> ();
         deActiveQueries = new HashMap<> ();
 
-        headersDescription = new HashMap<> ();
-        queriesDescription = new HashMap<> ();
-        multiMapDescription = new HashMap<> ();
-        encodedMapDescription = new HashMap<> ();
 
         isToggledHeadersDescription = false;
         isToggledMultiMapDescription = false;
@@ -118,7 +110,6 @@ public class ExtraData implements Serializable
     public void clearHeadersExtraData ()
     {
         deActiveHeaders.clear ();
-        headersDescription.clear ();
     }
 
     /**
@@ -127,7 +118,6 @@ public class ExtraData implements Serializable
     public void clearQueriesExtraData ()
     {
         deActiveQueries.clear ();
-        queriesDescription.clear ();
     }
 
     /**
@@ -136,7 +126,6 @@ public class ExtraData implements Serializable
     public void clearMultiExtraData ()
     {
         deActiveMultiMap.clear ();
-        multiMapDescription.clear ();
     }
 
     /**
@@ -145,7 +134,6 @@ public class ExtraData implements Serializable
     public void clearEncodedExtraData ()
     {
         deActiveEncodedMap.clear ();
-        encodedMapDescription.clear ();
     }
 
 
@@ -181,37 +169,7 @@ public class ExtraData implements Serializable
         return deActiveQueries;
     }
 
-    /**
-     *
-     * @return encodedMapDescription
-     */
-    public HashMap<String, String> getEncodedMapDescription () {
-        return encodedMapDescription;
-    }
 
-    /**
-     *
-     * @return headersDescription
-     */
-    public HashMap<String, String> getHeadersDescription () {
-        return headersDescription;
-    }
-
-    /**
-     *
-     * @return multiMapDescription
-     */
-    public HashMap<String, String> getMultiMapDescription () {
-        return multiMapDescription;
-    }
-
-    /**
-     *
-     * @return queriesDescription
-     */
-    public HashMap<String, String> getQueriesDescription () {
-        return queriesDescription;
-    }
 
     /**
      * add new element
@@ -254,44 +212,6 @@ public class ExtraData implements Serializable
     }
 
 
-    /**
-     * add new element
-     * @param key key
-     * @param value value
-     */
-    public void addHeadersDescription (String key, String value)
-    {
-        headersDescription.put (key, value);
-    }
 
-    /**
-     * add new element
-     * @param key key
-     * @param value value
-     */
-    public void addQueriesDescription (String key, String value)
-    {
-        queriesDescription.put (key, value);
-    }
-
-    /**
-     * add new element
-     * @param key key
-     * @param value value
-     */
-    public void addMultiMapDescription (String key, String value)
-    {
-        multiMapDescription.put (key, value);
-    }
-
-    /**
-     * add new element
-     * @param key key
-     * @param value value
-     */
-    public void addEncodedMapDescription (String key, String value)
-    {
-        encodedMapDescription.put (key, value);
-    }
 
 }
