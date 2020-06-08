@@ -35,6 +35,7 @@ public class KeyAndValue extends JPanel
      * @param showDescription  should show description
      * @param theme  theme
      * @param owner  owner
+     * @param active active
      */
     protected KeyAndValue (String keyName, String valueName, boolean isEditable,
                         boolean showDescription, Theme theme, KeyAndValuePanel owner, boolean active)
