@@ -27,7 +27,7 @@ public class StorageUnit
      * adds new ClientRequest
      * @param clientRequest clientRequest
      */
-    public void addRequest (ClientRequest clientRequest) // means add in app
+    protected void addRequest (ClientRequest clientRequest) // means add in app
     {
         requestsStorage.add (clientRequest);
         save ();
@@ -37,7 +37,7 @@ public class StorageUnit
      * removes Client Request
      * @param clientRequest clientRequest
      */
-    public void removeRequest (ClientRequest clientRequest)
+    protected void removeRequest (ClientRequest clientRequest)
     {
 
         requestsStorage.remove (clientRequest);
@@ -49,12 +49,14 @@ public class StorageUnit
      * @param index index
      * @return client request
      */
-    public ClientRequest getClientRequest (int index)
+    protected ClientRequest getClientRequest (int index)
     {
         try{
+            if (requestsStorage.size () == 0)
+                throw new IndexOutOfBoundsException ("list is out of request");
             if (index - 1 < 0 || index - 1 >= requestsStorage.size ())
-                throw new IndexOutOfBoundsException ("index should be in range 0 to " +
-                        (requestsStorage.size () - 1));
+                throw new IndexOutOfBoundsException ("index should be in range 1 to " +
+                        (requestsStorage.size ()));
         } catch (IndexOutOfBoundsException e)
         {
             System.out.println (e.getMessage ());
@@ -67,7 +69,7 @@ public class StorageUnit
     /**
      * save
      */
-    public void save ()
+    protected void save ()
     {
         try (ObjectOutputStream out = new ObjectOutputStream (
                 new FileOutputStream (
@@ -100,18 +102,11 @@ public class StorageUnit
         }
     }
 
-    /**
-     * @return size of list
-     */
-    public int size ()
-    {
-        return requestsStorage.size ();
-    }
 
     /**
      * @return list of client requests
      */
-    public ArrayList<ClientRequest> getClientRequests ()
+    protected ArrayList<ClientRequest> getClientRequests ()
     {
 
         return requestsStorage.getClientRequests ();
@@ -120,7 +115,7 @@ public class StorageUnit
     /**
      * print list of request
      */
-    public void printList ()
+    protected void printList ()
     {
         if (requestsStorage.getClientRequests ().size () == 0)
             System.out.println ("List is Empty");

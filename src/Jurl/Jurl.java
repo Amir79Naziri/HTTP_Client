@@ -81,8 +81,27 @@ public class Jurl
                                 clientRequests.add (clientRequest);
                         }
                         return clientRequests;
-                    case HELP_V2: help (); return null;
+                    case HELP_V2: Controller.printHelp (); return null;
                     case LIST: Controller.printList (); return null;
+                    case REMOVE_V2:
+                        ArrayList<ClientRequest> clientRequestsForRemove = new ArrayList<> ();
+                        for (String arg : tasks.get (reservedWord))
+                        {
+                            ClientRequest clientRequest =
+                                    Controller.getClientRequest (Integer.parseInt (arg));
+                            if (clientRequest != null)
+                                clientRequestsForRemove.add (clientRequest);
+                        }
+                        for (ClientRequest clientRequest : clientRequestsForRemove)
+                            Controller.removeClientRequest (clientRequest);
+                        return null;
+                    case RENAME:
+                        ClientRequest clientRequest =
+                                Controller.getClientRequest (Integer.parseInt (
+                                        tasks.get (reservedWord).get (0)));
+                        if (clientRequest != null)
+                            clientRequest.setName (tasks.get (reservedWord).get (1));
+                        return null;
 
                 }
             }
@@ -98,7 +117,7 @@ public class Jurl
                 {
                     case JSON_V2:
                         break;
-                    case QUERY: clientRequest.addQuery (tasks.get (reservedWord).get (0));
+                    case QUERY_V2: clientRequest.addQuery (tasks.get (reservedWord).get (0));
                         break;
                     case OUTPUT_V2:
                         if (tasks.get (reservedWord).size () == 1)
@@ -147,30 +166,5 @@ public class Jurl
         return clientRequests;
     }
 
-    /**
-     * prints help details
-     */
-    private void help ()
-    {
-        System.out.println (" Usage: jurl url [options...]");
-        System.out.println (" do not write <> for your input , this is just for obvious input");
-        System.out.println (" -d, --data <\"key1=value1&key2=value2&.....\">" +
-                " (message body) MultiPart form");
-        System.out.println (" -M, --method <method> HTTP method ");
-        System.out.println (" -H, --headers <\"key1;value1:key2;value2:...\">" +
-                " Pass custom header(s) to server");
-        System.out.println (" -i, --include       Include protocol response headers in the output");
-        System.out.println (" -h, --help          This help text");
-        System.out.println (" -f                   Follow redirect");
-        System.out.println (" -O, --output <file> Write response body to file instead of stdout\n" +
-                "                     if you don't mention any name it will be output_[CurrentDate]");
-        System.out.println (" -S, --save           This will save the request");
-        System.out.println (" -j, --json  <\"{data1:details,data2:details,....}\">");
-        System.out.println (" --upload <absolute path>   upload file");
-        System.out.println (" -Q <\"key1=value1&key2=value2&.....\"> add query data");
-        System.out.println (" --name <name of request>   change name of request");
-        System.out.println (" --close                     close program");
-        System.out.println (" --dataEncoded <\"key1=value1&key2=value2&.....\">" +
-                " (message body) form url encoded form");
-    }
+
 }

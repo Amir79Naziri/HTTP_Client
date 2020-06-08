@@ -31,7 +31,11 @@ public enum ReservedWord
     FIRE("fire"),
     NAME("--name"),
     CLOSE ("--close"),
-    QUERY ("-Q");
+    QUERY_V2 ("--query"),
+    QUERY_V1 ("-Q"),
+    REMOVE_V1("-r"),
+    REMOVE_V2("--remove"),
+    RENAME("--rename");
 
 
     private String commandString; // command of a reserveWord

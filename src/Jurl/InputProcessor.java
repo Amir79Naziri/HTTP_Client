@@ -52,7 +52,8 @@ public class InputProcessor
         if ((reservedWordStart = isReserveWord (commands[1])) != null)
         {
             if (reservedWordStart != ReservedWord.FIRE && reservedWordStart != ReservedWord.HELP_V2
-            && reservedWordStart != ReservedWord.LIST && reservedWordStart != ReservedWord.CLOSE)
+            && reservedWordStart != ReservedWord.LIST && reservedWordStart != ReservedWord.CLOSE &&
+            reservedWordStart != ReservedWord.REMOVE_V2 && reservedWordStart != ReservedWord.RENAME)
             {
                 System.out.println ("jurl: try 'jurl --help' / 'jurl -h' for more information");
                 getLine ();
@@ -78,7 +79,9 @@ public class InputProcessor
                 if ((reservedWord = isReserveWord (commands[i])) != null)
                 {
                     if (reservedWord != ReservedWord.FIRE && reservedWord != ReservedWord.LIST &&
-                            reservedWord != ReservedWord.CLOSE)
+                            reservedWord != ReservedWord.CLOSE &&
+                            reservedWord != ReservedWord.REMOVE_V2 &&
+                            reservedWord != ReservedWord.RENAME)
                     {
                         ArrayList<String> args = findArgumentForReserveWord
                                 (reservedWord,i + 1);
@@ -157,11 +160,20 @@ public class InputProcessor
         else if (command.equals (ReservedWord.CLOSE.getCommandString ()))
             return ReservedWord.CLOSE;
 
-        else if (command.equals (ReservedWord.QUERY.getCommandString ()))
-            return ReservedWord.QUERY;
+        else if (command.equals (ReservedWord.QUERY_V1.getCommandString ()) ||
+                command.equals (ReservedWord.QUERY_V2.getCommandString ()))
+            return ReservedWord.QUERY_V2;
 
         else if (command.equals (ReservedWord.FORM_DATA_ENCODED.getCommandString ()))
             return ReservedWord.FORM_DATA_ENCODED;
+
+        else if (command.equals (ReservedWord.REMOVE_V1.getCommandString ()) ||
+                 command.equals (ReservedWord.REMOVE_V2.getCommandString ()))
+            return ReservedWord.REMOVE_V2;
+
+        else if (command.equals (ReservedWord.RENAME.getCommandString ()))
+            return ReservedWord.RENAME;
+
         else
             return null;
     }
@@ -185,7 +197,7 @@ public class InputProcessor
             case JSON_V2:
             case NAME:
             case HEADER_V2:
-            case QUERY:
+            case QUERY_V2:
             case METHOD_V2:
             case FORM_DATA_ENCODED:
             case FORM_DATA_V2:
@@ -200,12 +212,37 @@ public class InputProcessor
                 if (nextIndex < commands.length && isReserveWord (commands[nextIndex]) == null)
                     args.add (commands[nextIndex]);
                 break;
+            case RENAME:
+                if (nextIndex + 1 < commands.length && isReserveWord (commands[nextIndex])
+                == null && isReserveWord (commands[nextIndex + 1]) == null)
+                {
+                    try {
+                        Integer.parseInt (commands[nextIndex]);
+                    } catch (NumberFormatException e)
+                    {
+                        return null;
+                    }
+                    args.add (commands[nextIndex]);
+                    args.add (commands[nextIndex + 1]);
+                }
+                else
+                {
+                    return null;
+                }
+                break;
             case FIRE:
+            case REMOVE_V2:
                 int i = nextIndex;
                 while (i < commands.length)
                 {
                     if (isReserveWord (commands[i]) == null)
                     {
+                        try {
+                            Integer.parseInt (commands[i]);
+                        } catch (NumberFormatException e)
+                        {
+                            return null;
+                        }
                         args.add (commands[i]);
                         i++;
                     } else

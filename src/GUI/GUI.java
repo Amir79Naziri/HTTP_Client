@@ -351,7 +351,8 @@ public class GUI
                         "                     if you don't mention any name it will be output_[CurrentDate]" + "\n" +
                         " -S, --save           This will save the request" + "\n" +
                         " -j, --json  <\"{data1:details,data2:details,....}\">" + "\n" +
-                        " --upload <absolute path>   upload file" + "\n" +
+                        " --upload <absolute path>   upload file (messageBody) " +
+                        "binaryFile" + "\n" +
                         " -Q <\"key1=value1&key2=value2&.....\"> add query data" + "\n" +
                         " --name <name of request>   change name of request" + "\n" +
                         " --close                     close program" + "\n" +

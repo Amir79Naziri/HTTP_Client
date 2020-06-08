@@ -18,12 +18,13 @@ public class Controller
     private static final Jurl jurl = new Jurl ();
     private static final GUI gui = new GUI();
 
+
     /**
      * start program
      */
     public static void startProgram ()
     {
-        gui.setBaseFrameVisible ();
+//        gui.setBaseFrameVisible ();
         jurl.startProgram ();
     }
 
@@ -103,4 +104,35 @@ public class Controller
 //        gui.getFirstPanel ().getRequestsPanel ().addRequest (clientRequest.getRequestType (),
 //                clientRequest.getName (),clientRequest);
 //    }
+
+    /**
+     * prints help details
+     */
+    public static void printHelp () // TODO : move help to controller
+    {
+        String help = " Usage: jurl url [options...]\n" +
+                " do not write <> for your input , this is just for obvious input\n" +
+                " -d, --data <\"key1=value1&key2=value2&.....\"> (message body) MultiPart form\n" +
+                " -M, --method <method> HTTP method \n" +
+                " -H, --headers <\"key1;value1:key2;value2:...\"> Pass custom header(s) to server\n" +
+                " -i, --include       Include protocol response headers in the output\n" +
+                " -h, --help          This help text\n" +
+                " -f                   Follow redirect\n" +
+                " -O, --output <name of file> Write response body to file instead of stdout\n" +
+                "                     if you don't mention any name it will be output_[CurrentDate]\n" +
+                " -S, --save           This will save the request\n" +
+                " -j, --json  <\"{data1:details,data2:details,....}\">\n" +
+                " --upload <absolute path>   upload file (messageBody) binaryFile\n" +
+                " -Q <\"key1=value1&key2=value2&.....\"> add query data\n" +
+                " --name <name of request>   change name of request\n" +
+                " --close                     close program (only first element)\n" +
+                " --dataEncoded <\"key1=value1&key2=value2&.....\"> (message body) form url encoded form\n" +
+                " -r, --remove <indexes>         remove requests by their index (only first element)\n" +
+                " list                           print list of requests (only first element)\n" +
+                " fire <indexes>                 send requests by their index (only first element)\n" +
+                " --rename <index> <new name>    rename request by its index to new name (only first element)\n";
+        System.out.println (help);
+    }
+
+
 }
