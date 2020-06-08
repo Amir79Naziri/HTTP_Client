@@ -337,28 +337,35 @@ public class GUI
             } else if (e.getSource () == help || e.getSource () == trayHelp)
             {
                 baseFrame.requestFocusInWindow ();
-                String help = " Usage: jurl url [options...]" + "\n" +
-                        " do not write <> for your input , this is just for obvious input" + "\n" +
-                        " -d, --data <\"key1=value1&key2=value2&.....\">" +
-                        " (message body) MultiPart form" + "\n" +
-                        " -M, --method <method> HTTP method " + "\n" +
-                        " -H, --headers <\"key1;value1:key2;value2:...\">" +
-                        " Pass custom header(s) to server" + "\n" +
-                        " -i, --include       Include protocol response headers in the output" + "\n" +
-                        " -h, --help          This help text" + "\n" +
-                        " -f                   Follow redirect" + "\n" +
-                        " -O, --output <file> Write response body to file instead of stdout\n" +
-                        "                     if you don't mention any name it will be output_[CurrentDate]" + "\n" +
-                        " -S, --save           This will save the request" + "\n" +
-                        " -j, --json  <\"{data1:details,data2:details,....}\">" + "\n" +
-                        " --upload <absolute path>   upload file (messageBody) " +
-                        "binaryFile" + "\n" +
-                        " -Q <\"key1=value1&key2=value2&.....\"> add query data" + "\n" +
-                        " --name <name of request>   change name of request" + "\n" +
-                        " --close                     close program" + "\n" +
-                        " --dataEncoded <\"key1=value1&key2=value2&.....\">" +
-                        " (message body) form url encoded form"
-                        ;
+                String help = "This program is a great tool for checking " +
+                        "request and response in Http, here is tutorial tips for beginners :\n" +
+                        "\n" +
+                        "1) at first you should add a request by Ctrl" +
+                        " + N  or clicking at + sign \n" +
+                        "\n" +
+                        "2) you should write Url in Url part\n" +
+                        "\n" +
+                        "3) the are three type of message bodies for " +
+                        "send a request so you can choose one , but remember only one message body type\n" +
+                        "\tyou can use, for a request  these three types " +
+                        "are :\n1) multiPart ( keyAndValue Data / binary file )\n" +
+                        "\t\t\t\t\t\t\t\t\t\t\t\t\t\t2) formUrlEncoded ( keyAndValue )\n" +
+                        "\t\t\t\t\t\t\t\t\t\t\t\t\t\t3) binarFile ( binary file)\n" +
+                        "\n" +
+                        "4) also you can setHeaders and Queries too \n" +
+                        "\n" +
+                        "5) after that you can active save output for save" +
+                        " the result in a file , if you don't write a name program will define a \n" +
+                        "\tspecial name for it  (note that in writing a name" +
+                        " you should mention type of the file too , for Example : " +
+                        "\t( myRequest.txt )\n" +
+                        "\n" +
+                        "6) after that you can see your response on the left side of app\n" +
+                        "\n" +
+                        "\n" +
+                        "final note : remember that you can change followRedirection in Option\n" +
+                        " \n" +
+                        "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t , Hope to Enjoy it!";
                 JOptionPane.showMessageDialog (baseFrame
                         ,help, "Help",
                         JOptionPane.PLAIN_MESSAGE);

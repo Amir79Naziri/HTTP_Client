@@ -98,14 +98,22 @@ public class VisualPreviewPanel extends JPanel
     /**
      * add editor
      * @param url url
-     * @throws IOException IOException
      */
-    protected void addEditor (String url) throws IOException {
+    protected void addEditor (String url) {
         this.setVisible (false);
         textArea.setVisible (false);
         editorPane.setVisible (true);
         this.setVisible (true);
-        editorPane.setPage (url);
+        new Thread (new Runnable () {
+            @Override
+            public void run () {
+                try {
+                    editorPane.setPage (url);
+                } catch (IOException e) {
+                    removeEditor ();
+                }
+            }
+        }).start ();
     }
 
     /**

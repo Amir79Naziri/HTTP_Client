@@ -1,7 +1,6 @@
 package GUI;
 
 import Storage.ResponseStorage;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -11,9 +10,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.*;
-import java.util.Scanner;
-import java.util.concurrent.ArrayBlockingQueue;
+
 
 
 /**
@@ -292,15 +289,12 @@ public class ThirdPanel extends JPanel
                             visualPreviewPanel.addImage
                                     (responseStorage.getResponseBinaryRawData ());
                         } else if (key.equals ("Content-Type") && value.split (";")[0].
-                                equals ("text/html"))
+                                equals ("text/html") && responseCode.matches ("2(.*)"))
                         {
-                           try{
                                visualPreviewPanel.addEditor (request.getClientRequest ()
                                        .getUrl () +
                                        request.getClientRequest ().getQueryDataString ());
-                           } catch (IOException ignore)
-                           {
-                           }
+
                         }
                     }
                 }

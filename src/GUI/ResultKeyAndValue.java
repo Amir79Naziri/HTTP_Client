@@ -43,14 +43,8 @@ public class ResultKeyAndValue extends JPanel
         this.value = new JTextArea (value);
         createTextAria (this.value,backGround);
 
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
-        constraints.ipady = 0;
-        constraints.fill = GridBagConstraints.BOTH;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.weightx = 0.5;
-
         GridBagAdder.addComponent (this.key,0,0,1,layout,constraints,this);
         GridBagAdder.addComponent (this.value,0,1,1,layout,constraints,this);
 
