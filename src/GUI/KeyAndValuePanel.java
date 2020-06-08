@@ -119,13 +119,37 @@ public class KeyAndValuePanel extends JPanel
     }
 
     /**
+     *
+     * @return isFixedKeyAndValuePanelDescVisible
+     */
+    protected boolean isFixedKeyAndValuePanelDescVisible ()
+    {
+        return fixedKeyAndValue.isPanelDescVisible ();
+    }
+
+    /**
      * toggle description for keyAndValues
      */
-    private void toggleAllDescription ()
+    protected void toggleAllDescription ()
     {
         for (KeyAndValue keyAndValue : keyAndValues)
             keyAndValue.toggleDescription ();
         fixedKeyAndValue.toggleDescription ();
+        switch (getType ())
+        {
+            case "Query" : requestGui.getClientRequest ().getExtraData ().
+                    setToggledQueriesDescription (fixedKeyAndValue.isPanelDescVisible ());
+                break;
+            case "Header": requestGui.getClientRequest ().getExtraData ().
+                    setToggledHeadersDescription (fixedKeyAndValue.isPanelDescVisible ());
+                break;
+            case "MultiPart": requestGui.getClientRequest ().getExtraData ().
+                    setToggledMultiMapDescription (fixedKeyAndValue.isPanelDescVisible ());
+                break;
+            case "UrlEncoded": requestGui.getClientRequest ().getExtraData ().
+                    setToggleEncodedMapDescription (fixedKeyAndValue.isPanelDescVisible ());
+        }
+
     }
 
     /**
@@ -256,6 +280,14 @@ public class KeyAndValuePanel extends JPanel
                 }
                 break;
         }
+    }
+
+    /**
+     *
+     * @return type
+     */
+    public String getType () {
+        return type;
     }
 
     /**

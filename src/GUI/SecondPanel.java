@@ -178,10 +178,14 @@ public class SecondPanel extends JPanel
                             requestGui.getClientRequest ().setMessageBodyType (1);
                             binaryFilePanel.clearPath ();
                             urlEncodedPanel.getKeyAndValuePanel ().deleteAll ();
+                            if (urlEncodedPanel.getKeyAndValuePanel ().isFixedKeyAndValuePanelDescVisible ())
+                                urlEncodedPanel.getKeyAndValuePanel ().toggleAllDescription ();
                         } else if (bodyType.getSelectedIndex () == 1) {
                             tabbedPane.setComponentAt (0, urlEncodedPanel);
                             requestGui.getClientRequest ().setMessageBodyType (3);
                             multiPartPanel.getKeyAndValuePanel ().deleteAll ();
+                            if (multiPartPanel.getKeyAndValuePanel ().isFixedKeyAndValuePanelDescVisible ())
+                                multiPartPanel.getKeyAndValuePanel ().toggleAllDescription ();
                             binaryFilePanel.clearPath ();
                         } else if (bodyType.getSelectedIndex () == 2) {
                             tabbedPane.setComponentAt (0, jsonPanel);
@@ -189,8 +193,12 @@ public class SecondPanel extends JPanel
                         } else if (bodyType.getSelectedIndex () == 3) {
                             tabbedPane.setComponentAt (0, binaryFilePanel);
                             requestGui.getClientRequest ().setMessageBodyType (2);
+                            multiPartPanel.getKeyAndValuePanel ().deleteAll ();
+                            if (multiPartPanel.getKeyAndValuePanel ().isFixedKeyAndValuePanelDescVisible ())
+                                multiPartPanel.getKeyAndValuePanel ().toggleAllDescription ();
                             urlEncodedPanel.getKeyAndValuePanel ().deleteAll ();
-                            urlEncodedPanel.getKeyAndValuePanel ().deleteAll ();
+                            if (urlEncodedPanel.getKeyAndValuePanel ().isFixedKeyAndValuePanelDescVisible ())
+                                urlEncodedPanel.getKeyAndValuePanel ().toggleAllDescription ();
                         }
                     } else
                     {
@@ -419,5 +427,22 @@ public class SecondPanel extends JPanel
         .getExtraData ().getDeActiveEncodedMap ());
 
         binaryFilePanel.setPath (requestGui.getClientRequest ().getUploadBinaryFilePath ());
+
+        if (requestGui.getClientRequest ().getExtraData ().isToggledHeadersDescription ())
+        {
+            headerPanel.getKeyAndValuePanel ().toggleAllDescription ();
+        }
+        if (requestGui.getClientRequest ().getExtraData ().isToggledMultiMapDescription ())
+        {
+            multiPartPanel.getKeyAndValuePanel ().toggleAllDescription ();
+        }
+        if (requestGui.getClientRequest ().getExtraData ().isToggledQueriesDescription ())
+        {
+            queryPanel.getKeyAndValuePanel ().toggleAllDescription ();
+        }
+        if (requestGui.getClientRequest ().getExtraData ().isToggleEncodedMapDescription ())
+        {
+            urlEncodedPanel.getKeyAndValuePanel ().toggleAllDescription ();
+        }
     }
 }

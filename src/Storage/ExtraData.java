@@ -22,10 +22,10 @@ public class ExtraData implements Serializable
     private HashMap<String,String> multiMapDescription;
     private HashMap<String,String> encodedMapDescription;
 
-//    private boolean isToggledHeadersDescription;
-//    private boolean isToggledHeadersDescription;
-//    private boolean isToggledHeadersDescription;
-//    private boolean
+    private boolean isToggledHeadersDescription;
+    private boolean isToggledQueriesDescription;
+    private boolean isToggledMultiMapDescription;
+    private boolean isToggleEncodedMapDescription;
 
     /**
      * creates new ExtraData
@@ -41,6 +41,75 @@ public class ExtraData implements Serializable
         queriesDescription = new HashMap<> ();
         multiMapDescription = new HashMap<> ();
         encodedMapDescription = new HashMap<> ();
+
+        isToggledHeadersDescription = false;
+        isToggledMultiMapDescription = false;
+        isToggledQueriesDescription = false;
+        isToggleEncodedMapDescription = false;
+    }
+
+    /**
+     * set isToggledHeadersDescription
+     * @param toggledHeadersDescription isToggledHeadersDescription
+     */
+    public void setToggledHeadersDescription (boolean toggledHeadersDescription) {
+        isToggledHeadersDescription = toggledHeadersDescription;
+    }
+
+    /**
+     * set isToggledQueriesDescription
+     * @param toggledQueriesDescription isToggledQueriesDescription
+     */
+    public void setToggledQueriesDescription (boolean toggledQueriesDescription) {
+        isToggledQueriesDescription = toggledQueriesDescription;
+    }
+
+    /**
+     * set isToggledMultiMapDescription
+     * @param toggledMultiMapDescription isToggledMultiMapDescription
+     */
+    public void setToggledMultiMapDescription (boolean toggledMultiMapDescription) {
+        isToggledMultiMapDescription = toggledMultiMapDescription;
+    }
+
+    /**
+     * set isToggleEncodedMapDescription
+     * @param toggleEncodedMapDescription isToggleEncodedMapDescription
+     */
+    public void setToggleEncodedMapDescription (boolean toggleEncodedMapDescription) {
+        isToggleEncodedMapDescription = toggleEncodedMapDescription;
+    }
+
+    /**
+     *
+     * @return isToggledHeadersDescription
+     */
+    public boolean isToggledHeadersDescription () {
+        return isToggledHeadersDescription;
+    }
+
+    /**
+     *
+     * @return isToggledMultiMapDescription
+     */
+    public boolean isToggledMultiMapDescription () {
+        return isToggledMultiMapDescription;
+    }
+
+    /**
+     *
+     * @return isToggledQueriesDescription
+     */
+    public boolean isToggledQueriesDescription () {
+        return isToggledQueriesDescription;
+    }
+
+    /**
+     *
+     * @return isToggleEncodedMapDescription
+     */
+    public boolean isToggleEncodedMapDescription () {
+        return isToggleEncodedMapDescription;
     }
 
     /**

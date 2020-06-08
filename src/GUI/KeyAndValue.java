@@ -288,9 +288,13 @@ public class KeyAndValue extends JPanel
     protected void toggleDescription ()
     {
         if (panelDesc.isVisible ())
+        {
             panelDesc.setVisible (false);
+        }
         else
+        {
             panelDesc.setVisible (true);
+        }
     }
 
     /**
