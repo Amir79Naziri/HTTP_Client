@@ -98,7 +98,7 @@ public class HttpConnection
             connection.connect ();
             return true;
         }
-        catch (IOException e)
+        catch (IOException | IllegalArgumentException e)
         {
             System.err.println ("Failed to Connect");
             return false;

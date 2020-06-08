@@ -55,7 +55,7 @@ public class KeyAndValuePanel extends JPanel
         setLayout (new BoxLayout (this,BoxLayout.Y_AXIS));
         setBackground (theme.getBackGroundColorV4 ());
         fixedKeyAndValue = new KeyAndValue ("New " + key, "New " + value,
-                false,false,theme,this);
+                false,false,theme,this,true);
         add(fixedKeyAndValue);
         ComponentHandler componentHandler = new ComponentHandler ();
         fixedKeyAndValue.getKey ().addMouseListener (componentHandler);
@@ -91,15 +91,15 @@ public class KeyAndValuePanel extends JPanel
      */
     private void addDefaultNewKeyAndValue ()
     {
-        configureNewKeyAndValue (key, value);
+        configureNewKeyAndValue (key, value,true);
     }
 
     /**
      * add a new key and value
      */
-    private void addNewKeyAndValue (String key, String value)
+    private void addNewKeyAndValue (String key, String value, boolean active)
     {
-        configureNewKeyAndValue (key, value);
+        configureNewKeyAndValue (key, value,active);
     }
 
     /**
@@ -107,11 +107,13 @@ public class KeyAndValuePanel extends JPanel
      * @param key key
      * @param value value
      */
-    private void configureNewKeyAndValue (String key, String value) {
+    private void configureNewKeyAndValue (String key, String value, boolean active) {
         KeyAndValue keyAndValue = new KeyAndValue (key, value,true,
-                fixedKeyAndValue.isPanelDescVisible (),theme,this);
+                fixedKeyAndValue.isPanelDescVisible (),theme,this,active);
         getKeyAndValues ().add (keyAndValue);
         add (keyAndValue,keyAndValues.size () - 1);
+
+
         keyAndValue.setVisible (false);
         keyAndValue.setVisible (true);
     }
@@ -140,7 +142,7 @@ public class KeyAndValuePanel extends JPanel
     }
 
     /**
-     * load requestGui data on GUI
+     * load request active data on GUI
      * @param data requestGui data
      */
     protected void properBack (HashMap<String,String> data)
@@ -148,57 +150,110 @@ public class KeyAndValuePanel extends JPanel
         if (data == null)
             return;
         for (String key : data.keySet ())
-            addNewKeyAndValue (key,data.get (key));
+            addNewKeyAndValue (key,data.get (key),true);
     }
 
     /**
-     * load GUI on requestGui
+     * load request deActive data on GUI
+     * @param data requestGui data
+     */
+    protected void properBackV2 (HashMap<String,String> data)
+    {
+        if (data == null)
+            return;
+        for (String key : data.keySet ())
+            addNewKeyAndValue (key,data.get (key),false);
+    }
+
+
+
+    /**
+     * load GUI on request
      */
     protected void properData ()
     {
+
         switch (type)
         {
             case "Query" :
                 updateList ();
                 requestGui.getClientRequest ().clearQuery ();
+                requestGui.getClientRequest ().getExtraData ().clearQueriesExtraData ();
                 for (KeyAndValue keyAndValue : getKeyAndValues ())
+                {
                     if (keyAndValue.isActive ())
                     {
                         requestGui.getClientRequest ().addQuery (keyAndValue.getKey ().getText (),
                                 keyAndValue.getValue ().getText ());
+                    } else
+                    {
+                        requestGui.getClientRequest ().getExtraData ().addDeActiveQueries (
+                                keyAndValue.getKey ().getText (),
+                                keyAndValue.getValue ().getText ());
                     }
+
+                }
 
                 break;
             case "Header" :
                 updateList ();
                 requestGui.getClientRequest ().clearCustomHeaders ();
+                requestGui.getClientRequest ().getExtraData ().clearHeadersExtraData ();
                 for (KeyAndValue keyAndValue : getKeyAndValues ())
+                {
                     if (keyAndValue.isActive ())
                     {
                         requestGui.getClientRequest ().addCustomHeader (keyAndValue.getKey ().getText (),
                                 keyAndValue.getValue ().getText ());
                     }
+                    else
+                    {
+                        requestGui.getClientRequest ().getExtraData ().addDeActiveHeaders (
+                                keyAndValue.getKey ().getText (),
+                                keyAndValue.getValue ().getText ());
+                    }
+
+                }
                 break;
             case "MultiPart" :
                 updateList ();
                 requestGui.getClientRequest ().clearBody ();
+                requestGui.getClientRequest ().getExtraData ().clearMultiExtraData ();
                 for (KeyAndValue keyAndValue : getKeyAndValues ())
+                {
                     if (keyAndValue.isActive ())
                     {
                         requestGui.getClientRequest ().addFormUrlData (keyAndValue.getKey ().getText (),
                                 keyAndValue.getValue ().getText ());
                     }
+                    else
+                    {
+                        requestGui.getClientRequest ().getExtraData ().addDeActiveMultiMap (
+                                keyAndValue.getKey ().getText (),
+                                keyAndValue.getValue ().getText ());
+                    }
+
+                }
                 break;
             case "UrlEncoded" :
                 updateList ();
                 requestGui.getClientRequest ().clearBody ();
+                requestGui.getClientRequest ().getExtraData ().clearEncodedExtraData ();
                 for (KeyAndValue keyAndValue : getKeyAndValues ())
+                {
                     if (keyAndValue.isActive ())
                     {
                         requestGui.getClientRequest ().addFormUrlDataEncoded
                                 (keyAndValue.getKey ().getText (),
                                         keyAndValue.getValue ().getText ());
                     }
+                    else
+                    {
+                        requestGui.getClientRequest ().getExtraData ().addDeActiveEncodedMap (
+                                keyAndValue.getKey ().getText (),
+                                keyAndValue.getValue ().getText ());
+                    }
+                }
                 break;
         }
     }

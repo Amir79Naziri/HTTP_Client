@@ -37,7 +37,7 @@ public class KeyAndValue extends JPanel
      * @param owner  owner
      */
     protected KeyAndValue (String keyName, String valueName, boolean isEditable,
-                        boolean showDescription, Theme theme, KeyAndValuePanel owner)
+                        boolean showDescription, Theme theme, KeyAndValuePanel owner, boolean active)
     {
         super();
         if (keyName == null || valueName == null || theme == null)
@@ -52,7 +52,7 @@ public class KeyAndValue extends JPanel
         setBackground (theme.getBackGroundColorV4 ());
 
         if (isEditable)
-            createComponents (keyName, valueName);
+            createComponents (keyName, valueName,active);
         else
             createComponentsV2 (keyName, valueName);
 
@@ -79,7 +79,7 @@ public class KeyAndValue extends JPanel
      * @param keyName keyName
      * @param valueName value Name
      */
-    private void createComponents (String keyName, String valueName)
+    private void createComponents (String keyName, String valueName, boolean active)
     {
         if (keyName == null || valueName == null)
             throw new NullPointerException ("inValid input");
@@ -115,9 +115,16 @@ public class KeyAndValue extends JPanel
         describe.addMouseListener (componentHandler);
 
 
-        active = new JCheckBox ("");
-        active.setSelected (true);
-        active.addItemListener (componentHandler);
+        this.active = new JCheckBox ("");
+        this.active.setSelected (active);
+        this.active.addItemListener (componentHandler);
+        if (!this.active.isSelected ())
+        {
+            key.setForeground (theme.getForeGroundColorV3 ());
+            value.setForeground (theme.getForeGroundColorV3 ());
+            describe.setForeground (theme.getForeGroundColorV3 ());
+
+        }
 
 
         delete = new JButton (theme.getTrashR1 ());
@@ -144,7 +151,7 @@ public class KeyAndValue extends JPanel
         constraints.weightx = 0.0;
         constraints.ipady = 0;
         constraints.ipadx = 0;
-        GridBagAdder.addComponent (active,0,31,1,layout,constraints,this);
+        GridBagAdder.addComponent (this.active,0,31,1,layout,constraints,this);
         constraints.ipady = -13;
         constraints.ipadx = -31;
         GridBagAdder.addComponent (delete,0,32,1,layout,constraints,this);

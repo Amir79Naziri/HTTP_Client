@@ -1,5 +1,6 @@
 package Client;
 
+import Storage.ExtraData;
 import Storage.ResponseStorage;
 import java.io.*;
 import java.net.MalformedURLException;
@@ -27,6 +28,7 @@ public class ClientRequest implements Serializable, Runnable
     private boolean shouldSaveResponseOnFile; // should save result in file
     private String addressOfFileForSaveOutput; // address of file for save result
     private boolean showHeadersInResponse;
+    private ExtraData extraData; // storage of extra data such deActive key and values or descriptions
     private int messageBodyType; // 1 means multiPart  2 means Binary file
                                  // 3 means urlEncoded
 
@@ -54,6 +56,7 @@ public class ClientRequest implements Serializable, Runnable
         shouldSaveResponseOnFile = false;
         addressOfFileForSaveOutput = null;
         showHeadersInResponse = false;
+        extraData = new ExtraData ();
     }
 
     /**
@@ -82,6 +85,7 @@ public class ClientRequest implements Serializable, Runnable
         {
         }
         messageBodyType = 1;
+        extraData = new ExtraData ();
     }
 
     /**
@@ -542,5 +546,13 @@ public class ClientRequest implements Serializable, Runnable
     public boolean isShouldSaveOutputInFile ()
     {
         return shouldSaveResponseOnFile;
+    }
+
+    /**
+     *
+     * @return extraData
+     */
+    public ExtraData getExtraData () {
+        return extraData;
     }
 }

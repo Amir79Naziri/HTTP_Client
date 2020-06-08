@@ -400,13 +400,24 @@ public class SecondPanel extends JPanel
         url.setText (requestGui.getClientRequest ().getUrl ());
         headerPanel.getKeyAndValuePanel ().properBack
                 (requestGui.getClientRequest ().getCustomHeaders ());
+        headerPanel.getKeyAndValuePanel ().properBackV2 (
+                requestGui.getClientRequest ().getExtraData ().getDeActiveHeaders ());
+
         queryPanel.getKeyAndValuePanel ().properBack (requestGui.getClientRequest ()
         .getQueryData ());
+        queryPanel.getKeyAndValuePanel ().properBackV2 (requestGui.getClientRequest ()
+        .getExtraData ().getDeActiveQueries ());
 
         multiPartPanel.getKeyAndValuePanel ().properBack (requestGui.getClientRequest ()
                 .getFormUrlData ());
+        multiPartPanel.getKeyAndValuePanel ().properBackV2 (requestGui.getClientRequest ()
+        .getExtraData ().getDeActiveMultiMap ());
+
         urlEncodedPanel.getKeyAndValuePanel ().properBack (requestGui.getClientRequest ()
         .getFormUrlDataEncoded ());
+        urlEncodedPanel.getKeyAndValuePanel ().properBackV2 (requestGui.getClientRequest ()
+        .getExtraData ().getDeActiveEncodedMap ());
+
         binaryFilePanel.setPath (requestGui.getClientRequest ().getUploadBinaryFilePath ());
     }
 }
