@@ -23,9 +23,9 @@ public class QueryPanel extends KeyAndValueContainerPanel
      * creates a GUI.QueryPanel
      * @param theme theme
      */
-    protected QueryPanel (Theme theme,Request request)
+    protected QueryPanel (Theme theme, RequestGui requestGui)
     {
-        super(theme,request,4);
+        super(theme, requestGui,4);
         if (theme == null)
             throw new NullPointerException ("inValid input");
         this.theme = theme;

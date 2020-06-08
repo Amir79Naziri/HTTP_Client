@@ -28,7 +28,7 @@ public class ThirdPanel extends JPanel
     private VisualPreviewPanel visualPreviewPanel;
     private ResultHeaderPanel resultHeaderPanel;
     private Theme theme; // theme
-    private Request request;
+    private RequestGui requestGui;
     private JProgressBar progressBar;
     private ResponseCalculator responseCalculator;
     private JPanel progressPanel;
@@ -36,19 +36,20 @@ public class ThirdPanel extends JPanel
     /**
      * creates new Third panel
      * @param theme theme
+     * @param requestGui requestGui
      */
-    protected ThirdPanel (Theme theme, Request request)
+    protected ThirdPanel (Theme theme, RequestGui requestGui)
     {
         super();
         if (theme == null)
             throw new NullPointerException ("inValid input");
         this.theme = theme;
-        this.request = request;
+        this.requestGui = requestGui;
         setLayout (new BorderLayout ());
         addHeaderStatuses ();
         addBasePanel ();
         addProgressPanel ();
-        if (request.getClientRequest ().getResponseStorage ().isValid ())
+        if (requestGui.getClientRequest ().getResponseStorage ().isValid ())
             properBack ();
 
     }
@@ -243,12 +244,12 @@ public class ThirdPanel extends JPanel
     }
 
     /**
-     * load data from request on GUI
+     * load data from requestGui on GUI
      */
     protected void properBack ()
     {
         ResponseStorage responseStorage
-                = request.getClientRequest ().getResponseStorage ();
+                = requestGui.getClientRequest ().getResponseStorage ();
         String responseCode = responseStorage.getResponseCode () + "";
         if (responseCode.matches ("2(.*)"))
             statusMessage.setBackground (new Color (52, 174, 22));
@@ -291,9 +292,9 @@ public class ThirdPanel extends JPanel
                         } else if (key.equals ("Content-Type") && value.split (";")[0].
                                 equals ("text/html") && responseCode.matches ("2(.*)"))
                         {
-                               visualPreviewPanel.addEditor (request.getClientRequest ()
+                               visualPreviewPanel.addEditor (requestGui.getClientRequest ()
                                        .getUrl () +
-                                       request.getClientRequest ().getQueryDataString ());
+                                       requestGui.getClientRequest ().getQueryDataString ());
 
                         }
                     }
@@ -302,10 +303,10 @@ public class ThirdPanel extends JPanel
     }
 
     /**
-     * @return request
+     * @return requestGui
      */
-    protected Request getRequest () {
-        return request;
+    protected RequestGui getRequestGui () {
+        return requestGui;
     }
 
     /**

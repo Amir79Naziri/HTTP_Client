@@ -310,8 +310,8 @@ public class KeyAndValue extends JPanel
                 {
                     QueryPanel queryPanel = (QueryPanel)owner.getOwner ();
                     queryPanel.getPreviewURLText ().
-                            setText (owner.getRequest ().getClientRequest ().getUrl ()
-                            + owner.getRequest ().getClientRequest ().getQueryDataString ());
+                            setText (owner.getRequestGui ().getClientRequest ().getUrl ()
+                            + owner.getRequestGui ().getClientRequest ().getQueryDataString ());
                 }
             }
         }
@@ -336,8 +336,8 @@ public class KeyAndValue extends JPanel
             {
                 QueryPanel queryPanel = (QueryPanel)owner.getOwner ();
                 queryPanel.getPreviewURLText ().
-                        setText (owner.getRequest ().getClientRequest ().getUrl ()
-                                + owner.getRequest ().getClientRequest ().getQueryDataString ());
+                        setText (owner.getRequestGui ().getClientRequest ().getUrl ()
+                                + owner.getRequestGui ().getClientRequest ().getQueryDataString ());
             }
             repaint ();
         }
@@ -374,8 +374,8 @@ public class KeyAndValue extends JPanel
             {
                 QueryPanel queryPanel = (QueryPanel)owner.getOwner ();
                 queryPanel.getPreviewURLText ().
-                        setText (owner.getRequest ().getClientRequest ().getUrl ()
-                                + owner.getRequest ().getClientRequest ().getQueryDataString ());
+                        setText (owner.getRequestGui ().getClientRequest ().getUrl ()
+                                + owner.getRequestGui ().getClientRequest ().getQueryDataString ());
             }
         }
     }

@@ -27,7 +27,7 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
     @Override
     protected Boolean doInBackground ()  {
 
-        Thread thread = new Thread (thirdPanel.getRequest ().getClientRequest ());
+        Thread thread = new Thread (thirdPanel.getRequestGui ().getClientRequest ());
         thread.start ();
 
         try {
@@ -48,8 +48,8 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
         } catch (InterruptedException e)
         {
             thread.interrupt ();
-            thirdPanel.getRequest ().getClientRequest ().getResponseStorage ().reset ();
-            thirdPanel.getRequest ().getClientRequest ().getResponseStorage ().
+            thirdPanel.getRequestGui ().getClientRequest ().getResponseStorage ().reset ();
+            thirdPanel.getRequestGui ().getClientRequest ().getResponseStorage ().
                     setResponseMessage ("Canceled");
             setProgress (0);
             thirdPanel.getProgressPanel ().setVisible (false);

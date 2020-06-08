@@ -16,9 +16,9 @@ public class KeyAndValueContainerPanel extends JPanel
      * create a new Header Panel
      * @param theme theme
      * @param type type
-     * @param request request
+     * @param requestGui requestGui
      */
-    protected KeyAndValueContainerPanel (Theme theme, Request request, int type)
+    protected KeyAndValueContainerPanel (Theme theme, RequestGui requestGui, int type)
     {
         super();
         if (theme == null)
@@ -26,16 +26,16 @@ public class KeyAndValueContainerPanel extends JPanel
         setLayout (new BorderLayout ());
         if (type == 1)
             keyAndValuePanel = new KeyAndValuePanel ("header", "value",theme,"Header",
-                request,this);
+                    requestGui,this);
         else if (type == 2)
             keyAndValuePanel = new KeyAndValuePanel ("name", "value",theme,
-                    "MultiPart",request,this);
+                    "MultiPart", requestGui,this);
         else if (type == 3)
             keyAndValuePanel = new KeyAndValuePanel ("name", "value",theme,
-                    "UrlEncoded",request,this);
+                    "UrlEncoded", requestGui,this);
         else if (type == 4)
             keyAndValuePanel = new KeyAndValuePanel ("name", "value",theme,"Query",
-                    request,this);
+                    requestGui,this);
 
         add(ScrollPaneAdder.fetchToJScrollPane (keyAndValuePanel,theme),BorderLayout.CENTER);
     }

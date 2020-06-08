@@ -16,7 +16,7 @@ import java.net.MalformedURLException;
 public class SecondPanel extends JPanel
 {
     private JTextField url; // url text
-    private JComboBox<String> type; // type of request
+    private JComboBox<String> type; // type of requestGui
     private JButton send; // send button
     private JCheckBox save; // save button
     // private int messageBody;
@@ -30,29 +30,29 @@ public class SecondPanel extends JPanel
     private BinaryFilePanel binaryFilePanel;
     private JComboBox<String> bodyType;
     private GUI gui; // gui
-    private Request request; // request which has this panel
+    private RequestGui requestGui; // requestGui which has this panel
     private Theme theme; // theme
     private boolean firstTimeChangeBody;
     private JPanel programThirdPanel; // third panel which user will see , it is null
     // panel at first
-    private final ThirdPanel mainThirdPanel; // main third panel for  request
+    private final ThirdPanel mainThirdPanel; // main third panel for  requestGui
 
     /**
      * creates a new GUI.SecondPanel
      * @param gui gui
-     * @param request owner request
+     * @param requestGui owner requestGui
      * @param theme theme
      */
-    protected SecondPanel (GUI gui, Request request, Theme theme)
+    protected SecondPanel (GUI gui, RequestGui requestGui, Theme theme)
     {
         super();
-        if (gui == null || request == null || theme == null)
+        if (gui == null || requestGui == null || theme == null)
             throw new NullPointerException ("inValid input");
         this.theme = theme;
-        mainThirdPanel = new ThirdPanel (theme,request);
+        mainThirdPanel = new ThirdPanel (theme, requestGui);
         this.gui = gui;
-        this.request = request;
-        if (!request.getClientRequest ().getResponseStorage ().isValid ())
+        this.requestGui = requestGui;
+        if (!requestGui.getClientRequest ().getResponseStorage ().isValid ())
             programThirdPanel = new NullPanel (2,theme);
         else
         {
@@ -65,7 +65,7 @@ public class SecondPanel extends JPanel
         bodyType = new JComboBox<> (bodyTypes);
         createBasePanel ();
         firstTimeChangeBody = false;
-        switch (request.getClientRequest ().getMessageBodyType ())
+        switch (requestGui.getClientRequest ().getMessageBodyType ())
         {
             case 1 :
                 bodyType.setSelectedIndex (0);
@@ -97,7 +97,7 @@ public class SecondPanel extends JPanel
         type = new JComboBox<> (types);
         type.setFont (new Font ("Arial",Font.PLAIN,11));
         type.setBackground (Color.WHITE);
-        type.setSelectedItem (request.getRequestType ().toString ());
+        type.setSelectedItem (requestGui.getRequestType ().toString ());
         type.addItemListener (componentHandler);
 
         url = new JTextField ("https://api.myproduct.com/v1/users");
@@ -113,7 +113,7 @@ public class SecondPanel extends JPanel
         save = new JCheckBox ("Save Output");
         save.setFont (new Font ("Arial",Font.PLAIN,11));
         save.setBackground (Color.WHITE);
-        if (request.getClientRequest ().isShouldSaveOutputInFile ())
+        if (requestGui.getClientRequest ().isShouldSaveOutputInFile ())
             save.setSelected (true);
         else
             save.setSelected (false);
@@ -144,15 +144,15 @@ public class SecondPanel extends JPanel
         tabbedPane.setTabLayoutPolicy (JTabbedPane.SCROLL_TAB_LAYOUT);
 
 
-        queryPanel = new QueryPanel (theme,request);
-        headerPanel = new KeyAndValueContainerPanel (theme,request,1);
-        multiPartPanel = new KeyAndValueContainerPanel (theme,request,2);
-        urlEncodedPanel = new KeyAndValueContainerPanel (theme,request,3);
+        queryPanel = new QueryPanel (theme, requestGui);
+        headerPanel = new KeyAndValueContainerPanel (theme, requestGui,1);
+        multiPartPanel = new KeyAndValueContainerPanel (theme, requestGui,2);
+        urlEncodedPanel = new KeyAndValueContainerPanel (theme, requestGui,3);
         jsonPanel = new JsonPanel (theme);
         bearerPanel = new BearerPanel (theme);
         binaryFilePanel = new BinaryFilePanel (theme);
-        queryPanel.getPreviewURLText ().setText (request.getClientRequest ().getUrl()
-        + request.getClientRequest ().getQueryDataString ());
+        queryPanel.getPreviewURLText ().setText (requestGui.getClientRequest ().getUrl()
+        + requestGui.getClientRequest ().getQueryDataString ());
 
         bodyType.addItemListener (new ItemListener () {
             @Override
@@ -175,12 +175,12 @@ public class SecondPanel extends JPanel
                     {
                         if (bodyType.getSelectedIndex () == 0) {
                             tabbedPane.setComponentAt (0, multiPartPanel);
-                            request.getClientRequest ().setMessageBodyType (1);
+                            requestGui.getClientRequest ().setMessageBodyType (1);
                             binaryFilePanel.clearPath ();
                             urlEncodedPanel.getKeyAndValuePanel ().deleteAll ();
                         } else if (bodyType.getSelectedIndex () == 1) {
                             tabbedPane.setComponentAt (0, urlEncodedPanel);
-                            request.getClientRequest ().setMessageBodyType (3);
+                            requestGui.getClientRequest ().setMessageBodyType (3);
                             multiPartPanel.getKeyAndValuePanel ().deleteAll ();
                             binaryFilePanel.clearPath ();
                         } else if (bodyType.getSelectedIndex () == 2) {
@@ -188,14 +188,14 @@ public class SecondPanel extends JPanel
 
                         } else if (bodyType.getSelectedIndex () == 3) {
                             tabbedPane.setComponentAt (0, binaryFilePanel);
-                            request.getClientRequest ().setMessageBodyType (2);
+                            requestGui.getClientRequest ().setMessageBodyType (2);
                             urlEncodedPanel.getKeyAndValuePanel ().deleteAll ();
                             urlEncodedPanel.getKeyAndValuePanel ().deleteAll ();
                         }
                     } else
                     {
                         firstTimeChangeBody = false;
-                        switch (request.getClientRequest ().getMessageBodyType ())
+                        switch (requestGui.getClientRequest ().getMessageBodyType ())
                         {
                             case 1 : bodyType.setSelectedIndex (0);
                                 break;
@@ -257,15 +257,15 @@ public class SecondPanel extends JPanel
             {
                 String a = url.getText ();
                 try{
-                    request.getClientRequest ().setUrl (a);
+                    requestGui.getClientRequest ().setUrl (a);
                     queryPanel.getPreviewURLText ().setText (a +
-                            request.getClientRequest ().getQueryDataString ());
+                            requestGui.getClientRequest ().getQueryDataString ());
                 } catch (MalformedURLException ex)
                 {
                     try {
-                        request.getClientRequest ().setUrl ("http://" + a);
+                        requestGui.getClientRequest ().setUrl ("http://" + a);
                         queryPanel.getPreviewURLText ().setText ("http://" + a +
-                                request.getClientRequest ().getQueryDataString ());
+                                requestGui.getClientRequest ().getQueryDataString ());
                     } catch (MalformedURLException ignore)
                     {
                     }
@@ -292,39 +292,39 @@ public class SecondPanel extends JPanel
             {
                 switch (type.getSelectedIndex ()) {
                     case 0:
-                        request.setRequestType (RequestType.GET);
-                        request.getClientRequest ().
+                        requestGui.setRequestType (RequestType.GET);
+                        requestGui.getClientRequest ().
                                 setRequestType (RequestType.GET.toString ());
                         break;
                     case 1:
-                        request.setRequestType (RequestType.POST);
-                        request.getClientRequest ().
+                        requestGui.setRequestType (RequestType.POST);
+                        requestGui.getClientRequest ().
                                 setRequestType (RequestType.POST.toString ());
                         break;
                     case 2:
-                        request.setRequestType (RequestType.PUT);
-                        request.getClientRequest ().
+                        requestGui.setRequestType (RequestType.PUT);
+                        requestGui.getClientRequest ().
                                 setRequestType (RequestType.PUT.toString ());
                         break;
                     case 3:
-                        request.setRequestType (RequestType.PATCH);
-                        request.getClientRequest ().
+                        requestGui.setRequestType (RequestType.PATCH);
+                        requestGui.getClientRequest ().
                                 setRequestType (RequestType.PATCH.toString ());
                         break;
                     case 4:
-                        request.setRequestType (RequestType.DELETE);
-                        request.getClientRequest ().
+                        requestGui.setRequestType (RequestType.DELETE);
+                        requestGui.getClientRequest ().
                                 setRequestType (RequestType.DELETE.toString ());
                         break;
                 }
             } else if (e.getSource () == save)
             {
                 if (!save.isSelected ())
-                    request.getClientRequest ().setShouldSaveOutputInFile
+                    requestGui.getClientRequest ().setShouldSaveOutputInFile
                             (false,
                                     null);
                 else
-                    request.getClientRequest ().setShouldSaveOutputInFile
+                    requestGui.getClientRequest ().setShouldSaveOutputInFile
                             (true,
                                     null);
             }
@@ -332,7 +332,7 @@ public class SecondPanel extends JPanel
     }
 
     /**
-     * initialize a request by take every data from GUI
+     * initialize a requestGui by take every data from GUI
      * @param isForSending isForSending true, isFor close false
      * @return result
      */
@@ -340,9 +340,9 @@ public class SecondPanel extends JPanel
     {
         headerPanel.getKeyAndValuePanel ().properData ();
         queryPanel.getKeyAndValuePanel ().properData ();
-        if (request.getClientRequest ().getRequestType () != RequestType.GET)
+        if (requestGui.getClientRequest ().getRequestType () != RequestType.GET)
         {
-            switch (request.getClientRequest ().getMessageBodyType ())
+            switch (requestGui.getClientRequest ().getMessageBodyType ())
             {
                 case 1 :
                     multiPartPanel.getKeyAndValuePanel ().properData ();
@@ -366,7 +366,7 @@ public class SecondPanel extends JPanel
                         }
 
 
-                        request.getClientRequest ().addUploadBinaryFile (
+                        requestGui.getClientRequest ().addUploadBinaryFile (
                                 new File (binaryFilePanel.getPath ().toString ()));
                     }
                     break;
@@ -383,30 +383,30 @@ public class SecondPanel extends JPanel
             if (name == null)
                 return false;
             if (name.length () == 0)
-                request.getClientRequest ().setShouldSaveOutputInFile (
+                requestGui.getClientRequest ().setShouldSaveOutputInFile (
                         true,null);
             else
-                request.getClientRequest ().setShouldSaveOutputInFile (
+                requestGui.getClientRequest ().setShouldSaveOutputInFile (
                         true,name);
         }
         return true;
     }
 
     /**
-     * load data from request on GUI
+     * load data from requestGui on GUI
      */
     private void properBack ()
     {
-        url.setText (request.getClientRequest ().getUrl ());
+        url.setText (requestGui.getClientRequest ().getUrl ());
         headerPanel.getKeyAndValuePanel ().properBack
-                (request.getClientRequest ().getCustomHeaders ());
-        queryPanel.getKeyAndValuePanel ().properBack (request.getClientRequest ()
+                (requestGui.getClientRequest ().getCustomHeaders ());
+        queryPanel.getKeyAndValuePanel ().properBack (requestGui.getClientRequest ()
         .getQueryData ());
 
-        multiPartPanel.getKeyAndValuePanel ().properBack (request.getClientRequest ()
+        multiPartPanel.getKeyAndValuePanel ().properBack (requestGui.getClientRequest ()
                 .getFormUrlData ());
-        urlEncodedPanel.getKeyAndValuePanel ().properBack (request.getClientRequest ()
+        urlEncodedPanel.getKeyAndValuePanel ().properBack (requestGui.getClientRequest ()
         .getFormUrlDataEncoded ());
-        binaryFilePanel.setPath (request.getClientRequest ().getUploadBinaryFilePath ());
+        binaryFilePanel.setPath (requestGui.getClientRequest ().getUploadBinaryFilePath ());
     }
 }

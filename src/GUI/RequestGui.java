@@ -10,11 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * this class represents a request in firstPanel
+ * this class represents a requestGui  in firstPanel
  *
  * @author Amir Naziri
  */
-public class Request extends JPanel
+public class RequestGui extends JPanel
 {
     private JPanel chose; // chose mark
     private final SecondPanel secondPanel; // secondPanel belong to request
@@ -34,7 +34,7 @@ public class Request extends JPanel
      * @param gui gui
      * @param theme theme
      */
-    protected Request (RequestType requestType, String name, ClientRequest clientRequest
+    protected RequestGui (RequestType requestType, String name, ClientRequest clientRequest
             , GUI gui, Theme theme)
     {
         super();

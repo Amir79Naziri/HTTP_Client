@@ -20,7 +20,7 @@ public class AddNewRequestPanel extends JPanel
     private RequestType chosenRequestType; // chosen RequestType
 
     /**
-     * creates a new Add New GUI.Request Panel
+     * creates a new Add New Request Panel
      */
     protected AddNewRequestPanel () {
         super ();
@@ -114,7 +114,7 @@ public class AddNewRequestPanel extends JPanel
     }
 
     /**
-     * @return Client.RequestType of New GUI.Request
+     * @return RequestType of New Request
      */
     protected RequestType getChosenRequestType ()
     {

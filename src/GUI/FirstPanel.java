@@ -96,7 +96,7 @@ public class FirstPanel extends JPanel
         addRequest.setBackground (theme.getBackGroundColorV2 ());
         addRequest.addActionListener (componentHandler);
         addRequest.setFocusable (false);
-        addRequest.setToolTipText ("Adds New GUI.Request");
+        addRequest.setToolTipText ("Adds New Request");
 
 
         constraints.gridx = 0;
@@ -163,23 +163,23 @@ public class FirstPanel extends JPanel
             return;
         String l = filter.toLowerCase ().trim ().replaceAll ("\\s+","");
 
-        for (Request request : requestsPanel.getRequests ())
+        for (RequestGui requestGui : requestsPanel.getRequestGuis ())
         {
-            if (!(request.isDeleted ()))
-                request.setVisible (true);
+            if (!(requestGui.isDeleted ()))
+                requestGui.setVisible (true);
         }
-        for (Request request : requestsPanel.getRequests ())
+        for (RequestGui requestGui : requestsPanel.getRequestGuis ())
         {
-            String a = request.getRequestType ().getMinimizedName ().toLowerCase ().trim ().
+            String a = requestGui.getRequestType ().getMinimizedName ().toLowerCase ().trim ().
                     replaceAll ("\\s+","") +
-                    "" +request.getRequestType ().toString ().toLowerCase ().trim ().
+                    "" + requestGui.getRequestType ().toString ().toLowerCase ().trim ().
                     replaceAll ("\\s+","")
                     + "" +
-                    request.getNameLabel ().getText ().toLowerCase ().trim ().
+                    requestGui.getNameLabel ().getText ().toLowerCase ().trim ().
                             replaceAll ("\\s+","");
 
                     if (!(a.contains (l)))
-                        request.setVisible (false);
+                        requestGui.setVisible (false);
         }
     }
 

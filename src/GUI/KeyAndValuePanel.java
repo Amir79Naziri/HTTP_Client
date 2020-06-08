@@ -24,7 +24,7 @@ public class KeyAndValuePanel extends JPanel
     private String value; // value
     private Theme theme; // theme
     private String type;
-    private Request request;
+    private RequestGui requestGui;
     private JPanel owner;
 
 
@@ -35,11 +35,11 @@ public class KeyAndValuePanel extends JPanel
      * @param value value
      * @param theme theme
      * @param owner owner panel
-     * @param request request
+     * @param requestGui requestGui
      * @param type type of : header or Query or Bodies
      */
     protected KeyAndValuePanel (String key, String value, Theme theme,
-                             String type, Request request,
+                             String type, RequestGui requestGui,
                              JPanel owner)
     {
         super();
@@ -51,7 +51,7 @@ public class KeyAndValuePanel extends JPanel
         this.value = value;
         this.type = type;
         this.owner = owner;
-        this.request = request;
+        this.requestGui = requestGui;
         setLayout (new BoxLayout (this,BoxLayout.Y_AXIS));
         setBackground (theme.getBackGroundColorV4 ());
         fixedKeyAndValue = new KeyAndValue ("New " + key, "New " + value,
@@ -140,8 +140,8 @@ public class KeyAndValuePanel extends JPanel
     }
 
     /**
-     * load request data on GUI
-     * @param data request data
+     * load requestGui data on GUI
+     * @param data requestGui data
      */
     protected void properBack (HashMap<String,String> data)
     {
@@ -152,7 +152,7 @@ public class KeyAndValuePanel extends JPanel
     }
 
     /**
-     * load GUI on request
+     * load GUI on requestGui
      */
     protected void properData ()
     {
@@ -160,42 +160,42 @@ public class KeyAndValuePanel extends JPanel
         {
             case "Query" :
                 updateList ();
-                request.getClientRequest ().clearQuery ();
+                requestGui.getClientRequest ().clearQuery ();
                 for (KeyAndValue keyAndValue : getKeyAndValues ())
                     if (keyAndValue.isActive ())
                     {
-                        request.getClientRequest ().addQuery (keyAndValue.getKey ().getText (),
+                        requestGui.getClientRequest ().addQuery (keyAndValue.getKey ().getText (),
                                 keyAndValue.getValue ().getText ());
                     }
 
                 break;
             case "Header" :
                 updateList ();
-                request.getClientRequest ().clearCustomHeaders ();
+                requestGui.getClientRequest ().clearCustomHeaders ();
                 for (KeyAndValue keyAndValue : getKeyAndValues ())
                     if (keyAndValue.isActive ())
                     {
-                        request.getClientRequest ().addCustomHeader (keyAndValue.getKey ().getText (),
+                        requestGui.getClientRequest ().addCustomHeader (keyAndValue.getKey ().getText (),
                                 keyAndValue.getValue ().getText ());
                     }
                 break;
             case "MultiPart" :
                 updateList ();
-                request.getClientRequest ().clearBody ();
+                requestGui.getClientRequest ().clearBody ();
                 for (KeyAndValue keyAndValue : getKeyAndValues ())
                     if (keyAndValue.isActive ())
                     {
-                        request.getClientRequest ().addFormUrlData (keyAndValue.getKey ().getText (),
+                        requestGui.getClientRequest ().addFormUrlData (keyAndValue.getKey ().getText (),
                                 keyAndValue.getValue ().getText ());
                     }
                 break;
             case "UrlEncoded" :
                 updateList ();
-                request.getClientRequest ().clearBody ();
+                requestGui.getClientRequest ().clearBody ();
                 for (KeyAndValue keyAndValue : getKeyAndValues ())
                     if (keyAndValue.isActive ())
                     {
-                        request.getClientRequest ().addFormUrlDataEncoded
+                        requestGui.getClientRequest ().addFormUrlDataEncoded
                                 (keyAndValue.getKey ().getText (),
                                         keyAndValue.getValue ().getText ());
                     }
@@ -204,7 +204,7 @@ public class KeyAndValuePanel extends JPanel
     }
 
     /**
-     * update list : if a request deleted it will remove it from list
+     * update list : if a requestGui deleted it will remove it from list
      */
     private void updateList ()
     {
@@ -212,10 +212,10 @@ public class KeyAndValuePanel extends JPanel
     }
 
     /**
-     * @return request
+     * @return requestGui
      */
-    protected Request getRequest () {
-        return request;
+    protected RequestGui getRequestGui () {
+        return requestGui;
     }
 
     /**
@@ -234,8 +234,8 @@ public class KeyAndValuePanel extends JPanel
                 {
                     QueryPanel queryPanel = (QueryPanel) getOwner ();
                     queryPanel.getPreviewURLText ().
-                            setText (getRequest ().getClientRequest ().getUrl ()
-                                    + getRequest ().getClientRequest ().getQueryDataString ());
+                            setText (getRequestGui ().getClientRequest ().getUrl ()
+                                    + getRequestGui ().getClientRequest ().getQueryDataString ());
                 }
             }
             else if (e.getSource () == toggleDescription)
@@ -256,8 +256,8 @@ public class KeyAndValuePanel extends JPanel
                 {
                     QueryPanel queryPanel = (QueryPanel) getOwner ();
                     queryPanel.getPreviewURLText ().
-                            setText (getRequest ().getClientRequest ().getUrl ()
-                                    + getRequest ().getClientRequest ().getQueryDataString ());
+                            setText (getRequestGui ().getClientRequest ().getUrl ()
+                                    + getRequestGui ().getClientRequest ().getQueryDataString ());
                 }
             }
         }

@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class RequestsPanel extends JPanel
 {
-    private ArrayList<Request> requests; // list of requests
+    private ArrayList<RequestGui> requestGuis; // list of requestGuis
     private GUI gui; // gui
     private Theme theme; // theme
 
@@ -35,7 +35,7 @@ public class RequestsPanel extends JPanel
         this.theme = theme;
         setLayout (new BoxLayout (this,BoxLayout.Y_AXIS));
         setBackground (theme.getBackGroundColorV2 ());
-        requests = new ArrayList<> ();
+        requestGuis = new ArrayList<> ();
 
         if (clientRequests != null)
             for (ClientRequest clientRequest : clientRequests)
@@ -54,14 +54,14 @@ public class RequestsPanel extends JPanel
             throw new NullPointerException ("inValid input");
         ClientRequest clientRequest = new ClientRequest (gui.getOptionData ().isFollowRedirect (),
                 name,type);
-        Request request = new Request (type,name,clientRequest,gui,theme);
+        RequestGui requestGui = new RequestGui (type,name,clientRequest,gui,theme);
         Controller.addNewClientRequest (clientRequest);
         MouseHandler mouseHandler = new MouseHandler ();
-        request.addMouseListener (mouseHandler);
-        requests.add (request);
-        add(request);
-        request.setVisible (false);
-        request.setVisible (true);
+        requestGui.addMouseListener (mouseHandler);
+        requestGuis.add (requestGui);
+        add(requestGui);
+        requestGui.setVisible (false);
+        requestGui.setVisible (true);
     }
 
     /**
@@ -75,20 +75,20 @@ public class RequestsPanel extends JPanel
         if (type == null || name == null)
             throw new NullPointerException ("inValid input");
 
-        Request request = new Request (type,name,clientRequest,gui,theme);
+        RequestGui requestGui = new RequestGui (type,name,clientRequest,gui,theme);
         MouseHandler mouseHandler = new MouseHandler ();
-        request.addMouseListener (mouseHandler);
-        requests.add (request);
-        add(request);
-        request.setVisible (false);
-        request.setVisible (true);
+        requestGui.addMouseListener (mouseHandler);
+        requestGuis.add (requestGui);
+        add(requestGui);
+        requestGui.setVisible (false);
+        requestGui.setVisible (true);
     }
 
     /**
-     * @return list of requests
+     * @return list of requestGuis
      */
-    protected ArrayList<Request> getRequests () {
-        return requests;
+    protected ArrayList<RequestGui> getRequestGuis () {
+        return requestGuis;
     }
 
     /**
@@ -116,26 +116,26 @@ public class RequestsPanel extends JPanel
 
             if (e.getButton () == MouseEvent.BUTTON1)
             {
-                for (Request request : requests) {
-                    if (request == e.getComponent ()) {
-                        request.setChoseVisibly (true);
-                        request.getNameLabel ().setFont (
+                for (RequestGui requestGui : requestGuis) {
+                    if (requestGui == e.getComponent ()) {
+                        requestGui.setChoseVisibly (true);
+                        requestGui.getNameLabel ().setFont (
                                 new Font ("Arial",Font.BOLD,13));
-                        gui.setSecondPanel (request.getSecondPanel ());
-                        gui.setThirdPanel (request.getSecondPanel ().getProgramThirdPanel ());
+                        gui.setSecondPanel (requestGui.getSecondPanel ());
+                        gui.setThirdPanel (requestGui.getSecondPanel ().getProgramThirdPanel ());
 
                     } else
                     {
-                        request.getNameLabel ().setFont (new Font
+                        requestGui.getNameLabel ().setFont (new Font
                                 ("Arial",Font.PLAIN,13));
-                        request.setChoseVisibly (false);
+                        requestGui.setChoseVisibly (false);
                     }
                 }
             }
             else if (e.getButton () == MouseEvent.BUTTON3) {
-                for (Request request : requests) {
-                    if (request == e.getComponent ()) {
-                        request.getPopupMenu ().show (request, e.getX (),
+                for (RequestGui requestGui : requestGuis) {
+                    if (requestGui == e.getComponent ()) {
+                        requestGui.getPopupMenu ().show (requestGui, e.getX (),
                                 e.getY ());
                     }
                 }
@@ -148,7 +148,7 @@ public class RequestsPanel extends JPanel
      */
     public void properRequestsForClosing ()
     {
-        for (Request request : requests)
-            request.getSecondPanel ().initializeForSend (false);
+        for (RequestGui requestGui : requestGuis)
+            requestGui.getSecondPanel ().initializeForSend (false);
     }
 }
