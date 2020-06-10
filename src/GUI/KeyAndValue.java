@@ -114,6 +114,7 @@ public class KeyAndValue extends JPanel
         panelDesc.setVisible (showDescription);
 
         describe.addMouseListener (componentHandler);
+        describe.addKeyListener (keyHandler);
 
 
         this.active = new JCheckBox ("");

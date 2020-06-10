@@ -17,6 +17,11 @@ public class ExtraData implements Serializable
     private HashMap<String,String> deActiveMultiMap;
     private HashMap<String,String> deActiveEncodedMap;
 
+    private HashMap<String,String> headersDescription;
+    private HashMap<String,String> queriesDescription;
+    private HashMap<String,String> multiDescription;
+    private HashMap<String,String> encodedDescription;
+
 
     private boolean isToggledHeadersDescription;
     private boolean isToggledQueriesDescription;
@@ -33,12 +38,19 @@ public class ExtraData implements Serializable
         deActiveMultiMap = new HashMap<> ();
         deActiveQueries = new HashMap<> ();
 
+        encodedDescription = new HashMap<> ();
+        multiDescription = new HashMap<> ();
+        queriesDescription = new HashMap<> ();
+        headersDescription = new HashMap<> ();
+
 
         isToggledHeadersDescription = false;
         isToggledMultiMapDescription = false;
         isToggledQueriesDescription = false;
         isToggleEncodedMapDescription = false;
     }
+
+
 
     /**
      * set isToggledHeadersDescription
@@ -170,6 +182,21 @@ public class ExtraData implements Serializable
     }
 
 
+    public HashMap<String, String> getHeadersDescription () {
+        return headersDescription;
+    }
+
+    public HashMap<String, String> getEncodedDescription () {
+        return encodedDescription;
+    }
+
+    public HashMap<String, String> getMultiDescription () {
+        return multiDescription;
+    }
+
+    public HashMap<String, String> getQueriesDescription () {
+        return queriesDescription;
+    }
 
     /**
      * add new element
@@ -211,6 +238,25 @@ public class ExtraData implements Serializable
         deActiveEncodedMap.put (key, value);
     }
 
+    public void addHeadersDescription (String key, String value)
+    {
+        headersDescription.put (key, value);
+    }
+
+    public void addQueriesDescription (String key, String value)
+    {
+        queriesDescription.put (key, value);
+    }
+
+    public void addMultiDescription (String key, String value)
+    {
+        multiDescription.put (key, value);
+    }
+
+    public void addEncodedDescription (String key, String value)
+    {
+        encodedDescription.put (key, value);
+    }
 
 
 

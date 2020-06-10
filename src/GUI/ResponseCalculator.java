@@ -71,5 +71,5 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
         correctExecute = false;
     }
 
-    //TODO : some bug here
+    //TODO : some bug here in cancel and error state
 }

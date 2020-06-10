@@ -124,7 +124,8 @@ public class KeyAndValuePanel extends JPanel
      */
     protected boolean isFixedKeyAndValuePanelDescVisible ()
     {
-        return fixedKeyAndValue.isPanelDescVisible ();
+        return fixedKeyAndValue.
+                isPanelDescVisible ();
     }
 
     /**
@@ -190,6 +191,16 @@ public class KeyAndValuePanel extends JPanel
     }
 
 
+    protected void properDescriptionBack (HashMap<String,String> data)
+    {
+        for (KeyAndValue keyAndValue : keyAndValues)
+        {
+            if (data.get (keyAndValue.getKey ().getText ()) != null)
+            {
+                keyAndValue.getDescribe ().setText (data.get (keyAndValue.getKey ().getText ()));
+            }
+        }
+    }
 
     /**
      * load GUI on request
@@ -215,8 +226,14 @@ public class KeyAndValuePanel extends JPanel
                                 keyAndValue.getKey ().getText (),
                                 keyAndValue.getValue ().getText ());
                     }
-
+                    if (!keyAndValue.getDescribe ().getText ().equals ("description"))
+                    {
+                        requestGui.getClientRequest ().getExtraData ().addQueriesDescription (
+                                keyAndValue.getKey ().getText (),keyAndValue.getDescribe ().getText ());
+                    }
                 }
+
+
 
                 break;
             case "Header" :
@@ -235,6 +252,11 @@ public class KeyAndValuePanel extends JPanel
                         requestGui.getClientRequest ().getExtraData ().addDeActiveHeaders (
                                 keyAndValue.getKey ().getText (),
                                 keyAndValue.getValue ().getText ());
+                    }
+                    if (!keyAndValue.getDescribe ().getText ().equals ("description"))
+                    {
+                        requestGui.getClientRequest ().getExtraData ().addHeadersDescription (
+                                keyAndValue.getKey ().getText (),keyAndValue.getDescribe ().getText ());
                     }
 
                 }
@@ -256,6 +278,11 @@ public class KeyAndValuePanel extends JPanel
                                 keyAndValue.getKey ().getText (),
                                 keyAndValue.getValue ().getText ());
                     }
+                    if (!keyAndValue.getDescribe ().getText ().equals ("description"))
+                    {
+                        requestGui.getClientRequest ().getExtraData ().addMultiDescription (
+                                keyAndValue.getKey ().getText (),keyAndValue.getDescribe ().getText ());
+                    }
 
                 }
                 break;
@@ -276,6 +303,11 @@ public class KeyAndValuePanel extends JPanel
                         requestGui.getClientRequest ().getExtraData ().addDeActiveEncodedMap (
                                 keyAndValue.getKey ().getText (),
                                 keyAndValue.getValue ().getText ());
+                    }
+                    if (!keyAndValue.getDescribe ().getText ().equals ("description"))
+                    {
+                        requestGui.getClientRequest ().getExtraData ().addEncodedDescription (
+                                keyAndValue.getKey ().getText (),keyAndValue.getDescribe ().getText ());
                     }
                 }
                 break;

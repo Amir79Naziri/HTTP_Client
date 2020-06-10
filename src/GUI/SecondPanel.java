@@ -346,16 +346,10 @@ public class SecondPanel extends JPanel
      */
     protected boolean initializeForSend (boolean isForSending)
     {
-        headerPanel.getKeyAndValuePanel ().properData ();
-        queryPanel.getKeyAndValuePanel ().properData ();
-        if (requestGui.getClientRequest ().getRequestType () != RequestType.GET)
+        if (requestGui.getClientRequest ().getMessageBodyType () == 2)
         {
-            switch (requestGui.getClientRequest ().getMessageBodyType ())
-            {
-                case 1 :
-                    multiPartPanel.getKeyAndValuePanel ().properData ();
-                    break;
-                case 2 :
+                if (requestGui.getClientRequest ().getRequestType () != RequestType.GET)
+                {
                     File file;
                     if (isForSending) {
                         if (binaryFilePanel.getPath () != null) {
@@ -373,15 +367,12 @@ public class SecondPanel extends JPanel
                             return false;
                         }
 
-
                         requestGui.getClientRequest ().addUploadBinaryFile (
                                 new File (binaryFilePanel.getPath ().toString ()));
                     }
-                    break;
-                case 3 :
-                    urlEncodedPanel.getKeyAndValuePanel ().properData ();
-            }
+                }
         }
+
         if (save.isSelected () && isForSending) {
             String name =
                     JOptionPane.showInputDialog (gui.getBaseFrame (),
@@ -410,21 +401,29 @@ public class SecondPanel extends JPanel
                 (requestGui.getClientRequest ().getCustomHeaders ());
         headerPanel.getKeyAndValuePanel ().properBackV2 (
                 requestGui.getClientRequest ().getExtraData ().getDeActiveHeaders ());
+        headerPanel.getKeyAndValuePanel ().properDescriptionBack (
+                requestGui.getClientRequest ().getExtraData ().getHeadersDescription ());
 
         queryPanel.getKeyAndValuePanel ().properBack (requestGui.getClientRequest ()
         .getQueryData ());
         queryPanel.getKeyAndValuePanel ().properBackV2 (requestGui.getClientRequest ()
         .getExtraData ().getDeActiveQueries ());
+        queryPanel.getKeyAndValuePanel ().properDescriptionBack (requestGui.getClientRequest ()
+        .getExtraData ().getQueriesDescription ());
 
         multiPartPanel.getKeyAndValuePanel ().properBack (requestGui.getClientRequest ()
                 .getFormUrlData ());
         multiPartPanel.getKeyAndValuePanel ().properBackV2 (requestGui.getClientRequest ()
         .getExtraData ().getDeActiveMultiMap ());
+        multiPartPanel.getKeyAndValuePanel ().properDescriptionBack (requestGui.getClientRequest ()
+        .getExtraData ().getMultiDescription ());
 
         urlEncodedPanel.getKeyAndValuePanel ().properBack (requestGui.getClientRequest ()
         .getFormUrlDataEncoded ());
         urlEncodedPanel.getKeyAndValuePanel ().properBackV2 (requestGui.getClientRequest ()
         .getExtraData ().getDeActiveEncodedMap ());
+        urlEncodedPanel.getKeyAndValuePanel ().properDescriptionBack (requestGui.getClientRequest ()
+        .getExtraData ().getMultiDescription ());
 
         binaryFilePanel.setPath (requestGui.getClientRequest ().getUploadBinaryFilePath ());
 
