@@ -1,5 +1,7 @@
-package Client;
+package Connection;
 
+import Client.FollowRedirectException;
+import Client.RequestType;
 import Storage.ResponseStorage;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
@@ -316,22 +318,29 @@ public class HttpConnection
     {
         if (serverInputStream == null)
             throw new IOException ("serverInputStream is null");
-        BufferedReader out = new BufferedReader (new InputStreamReader (serverInputStream));
-        String line;
         StringBuilder content = new StringBuilder ();
-        while ((line = out.readLine ()) != null) {
-            content.append (line).append ('\n');
+        try (BufferedReader out = new BufferedReader (new InputStreamReader (serverInputStream)))
+        {
+            String line;
+            while ((line = out.readLine ()) != null) {
+                content.append (line).append ('\n');
+            }
         }
-        out.close ();
+
         responseStorage.setResponseTextRawData (content.toString ());
         responseStorage.setReadLength (content.toString ().getBytes ().length);
         if (shouldSaveResponseOnFile)
         {
-            BufferedOutputStream in = new BufferedOutputStream (new FileOutputStream (
-                    addressOfFileForSaveOutput));
-            in.write (content.toString ().getBytes ());
-            in.flush ();
-            in.close ();
+            try (BufferedOutputStream in = new BufferedOutputStream (new FileOutputStream (
+                    addressOfFileForSaveOutput)))
+            {
+                in.write (content.toString ().getBytes ());
+                in.flush ();
+            } catch (IOException e)
+            {
+                System.err.println ("Some thing went Wrong in Save response on File");
+            }
+
         }
     }
 
@@ -349,17 +358,22 @@ public class HttpConnection
     {
         if (serverInputStream == null)
             throw new IOException ("serverInputStream is null");
-        BufferedInputStream in= new BufferedInputStream (serverInputStream);
-        responseStorage.setResponseBinaryRawData (in.readAllBytes ());
-        responseStorage.setReadLength (responseStorage.getResponseBinaryRawData ().length);
-        in.close ();
+        try (BufferedInputStream in= new BufferedInputStream (serverInputStream))
+        {
+            responseStorage.setResponseBinaryRawData (in.readAllBytes ());
+            responseStorage.setReadLength (responseStorage.getResponseBinaryRawData ().length);
+        }
         if (shouldSaveResponseOnFile)
         {
-            BufferedOutputStream out = new BufferedOutputStream (
-                    new FileOutputStream (addressOfFileForSaveOutput));
-            out.write (responseStorage.getResponseBinaryRawData ());
-            out.flush ();
-            out.close ();
+            try (BufferedOutputStream out = new BufferedOutputStream (
+                    new FileOutputStream (addressOfFileForSaveOutput)))
+            {
+                out.write (responseStorage.getResponseBinaryRawData ());
+                out.flush ();
+            } catch (IOException e)
+            {
+                System.err.println ("Some thing went Wrong in Save response on File");
+            }
         }
     }
 
@@ -406,32 +420,32 @@ public class HttpConnection
     {
         if (body == null || boundary == null)
             throw new IOException("Body or Boundary is Empty");
-        BufferedOutputStream out = new BufferedOutputStream (serverOutPutSteam);
-        for (String key : body.keySet())
+        try (BufferedOutputStream out = new BufferedOutputStream (serverOutPutSteam))
         {
-            out.write(("--" + boundary + "\r\n").getBytes());
-            if (key.contains("file")) {
-                out.write (("" +
-                        "" + (new File(body.get(key))).getName() +
-                        "\"\r\nContent-Type: Auto\r\n\r\n").getBytes());
+            for (String key : body.keySet())
+            {
+                out.write(("--" + boundary + "\r\n").getBytes());
+                if (key.contains("file")) {
+                    out.write (("" +
+                            "" + (new File(body.get(key))).getName() +
+                            "\"\r\nContent-Type: Auto\r\n\r\n").getBytes());
 
-                BufferedInputStream tempBufferedInputStream = new BufferedInputStream
-                        (new FileInputStream(new File(body.get(key))));
-                byte[] filesBytes = tempBufferedInputStream.readAllBytes();
-                out.write(filesBytes);
-                out.write("\r\n".getBytes());
-                tempBufferedInputStream.close ();
-
-            } else {
-                out.write(("Content-Disposition: form" +
-                        "-data; name=\"" + key + "\"\r\n\r\n").getBytes());
-                out.write((body.get(key) + "\r\n").getBytes());
+                    try (BufferedInputStream tempBufferedInputStream = new BufferedInputStream
+                            (new FileInputStream(new File(body.get(key)))))
+                    {
+                        byte[] filesBytes = tempBufferedInputStream.readAllBytes();
+                        out.write(filesBytes);
+                        out.write("\r\n".getBytes());
+                    }
+                } else {
+                    out.write(("Content-Disposition: form" +
+                            "-data; name=\"" + key + "\"\r\n\r\n").getBytes());
+                    out.write((body.get(key) + "\r\n").getBytes());
+                }
             }
+            out.write(("--" + boundary + "--\r\n").getBytes());
+            out.flush();
         }
-        out.write(("--" + boundary + "--\r\n").getBytes());
-        out.flush();
-        out.close();
-
     }
 
     /**
@@ -443,12 +457,11 @@ public class HttpConnection
     private void writeBinaryFile (OutputStream serverOutPutStream, File file)
                                     throws IOException
     {
-        BufferedOutputStream out = new BufferedOutputStream (serverOutPutStream);
-        BufferedInputStream in = new BufferedInputStream (new FileInputStream (file));
-        out.write (in.readAllBytes ());
-        out.flush ();
-        out.close ();
-        in.close ();
+        try (BufferedOutputStream out = new BufferedOutputStream (serverOutPutStream);
+             BufferedInputStream in = new BufferedInputStream (new FileInputStream (file))) {
+            out.write (in.readAllBytes ());
+            out.flush ();
+        }
     }
 
     /**
@@ -462,9 +475,12 @@ public class HttpConnection
     {
         if (formUrlEncodedData == null)
             throw new IOException("Body is Empty");
-        BufferedOutputStream out = new BufferedOutputStream (serverOutPutStream);
-        out.write (formUrlEncodedData.getBytes (StandardCharsets.UTF_8));
-        out.flush ();
-        out.close ();
+        try (BufferedOutputStream out = new BufferedOutputStream (serverOutPutStream))
+        {
+            out.write (formUrlEncodedData.getBytes (StandardCharsets.UTF_8));
+            out.flush ();
+        }
     }
+
+
 }

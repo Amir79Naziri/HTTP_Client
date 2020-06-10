@@ -1,6 +1,6 @@
 package Storage;
 
-import GUI.BinaryFilePanel;
+import Client.MakeSizeReadable;
 import java.io.*;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +59,7 @@ public class ResponseStorage implements Serializable
      */
     public void setReadLength (long readLength) {
 
-        this.readLength = BinaryFilePanel.makeSizeReadable (readLength);
+        this.readLength = MakeSizeReadable.makeSizeReadable (readLength);
         valid = true;
     }
 

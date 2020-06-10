@@ -1,4 +1,5 @@
 package GUI;
+import Connection.Connector;
 import javax.swing.*;
 import java.awt.*;
 
@@ -27,7 +28,7 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
     @Override
     protected Boolean doInBackground ()  {
 
-        Thread thread = new Thread (thirdPanel.getRequestGui ().getClientRequest ());
+        Thread thread = new Thread (new Connector (thirdPanel.getRequestGui ().getClientRequest ()));
         thread.start ();
 
         try {
@@ -70,4 +71,5 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
         correctExecute = false;
     }
 
+    //TODO : some bug here
 }

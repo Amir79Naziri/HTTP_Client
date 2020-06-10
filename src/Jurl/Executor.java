@@ -1,6 +1,8 @@
 package Jurl;
 
 import Client.ClientRequest;
+import Connection.Connector;
+
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -38,9 +40,7 @@ public class Executor implements Runnable
             {
                 e.printStackTrace ();
             }
-            pool.execute (clientRequest);
+            pool.execute (new Connector (clientRequest));
         }
-
-
     }
 }

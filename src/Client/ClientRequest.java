@@ -13,7 +13,7 @@ import java.util.*;
  *
  * @author Amir Naziri
  */
-public class ClientRequest implements Serializable, Runnable
+public class ClientRequest implements Serializable
 {
     private URL url;
     private ResponseStorage responseStorage;
@@ -320,54 +320,13 @@ public class ClientRequest implements Serializable, Runnable
         uploadBinaryFile = null;
     }
 
-    /**
-     * send request
-     */
-    @Override
-    public void run ()
-    {
-        HttpConnection httpConnection = new HttpConnection (responseStorage);
-        String url = getUrl ();
 
-        while (true)
-        {
-            if (httpConnection.connectionInitializer
-                    (getCustomHeaders (), getQueryDataString (),url,
-                            getRequestType ()))
-            {
-                try {
-                    switch (getRequestType ())
-                    {
-                        case GET:
-                            httpConnection.onlyGet (followRedirect,
-                                    shouldSaveResponseOnFile,addressOfFileForSaveOutput);
-                            break;
-                        case POST:
-                        case PUT:
-                        case DELETE:httpConnection.sendAndGet (messageBodyType,
-                                getFormUrlData (),uploadBinaryFile,
-                                getFormUrlDataEncodedString (),followRedirect,
-                                shouldSaveResponseOnFile,addressOfFileForSaveOutput);
-                    }
-                    printResult (url);
-                    return;
-                } catch (FollowRedirectException e)
-                {
-                    url = e.getNewUrl ();
-                }
-            }
-            else
-                return;
-        }
-
-
-    }
 
     /**
      * print result
      * @param url url
      */
-    private synchronized void printResult (String url)
+    public synchronized void printResult (String url)
     {
         responseStorage.printTimeAndReadDetails ();
         System.out.println ();
@@ -523,6 +482,20 @@ public class ClientRequest implements Serializable, Runnable
             case "GET" :
             default : this.requestType = RequestType.GET;
         }
+    }
+
+    public File getUploadBinaryFile () {
+        return uploadBinaryFile;
+    }
+
+    public boolean isFollowRedirect () {
+        return followRedirect;
+    }
+
+
+
+    public String getAddressOfFileForSaveOutput () {
+        return addressOfFileForSaveOutput;
     }
 
     /**
