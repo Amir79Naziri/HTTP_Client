@@ -1,6 +1,6 @@
 package GUI;
 
-import Client.RequestType;
+import ClientRequest.RequestType;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -423,7 +423,7 @@ public class SecondPanel extends JPanel
         urlEncodedPanel.getKeyAndValuePanel ().properBackV2 (requestGui.getClientRequest ()
         .getExtraData ().getDeActiveEncodedMap ());
         urlEncodedPanel.getKeyAndValuePanel ().properDescriptionBack (requestGui.getClientRequest ()
-        .getExtraData ().getMultiDescription ());
+        .getExtraData ().getEncodedDescription ());
 
         binaryFilePanel.setPath (requestGui.getClientRequest ().getUploadBinaryFilePath ());
 

@@ -1,12 +1,18 @@
 package ConnectionHandler;
 
-import Client.ClientRequest;
+import ClientRequest.ClientRequest;
 
-
+/**
+ * this class connect a client request to server
+ */
 public class Connector implements Runnable
 {
     private ClientRequest clientRequest;
 
+    /**
+     * create new connector
+     * @param clientRequest clientRequest
+     */
     public Connector (ClientRequest clientRequest)
     {
         this.clientRequest = clientRequest;

@@ -1,6 +1,6 @@
 package ConnectionHandler;
 
-import Client.ClientRequest;
+import ClientRequest.ClientRequest;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;

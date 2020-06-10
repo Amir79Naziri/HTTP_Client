@@ -1,6 +1,6 @@
 package ControlUnit;
 
-import Client.ClientRequest;
+import ClientRequest.ClientRequest;
 import Storage.RequestsStorage;
 import java.io.*;
 import java.util.ArrayList;

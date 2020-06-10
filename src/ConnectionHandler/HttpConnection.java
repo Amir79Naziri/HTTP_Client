@@ -1,6 +1,6 @@
 package ConnectionHandler;
 
-import Client.RequestType;
+import ClientRequest.RequestType;
 import Storage.ResponseStorage;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;

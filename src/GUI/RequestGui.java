@@ -1,7 +1,7 @@
 package GUI;
 
-import Client.ClientRequest;
-import Client.RequestType;
+import ClientRequest.ClientRequest;
+import ClientRequest.RequestType;
 import ControlUnit.Controller;
 
 import javax.swing.*;

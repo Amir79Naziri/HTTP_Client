@@ -1,6 +1,6 @@
 package Storage;
 
-import Client.ClientRequest;
+import ClientRequest.ClientRequest;
 import java.io.Serializable;
 import java.util.ArrayList;
 

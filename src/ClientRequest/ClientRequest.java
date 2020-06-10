@@ -1,4 +1,4 @@
-package Client;
+package ClientRequest;
 
 import Storage.ExtraData;
 import Storage.ResponseStorage;

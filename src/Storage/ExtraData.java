@@ -181,19 +181,34 @@ public class ExtraData implements Serializable
         return deActiveQueries;
     }
 
-
+    /**
+     *
+     * @return headersDescription
+     */
     public HashMap<String, String> getHeadersDescription () {
         return headersDescription;
     }
 
+    /**
+     *
+     * @return encodedDescription
+     */
     public HashMap<String, String> getEncodedDescription () {
         return encodedDescription;
     }
 
+    /**
+     *
+     * @return multiDescription
+     */
     public HashMap<String, String> getMultiDescription () {
         return multiDescription;
     }
 
+    /**
+     *
+     * @return queriesDescription
+     */
     public HashMap<String, String> getQueriesDescription () {
         return queriesDescription;
     }
@@ -238,21 +253,41 @@ public class ExtraData implements Serializable
         deActiveEncodedMap.put (key, value);
     }
 
+    /**
+     * add new element
+     * @param key key
+     * @param value value
+     */
     public void addHeadersDescription (String key, String value)
     {
         headersDescription.put (key, value);
     }
 
+    /**
+     * add new element
+     * @param key key
+     * @param value value
+     */
     public void addQueriesDescription (String key, String value)
     {
         queriesDescription.put (key, value);
     }
 
+    /**
+     * add new element
+     * @param key key
+     * @param value value
+     */
     public void addMultiDescription (String key, String value)
     {
         multiDescription.put (key, value);
     }
 
+    /**
+     * add new element
+     * @param key key
+     * @param value value
+     */
     public void addEncodedDescription (String key, String value)
     {
         encodedDescription.put (key, value);

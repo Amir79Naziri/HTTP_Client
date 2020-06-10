@@ -1,6 +1,6 @@
 package ControlUnit;
 
-import Client.ClientRequest;
+import ClientRequest.ClientRequest;
 import GUI.GUI;
 import Jurl.Jurl;
 

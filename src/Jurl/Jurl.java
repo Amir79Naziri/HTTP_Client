@@ -1,6 +1,6 @@
 package Jurl;
 
-import Client.ClientRequest;
+import ClientRequest.ClientRequest;
 import ConnectionHandler.Executor;
 import ControlUnit.Controller;
 import java.io.File;
