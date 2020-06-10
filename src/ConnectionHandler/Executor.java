@@ -1,7 +1,6 @@
-package Jurl;
+package ConnectionHandler;
 
 import Client.ClientRequest;
-import Connection.Connector;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -22,7 +21,7 @@ public class Executor implements Runnable
      * creates a new Executor
      * @param clientRequests list of client requests
      */
-    protected Executor (ArrayList<ClientRequest> clientRequests)
+    public Executor (ArrayList<ClientRequest> clientRequests)
     {
         this.clientRequests = clientRequests;
         pool = Executors.newCachedThreadPool ();

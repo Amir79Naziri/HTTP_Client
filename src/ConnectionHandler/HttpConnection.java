@@ -1,6 +1,5 @@
-package Connection;
+package ConnectionHandler;
 
-import Client.FollowRedirectException;
 import Client.RequestType;
 import Storage.ResponseStorage;
 import javax.net.ssl.HttpsURLConnection;

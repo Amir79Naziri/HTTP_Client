@@ -1,7 +1,6 @@
-package Connection;
+package ConnectionHandler;
 
 import Client.ClientRequest;
-import Client.FollowRedirectException;
 
 
 public class Connector implements Runnable

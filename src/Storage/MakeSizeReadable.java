@@ -1,4 +1,4 @@
-package Client;
+package Storage;
 
 /**
  * this class make size readable

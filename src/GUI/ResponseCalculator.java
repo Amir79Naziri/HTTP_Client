@@ -1,5 +1,5 @@
 package GUI;
-import Connection.Connector;
+import ConnectionHandler.Connector;
 import javax.swing.*;
 import java.awt.*;
 
