@@ -2,14 +2,9 @@ import ControlUnit.Controller;
 
 import javax.swing.*;
 
-
-/**
- * this class build for test
- */
-public class Run
+public class RunGUI
 {
     public static void main (String[] args) {
-
 
         try { // "javax.swing.plaf.nimbus.NimbusLookAndFeel"
             UIManager.setLookAndFeel ("javax.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -19,10 +14,5 @@ public class Run
         }
 
         Controller.startProgramGui ();
-        Controller.startProgramJurl ();
-
-
-
-
     }
 }
