@@ -174,10 +174,9 @@ public class HttpConnection
                     "multipart/form-data; boundary=" + boundary);
         } else if (messageBodyType == 2)
         {
-            if (binaryFileUpload == null || !binaryFileUpload.exists () ||
-                    !binaryFileUpload.isAbsolute ()) {
+            if (binaryFileUpload == null) {
                 {
-                    System.err.println ("File is not Valid");
+                    System.err.println ("you should set a valid file address");
                     return;
                 }
             }

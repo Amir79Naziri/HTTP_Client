@@ -124,6 +124,13 @@ public class ClientRequest implements Serializable
      * @param uploadBinaryFile binaryFile
      */
     public void addUploadBinaryFile (File uploadBinaryFile) {
+        if (uploadBinaryFile == null || !uploadBinaryFile.exists () ||
+                !uploadBinaryFile.isAbsolute ()) {
+            {
+                this.uploadBinaryFile = null;
+                return;
+            }
+        }
         this.uploadBinaryFile =
                 uploadBinaryFile;
     }
