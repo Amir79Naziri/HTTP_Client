@@ -190,7 +190,10 @@ public class KeyAndValuePanel extends JPanel
             addNewKeyAndValue (key,data.get (key),false);
     }
 
-
+    /**
+     * load request description on GUI
+     * @param data data
+     */
     protected void properDescriptionBack (HashMap<String,String> data)
     {
         for (KeyAndValue keyAndValue : keyAndValues)
