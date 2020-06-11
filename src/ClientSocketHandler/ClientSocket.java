@@ -3,6 +3,7 @@ package ClientSocketHandler;
 
 import Storage.RequestsStorage;
 import java.io.*;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketException;
 
@@ -52,7 +53,7 @@ public class ClientSocket implements Runnable
     public void run () {
         if (port == -1)
         {
-            System.err.println ("post number is not valid");
+            System.err.println ("port number is not valid");
             return;
         }
         if (host == null)
@@ -66,12 +67,17 @@ public class ClientSocket implements Runnable
             sendData (connection.getOutputStream ());
             receiveData (connection.getInputStream ());
             successfullyFinished = true;
-        } catch (ClassNotFoundException e)
+        }
+        catch (ConnectException e)
+        {
+            System.err.println ("Couldn't connect to Server");
+        }
+        catch (ClassNotFoundException e)
         {
             System.err.println ("Some Thing went Wrong while reading from Client");
         } catch (SocketException e)
         {
-            System.err.println ("Server's connection Terminated");
+            System.err.println ("Server Not Responding");
         } catch (IOException e)
         {
             e.printStackTrace ();

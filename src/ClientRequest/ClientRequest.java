@@ -485,16 +485,26 @@ public class ClientRequest implements Serializable
         }
     }
 
+    /**
+     *
+     * @return getUploadBinaryFile
+     */
     public File getUploadBinaryFile () {
         return uploadBinaryFile;
     }
 
+    /**
+     *
+     * @return isFollowRedirect
+     */
     public boolean isFollowRedirect () {
         return followRedirect;
     }
 
-
-
+    /**
+     *
+     * @return addressOfFileForSaveOutput
+     */
     public String getAddressOfFileForSaveOutput () {
         return addressOfFileForSaveOutput;
     }

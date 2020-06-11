@@ -62,7 +62,6 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
             correctExecute = false;
             return false;
         }
-
     }
 
 

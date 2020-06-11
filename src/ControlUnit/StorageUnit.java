@@ -130,6 +130,10 @@ public class StorageUnit
         }
     }
 
+    /**
+     * update request storage data
+     * @param requestsStorage requestsStorage
+     */
     protected void updateRequestStorage (RequestsStorage requestsStorage)
     {
         for (ClientRequest clientRequest : getClientRequests ())
