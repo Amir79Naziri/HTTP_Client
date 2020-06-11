@@ -358,7 +358,10 @@ public class KeyAndValuePanel extends JPanel
                 }
             }
             else if (e.getSource () == toggleDescription)
+            {
                 toggleAllDescription ();
+                properData ();
+            }
         }
 
         @Override

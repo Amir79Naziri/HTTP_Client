@@ -161,6 +161,7 @@ public class BinaryFilePanel extends JPanel
     protected void clearPath ()
     {
         fileAddress.setText ("No file selected");
+
         path = null;
         resetFile.setEnabled (false);
     }
