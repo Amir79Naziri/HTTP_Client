@@ -20,11 +20,19 @@ public class Controller {
 
 
     /**
-     * start program
+     * start program : Jurl
      */
-    public static void startProgram () {
+    public static void startProgramJurl () {
+
+        jurl.startProgram ();
+    }
+
+    /**
+     * start program : GUI
+     */
+    public static void startProgramGui ()
+    {
         gui.setBaseFrameVisible ();
-//        jurl.startProgram ();
     }
 
     /**
