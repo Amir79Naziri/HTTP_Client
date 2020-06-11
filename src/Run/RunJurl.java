@@ -1,8 +1,14 @@
+package Run;
+
 import ControlUnit.Controller;
 
 import javax.swing.*;
 
-public class RunGUI
+
+/**
+ * this class build for test jurl
+ */
+public class RunJurl
 {
     public static void main (String[] args) {
 
@@ -13,6 +19,6 @@ public class RunGUI
             e.printStackTrace ();
         }
 
-        Controller.startProgramGui ();
+        Controller.startProgramJurl ();
     }
 }

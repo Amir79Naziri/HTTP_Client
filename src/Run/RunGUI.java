@@ -1,12 +1,13 @@
+package Run;
+
 import ControlUnit.Controller;
 
 import javax.swing.*;
 
-
 /**
- * this class build for test
+ * this class build for test GUI
  */
-public class RunJurl
+public class RunGUI
 {
     public static void main (String[] args) {
 
@@ -17,6 +18,6 @@ public class RunJurl
             e.printStackTrace ();
         }
 
-        Controller.startProgramJurl ();
+        Controller.startProgramGui ();
     }
 }
