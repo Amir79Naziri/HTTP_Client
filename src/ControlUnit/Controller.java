@@ -1,8 +1,10 @@
 package ControlUnit;
 
 import ClientRequest.ClientRequest;
+import ClientSocketHandler.ClientProxy;
 import GUI.GUI;
 import Jurl.Jurl;
+import Storage.RequestsStorage;
 
 import java.util.ArrayList;
 
@@ -12,49 +14,47 @@ import java.util.ArrayList;
  * @author Amir Naziri
  */
 
-public class Controller
-{
+public class Controller {
     private static final StorageUnit storageUnit = new StorageUnit ();
     private static final Jurl jurl = new Jurl ();
-    private static final GUI gui = new GUI();
+    private static final GUI gui = new GUI ();
 
 
     /**
      * start program
      */
-    public static void startProgram ()
-    {
+    public static void startProgram () {
         gui.setBaseFrameVisible ();
         jurl.startProgram ();
     }
 
     /**
      * add new Client request to list
+     *
      * @param clientRequest new clientRequest
      */
-    public static void addNewClientRequest (ClientRequest clientRequest)
-    {
+    public static void addNewClientRequest (ClientRequest clientRequest) {
         storageUnit.
                 addRequest (clientRequest);
     }
 
     /**
      * remove client request from list
+     *
      * @param clientRequest clientRequest
      */
-    public static void removeClientRequest (ClientRequest clientRequest)
-    {
+    public static void removeClientRequest (ClientRequest clientRequest) {
         storageUnit.
                 removeRequest (clientRequest);
     }
 
     /**
      * get a client request
+     *
      * @param index index
      * @return client request
      */
-    public static ClientRequest getClientRequest (int index)
-    {
+    public static ClientRequest getClientRequest (int index) {
         return storageUnit.
                 getClientRequest (index);
     }
@@ -62,26 +62,24 @@ public class Controller
     /**
      * print list of request
      */
-    public static void printList ()
-    {
+    public static void printList () {
         storageUnit.printList ();
     }
 
     /**
      * save every thing
      */
-    public static void saveUpdates ()
-    {
+    public static void saveUpdates () {
         gui.getFirstPanel ().getRequestsPanel ().properRequestsForClosing ();
         storageUnit.save ();
     }
 
     /**
      * set follow redirection for all client requests
+     *
      * @param followRedirect followRedirect
      */
-    public static void setFollowRedirectForAllClientRequests (boolean followRedirect)
-    {
+    public static void setFollowRedirectForAllClientRequests (boolean followRedirect) {
         for (ClientRequest clientRequest : storageUnit.getClientRequests ())
             clientRequest.setFollowRedirect (followRedirect);
     }
@@ -89,27 +87,35 @@ public class Controller
     /**
      * @return list of client requests
      */
-    public static ArrayList<ClientRequest> clientRequests ()
-    {
+    public static ArrayList<ClientRequest> clientRequests () {
         return storageUnit.
                 getClientRequests ();
     }
 
-    public static void printAllResult ()
+    /**
+     * print all result of given storage
+     * @param requestsStorage requestsStorage
+     */
+    public static synchronized void printAllResult (RequestsStorage requestsStorage)
     {
-        for (ClientRequest clientRequest : clientRequests ())
+        if (requestsStorage == null)
+            return;
+        for (ClientRequest clientRequest : requestsStorage.getClientRequests ())
             clientRequest.printResult ();
     }
 
-    public static void sendRequestsToServer ()
-    {
 
+
+    /**
+     * update the requestsStorage
+     * @param requestsStorage requestsStorage
+     */
+    public static void updateRequestsStorage (RequestsStorage requestsStorage)
+    {
+        storageUnit.updateRequestStorage (requestsStorage);
+        storageUnit.save ();
     }
 
-    public static void sendRequestToServer (ClientRequest clientRequest)
-    {
-
-    }
 
 //    /**
 //     * adds a new client request to GUI from jurl in runtime

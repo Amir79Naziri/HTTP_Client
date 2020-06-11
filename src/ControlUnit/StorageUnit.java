@@ -1,6 +1,7 @@
 package ControlUnit;
 
 import ClientRequest.ClientRequest;
+import ClientSocketHandler.ClientProxy;
 import Storage.RequestsStorage;
 import java.io.*;
 import java.util.ArrayList;
@@ -126,6 +127,18 @@ public class StorageUnit
             {
                 System.out.println (count + " . " + request.toString ());
                 count++;
+            }
+        }
+    }
+
+    protected void updateRequestStorage (RequestsStorage requestsStorage)
+    {
+        for (ClientRequest clientRequest : getClientRequests ())
+        {
+            for (ClientRequest clientRequest1 : requestsStorage.getClientRequests ())
+            {
+                if (clientRequest.equals (clientRequest1))
+                    clientRequest = clientRequest1;
             }
         }
     }

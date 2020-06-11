@@ -1,47 +1,33 @@
 package ClientSocketHandler;
 
 
-import ClientRequest.ClientRequest;
 import Storage.RequestsStorage;
 import com.sun.jdi.ClassNotLoadedException;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 
-public class Client implements Runnable
+public class ClientProxy implements Runnable
 {
     private int port;
     private String host;
     private RequestsStorage requestsStorage;
     private boolean successfullyFinished;
 
-    public Client (RequestsStorage requestsStorage)
+    public ClientProxy (int port, String host, RequestsStorage requestsStorage)
     {
-        port = -1;
-        host = null;
+        this.port = port;
+        this.host = host;
         this.requestsStorage = requestsStorage;
         successfullyFinished = false;
     }
 
-    public Client (ClientRequest clientRequest)
-    {
-        port = -1;
-        host = null;
-        requestsStorage = new RequestsStorage ();
-        requestsStorage.add (clientRequest);
-        successfullyFinished = false;
-    }
-
-    public void setHost (String host) {
-        this.host = host;
-    }
-
-    public void setPort (int port) {
-        this.port = port;
-    }
-
     public boolean isSuccessfullyFinished () {
         return successfullyFinished;
+    }
+
+    public RequestsStorage getRequestsStorage () {
+        return requestsStorage;
     }
 
     @Override
