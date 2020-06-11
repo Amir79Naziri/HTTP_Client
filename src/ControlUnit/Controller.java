@@ -95,6 +95,22 @@ public class Controller
                 getClientRequests ();
     }
 
+    public static void printAllResult ()
+    {
+        for (ClientRequest clientRequest : clientRequests ())
+            clientRequest.printResult ();
+    }
+
+    public static void sendRequestsToServer ()
+    {
+
+    }
+
+    public static void sendRequestToServer (ClientRequest clientRequest)
+    {
+
+    }
+
 //    /**
 //     * adds a new client request to GUI from jurl in runtime
 //     * @param clientRequest clientRequest

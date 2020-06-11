@@ -1,7 +1,11 @@
 package GUI;
+import ClientRequest.ClientRequest;
 import ConnectionHandler.Connector;
+import ConnectionHandler.Executor;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * this class build for connecting process in GUI
@@ -28,7 +32,8 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
     @Override
     protected Boolean doInBackground ()  {
 
-        Thread thread = new Thread (new Connector (thirdPanel.getRequestGui ().getClientRequest ()));
+
+        Thread thread = new Thread (new Executor (thirdPanel.getRequestGui ().getClientRequest ()));
         thread.start ();
 
         try {

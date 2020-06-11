@@ -35,7 +35,11 @@ public enum ReservedWord
     QUERY_V1 ("-Q"),
     REMOVE_V1("-r"),
     REMOVE_V2("--remove"),
-    RENAME("--rename");
+    RENAME("--rename"),
+    PROXY("--proxy"),
+    IP("--ip"),
+    PORT("--port"),
+    SEND("--send");
 
 
     private String commandString; // command of a reserveWord

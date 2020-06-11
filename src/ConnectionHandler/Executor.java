@@ -27,6 +27,16 @@ public class Executor implements Runnable
         pool = Executors.newCachedThreadPool ();
     }
 
+    /**
+     * creates a new Executor
+     * @param clientRequest client requests
+     */
+    public Executor (ClientRequest clientRequest)
+    {
+        clientRequests = new ArrayList<> ();
+        clientRequests.add (clientRequest);
+    }
+
     @Override
     public void run () {
         if (clientRequests == null)

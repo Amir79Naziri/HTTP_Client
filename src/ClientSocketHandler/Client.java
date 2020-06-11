@@ -1,9 +1,9 @@
 package ClientSocketHandler;
 
 
+import ClientRequest.ClientRequest;
 import Storage.RequestsStorage;
 import com.sun.jdi.ClassNotLoadedException;
-
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
@@ -13,20 +13,55 @@ public class Client implements Runnable
     private int port;
     private String host;
     private RequestsStorage requestsStorage;
+    private boolean successfullyFinished;
 
-    public Client (String host, int port, RequestsStorage requestsStorage)
+    public Client (RequestsStorage requestsStorage)
     {
-        this.host = host;
-        this.port = port;
+        port = -1;
+        host = null;
         this.requestsStorage = requestsStorage;
+        successfullyFinished = false;
+    }
+
+    public Client (ClientRequest clientRequest)
+    {
+        port = -1;
+        host = null;
+        requestsStorage = new RequestsStorage ();
+        requestsStorage.add (clientRequest);
+        successfullyFinished = false;
+    }
+
+    public void setHost (String host) {
+        this.host = host;
+    }
+
+    public void setPort (int port) {
+        this.port = port;
+    }
+
+    public boolean isSuccessfullyFinished () {
+        return successfullyFinished;
     }
 
     @Override
     public void run () {
+        if (port == -1)
+        {
+            System.err.println ("post number is not valid");
+            return;
+        }
+        if (host == null)
+        {
+            System.err.println ("IP is not valid");
+            return;
+        }
+
         try (Socket connection = new Socket (host,port))
         {
             sendData (connection.getOutputStream ());
             receiveData (connection.getInputStream ());
+            successfullyFinished = true;
         } catch (ClassNotLoadedException e)
         {
             System.err.println (e.getMessage ());
@@ -38,6 +73,7 @@ public class Client implements Runnable
             e.printStackTrace ();
         }
     }
+
 
     private void receiveData (InputStream serverInputStream) throws IOException,
             ClassNotLoadedException

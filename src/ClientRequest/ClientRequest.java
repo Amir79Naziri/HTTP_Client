@@ -324,9 +324,8 @@ public class ClientRequest implements Serializable
 
     /**
      * print result
-     * @param url url
      */
-    public synchronized void printResult (String url)
+    public synchronized void printResult ()
     {
         responseStorage.printTimeAndReadDetails ();
         System.out.println ();

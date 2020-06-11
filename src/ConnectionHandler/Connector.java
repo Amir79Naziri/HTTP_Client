@@ -13,7 +13,7 @@ public class Connector implements Runnable
      * create new connector
      * @param clientRequest clientRequest
      */
-    public Connector (ClientRequest clientRequest)
+    protected Connector (ClientRequest clientRequest)
     {
         this.clientRequest = clientRequest;
     }
@@ -50,7 +50,7 @@ public class Connector implements Runnable
                                 clientRequest.isShouldSaveOutputInFile (),
                                 clientRequest.getAddressOfFileForSaveOutput ());
                     }
-                    clientRequest.printResult (url);
+                    clientRequest.printResult ();
                     return;
                 } catch (FollowRedirectException e)
                 {
