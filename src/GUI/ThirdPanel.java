@@ -51,7 +51,6 @@ public class ThirdPanel extends JPanel
         addProgressPanel ();
         if (requestGui.getClientRequest ().getResponseStorage ().isValid ())
             properBack ();
-
     }
 
     /**

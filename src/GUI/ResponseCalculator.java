@@ -1,5 +1,6 @@
 package GUI;
 
+
 import ConnectionHandler.Executor;
 import javax.swing.*;
 import java.awt.*;
@@ -30,15 +31,15 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
     @Override
     protected Boolean doInBackground ()  {
 
-
-        Thread thread = new Thread (new Executor (thirdPanel.getRequestGui ().getClientRequest ()));
+        Executor executor = new Executor (thirdPanel.getRequestGui ().getClientRequest ());
+        Thread thread = new Thread (executor);
         thread.start ();
 
         try {
             int i = 2;
             thirdPanel.getStatusMessage ().setText ("Connecting");
             thirdPanel.getStatusMessage ().setBackground (new Color (189, 143, 17));
-            while (thread.isAlive ()) {
+            while (!executor.getPool ().isTerminated ()) {
 
                 setProgress (i);
                 Thread.sleep (500);

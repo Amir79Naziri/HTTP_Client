@@ -23,8 +23,8 @@ public class Controller {
      * start program
      */
     public static void startProgram () {
-//        gui.setBaseFrameVisible ();
-        jurl.startProgram ();
+        gui.setBaseFrameVisible ();
+//        jurl.startProgram ();
     }
 
     /**

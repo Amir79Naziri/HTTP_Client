@@ -38,6 +38,13 @@ public class Executor implements Runnable
         pool = Executors.newCachedThreadPool ();
     }
 
+    /**
+     * get pool
+     * @return pool
+     */
+    public ExecutorService getPool () {
+        return pool;
+    }
 
     @Override
     public void run () {
@@ -46,9 +53,10 @@ public class Executor implements Runnable
         for (ClientRequest clientRequest : clientRequests)
         {
             try {
-                Thread.sleep (3000);
-            } catch (InterruptedException ignore)
+                Thread.sleep (500);
+            } catch (InterruptedException e)
             {
+                System.out.println (e.getMessage ());
                 pool.shutdownNow ();
                 return;
             }
