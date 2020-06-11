@@ -35,6 +35,7 @@ public class Executor implements Runnable
     {
         clientRequests = new ArrayList<> ();
         clientRequests.add (clientRequest);
+        pool = Executors.newCachedThreadPool ();
     }
 
 
@@ -46,9 +47,10 @@ public class Executor implements Runnable
         {
             try {
                 Thread.sleep (3000);
-            } catch (InterruptedException e)
+            } catch (InterruptedException ignore)
             {
-                e.printStackTrace ();
+                pool.shutdownNow ();
+                return;
             }
             pool.execute (new Connector (clientRequest));
         }

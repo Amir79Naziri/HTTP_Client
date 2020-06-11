@@ -1,11 +1,9 @@
 package GUI;
-import ClientRequest.ClientRequest;
-import ConnectionHandler.Connector;
-import ConnectionHandler.Executor;
 
+import ConnectionHandler.Executor;
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+
 
 /**
  * this class build for connecting process in GUI
@@ -54,9 +52,6 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
         } catch (InterruptedException e)
         {
             thread.interrupt ();
-            thirdPanel.getRequestGui ().getClientRequest ().getResponseStorage ().reset ();
-            thirdPanel.getRequestGui ().getClientRequest ().getResponseStorage ().
-                    setResponseMessage ("Canceled");
             setProgress (0);
             thirdPanel.getProgressPanel ().setVisible (false);
             correctExecute = false;
@@ -69,11 +64,10 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
     protected void done () {
         if (correctExecute)
             thirdPanel.properBack ();
-        else
+        else {
             thirdPanel.statusUnknown ("Cancelled");
-
+        }
         correctExecute = false;
     }
 
-    //TODO : some bug here in cancel and error state
 }
