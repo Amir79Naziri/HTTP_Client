@@ -1,7 +1,6 @@
 package ControlUnit;
 
 import ClientRequest.ClientRequest;
-import ClientSocketHandler.ClientProxy;
 import Storage.RequestsStorage;
 import java.io.*;
 import java.util.ArrayList;

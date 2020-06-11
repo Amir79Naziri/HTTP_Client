@@ -2,19 +2,29 @@ package ClientSocketHandler;
 
 
 import Storage.RequestsStorage;
-import com.sun.jdi.ClassNotLoadedException;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 
-public class ClientProxy implements Runnable
+/**
+ * this class represents ClientSocket
+ *
+ * @author Amir Naziri
+ */
+public class ClientSocket implements Runnable
 {
-    private int port;
-    private String host;
+    private int port; // port number
+    private String host; // IP Address
     private RequestsStorage requestsStorage;
     private boolean successfullyFinished;
 
-    public ClientProxy (int port, String host, RequestsStorage requestsStorage)
+    /**
+     * client Socket
+     * @param port port
+     * @param host host
+     * @param requestsStorage requestsStorage
+     */
+    public ClientSocket (int port, String host, RequestsStorage requestsStorage)
     {
         this.port = port;
         this.host = host;
@@ -22,10 +32,18 @@ public class ClientProxy implements Runnable
         successfullyFinished = false;
     }
 
+    /**
+     *
+     * @return isSuccessfullyFinished
+     */
     public boolean isSuccessfullyFinished () {
         return successfullyFinished;
     }
 
+    /**
+     *
+     * @return requestsStorage
+     */
     public RequestsStorage getRequestsStorage () {
         return requestsStorage;
     }
@@ -48,9 +66,9 @@ public class ClientProxy implements Runnable
             sendData (connection.getOutputStream ());
             receiveData (connection.getInputStream ());
             successfullyFinished = true;
-        } catch (ClassNotLoadedException e)
+        } catch (ClassNotFoundException e)
         {
-            System.err.println (e.getMessage ());
+            System.err.println ("Some Thing went Wrong while reading from Client");
         } catch (SocketException e)
         {
             System.err.println ("Server's connection Terminated");
@@ -60,19 +78,26 @@ public class ClientProxy implements Runnable
         }
     }
 
-
+    /**
+     * receive data from server
+     * @param serverInputStream serverInputStream
+     * @throws IOException IOException
+     * @throws ClassNotFoundException couldn't load requestStorage class
+     */
     private void receiveData (InputStream serverInputStream) throws IOException,
-            ClassNotLoadedException
+            ClassNotFoundException
     {
         try (ObjectInputStream in = new ObjectInputStream (serverInputStream)) {
             requestsStorage = (RequestsStorage)in.readObject ();
             System.out.println ("<- data received from Server");
-        } catch (ClassNotFoundException e)
-        {
-            throw new ClassNotLoadedException ("Some Thing went Wrong while reading from Client");
         }
     }
 
+    /**
+     * send data to request
+     * @param serverOutputStream serverOutputStream
+     * @throws IOException IOException
+     */
     private void sendData (OutputStream serverOutputStream) throws IOException
     {
         try (ObjectOutputStream out = new ObjectOutputStream (serverOutputStream)) {

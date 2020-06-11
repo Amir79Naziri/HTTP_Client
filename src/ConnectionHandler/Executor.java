@@ -37,21 +37,6 @@ public class Executor implements Runnable
         clientRequests.add (clientRequest);
     }
 
-    /**
-     *
-     * @return pool executor
-     */
-    public ExecutorService getPool () {
-        return pool;
-    }
-
-    /**
-     *
-     * @return list of client requests
-     */
-    public ArrayList<ClientRequest> getClientRequests () {
-        return clientRequests;
-    }
 
     @Override
     public void run () {

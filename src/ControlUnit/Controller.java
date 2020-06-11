@@ -1,7 +1,6 @@
 package ControlUnit;
 
 import ClientRequest.ClientRequest;
-import ClientSocketHandler.ClientProxy;
 import GUI.GUI;
 import Jurl.Jurl;
 import Storage.RequestsStorage;
