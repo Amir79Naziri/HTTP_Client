@@ -122,6 +122,7 @@ public class ExtraData implements Serializable
     public void clearHeadersExtraData ()
     {
         deActiveHeaders.clear ();
+        headersDescription.clear ();
     }
 
     /**
@@ -130,6 +131,7 @@ public class ExtraData implements Serializable
     public void clearQueriesExtraData ()
     {
         deActiveQueries.clear ();
+        queriesDescription.clear ();
     }
 
     /**
@@ -138,6 +140,7 @@ public class ExtraData implements Serializable
     public void clearMultiExtraData ()
     {
         deActiveMultiMap.clear ();
+        multiDescription.clear ();
     }
 
     /**
@@ -146,6 +149,7 @@ public class ExtraData implements Serializable
     public void clearEncodedExtraData ()
     {
         deActiveEncodedMap.clear ();
+        encodedDescription.clear ();
     }
 
 

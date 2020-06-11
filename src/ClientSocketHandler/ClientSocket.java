@@ -1,6 +1,7 @@
 package ClientSocketHandler;
 
 
+import ClientRequest.ClientRequest;
 import Storage.RequestsStorage;
 import java.io.*;
 import java.net.ConnectException;
@@ -21,16 +22,43 @@ public class ClientSocket implements Runnable
 
     /**
      * client Socket
-     * @param port port
-     * @param host host
      * @param requestsStorage requestsStorage
      */
-    public ClientSocket (int port, String host, RequestsStorage requestsStorage)
+    public ClientSocket (RequestsStorage requestsStorage)
     {
-        this.port = port;
-        this.host = host;
+        this.port = -1;
+        this.host = null;
         this.requestsStorage = requestsStorage;
         successfullyFinished = false;
+    }
+
+    /**
+     * client Socket
+     * @param clientRequest clientRequest
+     */
+    public ClientSocket (ClientRequest clientRequest)
+    {
+        this.port = -1;
+        this.host = null;
+        requestsStorage = new RequestsStorage ();
+        requestsStorage.add (clientRequest);
+        successfullyFinished = false;
+    }
+
+    /**
+     * sets IP Address
+     * @param host host
+     */
+    public void setHost (String host) {
+        this.host = host;
+    }
+
+    /**
+     * sets Port
+     * @param port port
+     */
+    public void setPort (int port) {
+        this.port = port;
     }
 
     /**

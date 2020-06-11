@@ -4,6 +4,8 @@ import ClientRequest.ClientRequest;
 
 /**
  * this class connect a client request to server
+ *
+ * @author Amir Naziri
  */
 public class Connector implements Runnable
 {
