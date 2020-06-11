@@ -251,63 +251,58 @@ public class ThirdPanel extends JPanel
      */
     protected void properBack ()
     {
-        new Thread (new Runnable () {
-            @Override
-            public void run () {
-                ResponseStorage responseStorage
-                        = requestGui.getClientRequest ().getResponseStorage ();
-                String responseCode = responseStorage.getResponseCode () + "";
-                if (responseCode.matches ("2(.*)"))
-                    statusMessage.setBackground (new Color (52, 174, 22));
-                else if (responseCode.equals ("0"))
+        ResponseStorage responseStorage
+                = requestGui.getClientRequest ().getResponseStorage ();
+        String responseCode = responseStorage.getResponseCode () + "";
+        if (responseCode.matches ("2(.*)"))
+            statusMessage.setBackground (new Color (52, 174, 22));
+        else if (responseCode.equals ("0"))
+        {
+            statusUnknown (responseStorage.getResponseMessage ());
+        }
+        else
+            statusMessage.setBackground (new Color (133, 94, 8));
+
+        if (responseStorage.getResponseCode () == 0)
+            statusMessage.setText (responseStorage.getResponseMessage ());
+        else if (responseStorage.getResponseMessage () == null)
+            statusMessage.setText (responseStorage.getResponseCode () + "");
+        else
+            statusMessage.setText (responseStorage.getResponseCode ()
+                    + " " + responseStorage.getResponseMessage ());
+
+        size.setText (responseStorage.getReadLength ());
+        time.setText (responseStorage.getResponseTime () + "ms");
+        rawPanel.getTextArea ().setText (responseStorage.getResponseTextRawData ());
+
+
+        resultHeaderPanel.clear ();
+        visualPreviewPanel.removeImage ();
+        visualPreviewPanel.removeEditor ();
+        if (responseStorage.getResponseHeaders () != null)
+        {
+            for (String key : responseStorage.getResponseHeaders ().keySet ())
+                for (String value : responseStorage.getResponseHeaders ().get (key))
                 {
-                    statusUnknown (responseStorage.getResponseMessage ());
-                }
-                else
-                    statusMessage.setBackground (new Color (133, 94, 8));
+                    if (key != null) {
+                        resultHeaderPanel.addResultKeyAndValue (key, value);
 
-                if (responseStorage.getResponseCode () == 0)
-                    statusMessage.setText (responseStorage.getResponseMessage ());
-                else if (responseStorage.getResponseMessage () == null)
-                    statusMessage.setText (responseStorage.getResponseCode () + "");
-                else
-                    statusMessage.setText (responseStorage.getResponseCode ()
-                            + " " + responseStorage.getResponseMessage ());
-
-                size.setText (responseStorage.getReadLength ());
-                time.setText (responseStorage.getResponseTime () + "ms");
-                rawPanel.getTextArea ().setText (responseStorage.getResponseTextRawData ());
-
-
-                resultHeaderPanel.clear ();
-                visualPreviewPanel.removeImage ();
-                visualPreviewPanel.removeEditor ();
-                if (responseStorage.getResponseHeaders () != null)
-                {
-                    for (String key : responseStorage.getResponseHeaders ().keySet ())
-                        for (String value : responseStorage.getResponseHeaders ().get (key))
+                        if (key.equals ("Content-Type") && value.split (";")[0].
+                                equals ("image/png"))
                         {
-                            if (key != null) {
-                                resultHeaderPanel.addResultKeyAndValue (key, value);
+                            visualPreviewPanel.addImage
+                                    (responseStorage.getResponseBinaryRawData ());
+                        } else if (key.equals ("Content-Type") && value.split (";")[0].
+                                equals ("text/html") && responseCode.matches ("2(.*)"))
+                        {
+                            visualPreviewPanel.addEditor (requestGui.getClientRequest ()
+                                    .getUrl () +
+                                    requestGui.getClientRequest ().getQueryDataString ());
 
-                                if (key.equals ("Content-Type") && value.split (";")[0].
-                                        equals ("image/png"))
-                                {
-                                    visualPreviewPanel.addImage
-                                            (responseStorage.getResponseBinaryRawData ());
-                                } else if (key.equals ("Content-Type") && value.split (";")[0].
-                                        equals ("text/html") && responseCode.matches ("2(.*)"))
-                                {
-                                    visualPreviewPanel.addEditor (requestGui.getClientRequest ()
-                                            .getUrl () +
-                                            requestGui.getClientRequest ().getQueryDataString ());
-
-                                }
-                            }
                         }
+                    }
                 }
-            }
-        }).start ();
+        }
     }
 
     /**
