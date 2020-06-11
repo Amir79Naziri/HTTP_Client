@@ -1,6 +1,7 @@
 package GUI;
 
-import Storage.MakeSizeReadable;
+import Storage.ResponseStorage;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -128,7 +129,7 @@ public class BinaryFilePanel extends JPanel
             stringBuilder.append (String.format ("%s",path)).append (" ");
             try{
                 stringBuilder.append (
-                        String.format ("(%s)", MakeSizeReadable.makeSizeReadable (Files.size (path))));
+                        String.format ("(%s)", ResponseStorage.makeSizeReadable (Files.size (path))));
             } catch (IOException e)
             {
                 e.printStackTrace ();
