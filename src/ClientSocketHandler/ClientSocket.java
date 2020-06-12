@@ -119,7 +119,7 @@ public class ClientSocket implements Runnable
             System.err.println ("Server Not Responding");
         } catch (IOException e)
         {
-            System.err.println (e.getMessage ());
+            System.err.println ("Some went Wrong");
         } finally {
             try {
                 if (in != null)
