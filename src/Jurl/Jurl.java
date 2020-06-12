@@ -1,6 +1,7 @@
 package Jurl;
 
 import ClientRequest.ClientRequest;
+import ClientSocketHandler.ClientSocket;
 import ConnectionHandler.Executor;
 import ControlUnit.Controller;
 import java.io.File;
@@ -36,7 +37,22 @@ public class Jurl
             try {
                 ArrayList<ClientRequest> clientRequests = createClientRequest (inputProcessor.getTasks (),
                         inputProcessor.getUrl (), inputProcessor.getInputType ());
-                if (clientRequests != null)
+                if (inputProcessor.getInputType () == 0)
+                {
+                    ClientSocket clientSocket = new ClientSocket (Controller.clientRequests ());
+                    ReadyClientSocket (clientSocket);
+                    new Thread (clientSocket).start ();
+                }
+                if (inputProcessor.getInputType () == 3)
+                {
+                    if (clientRequests != null)
+                    {
+                        ClientSocket clientSocket = new ClientSocket (clientRequests.get (0));
+                        ReadyClientSocket (clientSocket);
+                        new Thread (clientSocket).start ();
+                    }
+                }
+                else if (clientRequests != null)
                 {
                     new Thread (new Executor (clientRequests)).start ();
                 }
@@ -50,6 +66,27 @@ public class Jurl
                 System.exit (0);
             }
         }
+    }
+
+    /**
+     * ready clientSocket for send
+     * @param clientSocket clientSocket
+     */
+    private void ReadyClientSocket (ClientSocket clientSocket) {
+        String ip;
+        if (inputProcessor.getTasks ().get (ReservedWord.IP) != null)
+            ip = inputProcessor.getTasks ().get (ReservedWord.IP).get (0);
+        else
+            ip = null;
+
+        String port;
+        if (inputProcessor.getTasks ().get (ReservedWord.PORT) != null)
+            port = inputProcessor.getTasks ().get (ReservedWord.PORT).get (0);
+        else
+            port = "-1";
+
+        clientSocket.setHost (ip);
+        clientSocket.setPort (Integer.parseInt (port));
     }
 
     /**
@@ -107,7 +144,7 @@ public class Jurl
                 }
             }
         }
-        else
+        else if (inputType == 2 || inputType == 3)
         {
 
             ClientRequest clientRequest = new ClientRequest (url,false);

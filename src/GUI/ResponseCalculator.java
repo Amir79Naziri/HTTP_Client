@@ -58,7 +58,7 @@ public class ResponseCalculator extends SwingWorker<Boolean,Object>
             correctExecute = false;
             return false;
         }
-    }
+    } // TODO : upgrade cancel process
 
 
     @Override

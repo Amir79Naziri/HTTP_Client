@@ -2,11 +2,13 @@ package ClientSocketHandler;
 
 
 import ClientRequest.ClientRequest;
+import ControlUnit.Controller;
 import Storage.RequestsStorage;
 import java.io.*;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 
 /**
  * this class represents ClientSocket
@@ -22,13 +24,14 @@ public class ClientSocket implements Runnable
 
     /**
      * client Socket
-     * @param requestsStorage requestsStorage
+     * @param clientRequests clientRequests
      */
-    public ClientSocket (RequestsStorage requestsStorage)
+    public ClientSocket (ArrayList<ClientRequest> clientRequests)
     {
         this.port = -1;
         this.host = null;
-        this.requestsStorage = requestsStorage;
+        this.requestsStorage = new RequestsStorage ();
+        requestsStorage.getClientRequests ().addAll (clientRequests);
         successfullyFinished = false;
     }
 
@@ -79,6 +82,11 @@ public class ClientSocket implements Runnable
 
     @Override
     public void run () {
+        if (port == -1 && host == null)
+        {
+            System.err.println ("port number is not valid" + "\nIP is not valid");
+            return;
+        }
         if (port == -1)
         {
             System.err.println ("port number is not valid");
@@ -89,12 +97,15 @@ public class ClientSocket implements Runnable
             System.err.println ("IP is not valid");
             return;
         }
-
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
         try (Socket connection = new Socket (host,port))
         {
-            sendData (connection.getOutputStream ());
-            receiveData (connection.getInputStream ());
+            out = sendData (connection.getOutputStream ());
+            in = receiveData (connection.getInputStream ());
             successfullyFinished = true;
+            Controller.printAllResult (requestsStorage);
+            Controller.updateRequestsStorage (requestsStorage);
         }
         catch (ConnectException e)
         {
@@ -108,7 +119,30 @@ public class ClientSocket implements Runnable
             System.err.println ("Server Not Responding");
         } catch (IOException e)
         {
-            e.printStackTrace ();
+            System.err.println (e.getMessage ());
+        } finally {
+            try {
+                if (in != null)
+                    in.close ();
+            }
+            catch (SocketException ignore)
+            {
+            }
+            catch (IOException e)
+            {
+                System.err.println ("Some thing went wrong in closing ServerInputStream");
+            }
+            try {
+                if (out != null)
+                    out.close ();
+            }
+            catch (SocketException ignore)
+            {
+            }
+            catch (IOException e)
+            {
+                System.err.println ("Some thing went wrong in closing ServerOutputStream");
+            }
         }
     }
 
@@ -118,13 +152,13 @@ public class ClientSocket implements Runnable
      * @throws IOException IOException
      * @throws ClassNotFoundException couldn't load requestStorage class
      */
-    private void receiveData (InputStream serverInputStream) throws IOException,
+    private ObjectInputStream receiveData (InputStream serverInputStream) throws IOException,
             ClassNotFoundException
     {
-        try (ObjectInputStream in = new ObjectInputStream (serverInputStream)) {
-            requestsStorage = (RequestsStorage)in.readObject ();
-            System.out.println ("<- data received from Server");
-        }
+        ObjectInputStream in = new ObjectInputStream (serverInputStream);
+        requestsStorage = (RequestsStorage)in.readObject ();
+        System.out.println ("<- data received from Server");
+        return in;
     }
 
     /**
@@ -132,12 +166,12 @@ public class ClientSocket implements Runnable
      * @param serverOutputStream serverOutputStream
      * @throws IOException IOException
      */
-    private void sendData (OutputStream serverOutputStream) throws IOException
+    private ObjectOutputStream sendData (OutputStream serverOutputStream) throws IOException
     {
-        try (ObjectOutputStream out = new ObjectOutputStream (serverOutputStream)) {
-            out.writeObject (requestsStorage);
-            System.out.println ("-> data sent to Server");
-        }
+        ObjectOutputStream out = new ObjectOutputStream (serverOutputStream);
+        out.writeObject (requestsStorage);
+        System.out.println ("-> data sent to Server");
+        return out;
     }
 
 }

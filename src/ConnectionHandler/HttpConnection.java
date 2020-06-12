@@ -136,8 +136,30 @@ public class HttpConnection
         if (connectToServer ())
         {
             // reading
-            readFromServer (followRedirect,
-                    shouldSaveResponseOnFile,addressOfFileForSaveOutput);
+            Closeable in = null;
+            try {
+                in = readFromServer (followRedirect,
+                        shouldSaveResponseOnFile,addressOfFileForSaveOutput);
+            } catch (IOException e)
+            {
+                try {
+                    textReader (connection.getErrorStream (),
+                            shouldSaveResponseOnFile,addressOfFileForSaveOutput);
+                } catch (IOException ex)
+                {
+                    responseStorage.setResponseTextRawData ("Error:" +
+                            " URL using bad/illegal format or missing URL");
+                }
+            } finally {
+                try {
+                    if (in != null)
+                        in.close ();
+                } catch (IOException e)
+                {
+                    System.err.println ("Some thing went wrong in closing ServerInputStream");
+                }
+            }
+
         }
         responseStorage.setResponseTime ((System.currentTimeMillis () - startTime));
 
@@ -189,15 +211,52 @@ public class HttpConnection
                     toString(formUrlEncodedData.getBytes (StandardCharsets.UTF_8).length));
         }
 
-        if (connectToServer ())
-        {
-            //writing
-            writeToServer (messageBodyType,multipartData,binaryFileUpload,boundary,
-                    formUrlEncodedData);
+        if (connectToServer ()) {
 
-            // reading
-            readFromServer (followRedirect,
-                    shouldSaveResponseOnFile,addressOfFileForSaveOutput);
+            Closeable in = null;
+            Closeable out = null;
+            try {
+                try {
+                    //writing
+                    in = writeToServer (messageBodyType, multipartData, binaryFileUpload, boundary,
+                            formUrlEncodedData);
+                } catch (IOException e) {
+                    System.out.println ("Some thing went wrong in reading from server");
+                    throw new IOException ("IOException");
+                }
+
+                try {    // reading
+                    out = readFromServer (followRedirect,
+                            shouldSaveResponseOnFile, addressOfFileForSaveOutput);
+                } catch (IOException e) {
+                    try {
+                        textReader (connection.getErrorStream (),
+                                shouldSaveResponseOnFile, addressOfFileForSaveOutput);
+                    } catch (IOException ex) {
+                        responseStorage.setResponseTextRawData ("Error:" +
+                                " URL using bad/illegal format or missing URL");
+                    }
+                    throw new IOException ("IOException");
+                }
+            } catch (IOException ignore)
+            {
+            } finally {
+                try {
+                    if (in != null)
+                        in.close ();
+                } catch (IOException e)
+                {
+                    System.err.println ("Some thing went wrong in closing ServerInputStream");
+                }
+
+                try {
+                    if (out != null)
+                        out.close ();
+                } catch (IOException e)
+                {
+                    System.err.println ("Some thing went wrong in closing ServerOutputStream");
+                }
+            }
         }
 
 
@@ -211,95 +270,87 @@ public class HttpConnection
      * @param followRedirect followRedirect
      * @param shouldSaveResponseOnFile shouldSaveResponseOnFile
      * @param addressOfFileForSaveOutput addressOfFileForSaveOutput
+     * @return inputStream
      * @throws FollowRedirectException need to follow redirect
+     * @throws IOException IOException
      */
-    private void readFromServer (boolean followRedirect,
+    private Closeable readFromServer (boolean followRedirect,
                                  boolean shouldSaveResponseOnFile,
                                  String addressOfFileForSaveOutput
-                                 ) throws FollowRedirectException
+                                 ) throws FollowRedirectException , IOException
     {
         if (connection == null)
             throw new NullPointerException ("inValid input");
-        try {
-            responseStorage.setResponseCode (connection.getResponseCode ());
-            responseStorage.setResponseMessage (connection.getResponseMessage ());
-            responseStorage.setResponseHeaders (connection.getHeaderFields ());
 
-            if (followRedirect &&
-                    (responseStorage.getResponseCode () ==
-                            HttpURLConnection.HTTP_SEE_OTHER ||
-                            responseStorage.getResponseCode () ==
-                                    HttpURLConnection.HTTP_MOVED_TEMP ||
-                            responseStorage.getResponseCode () ==
-                                    HttpURLConnection.HTTP_MOVED_PERM))
-            {
-                String newURL = connection.getHeaderField ("Location");
-                connection.disconnect ();
-                throw new FollowRedirectException (newURL);
-            }
+        Closeable in = null;
+        responseStorage.setResponseCode (connection.getResponseCode ());
+        responseStorage.setResponseMessage (connection.getResponseMessage ());
+        responseStorage.setResponseHeaders (connection.getHeaderFields ());
 
-
-
-            String contentType = "text/html";
-            if (connection.getContentType () != null)
-                 contentType = connection.getContentType ().split (";")[0];
-
-            switch (contentType) {
-                case "text/html":
-                    if (shouldSaveResponseOnFile && addressOfFileForSaveOutput == null) {
-                        addressOfFileForSaveOutput = "./data/RawData/Output_" +
-                                new SimpleDateFormat (
-                                "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".html";
-                    }
-                    textReader (connection.getInputStream (),
-                            shouldSaveResponseOnFile,addressOfFileForSaveOutput);
-                    break;
-                case "image/png":
-                    if (shouldSaveResponseOnFile && addressOfFileForSaveOutput == null) {
-                        addressOfFileForSaveOutput = "./data/RawData/Output_" +
-                                new SimpleDateFormat (
-                                "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".png";
-                    }
-                    if (!shouldSaveResponseOnFile)
-                            System.out.println ("you should use --output!");
-
-                        binaryReader (connection.getInputStream (),
-                                shouldSaveResponseOnFile,addressOfFileForSaveOutput);
-
-
-                    responseStorage.setResponseTextRawData ("File is Binary !");
-                    break;
-                case "text/plain":
-                    if (shouldSaveResponseOnFile && addressOfFileForSaveOutput == null) {
-                        addressOfFileForSaveOutput = "./data/RawData/Output_" +
-                                new SimpleDateFormat (
-                                "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".txt";
-                    }
-                    textReader (connection.getInputStream (),
-                            shouldSaveResponseOnFile,addressOfFileForSaveOutput);
-                    break;
-                case "application/json":
-                    if (shouldSaveResponseOnFile && addressOfFileForSaveOutput == null) {
-                        addressOfFileForSaveOutput = "./data/RawData/Output_" +
-                                new SimpleDateFormat (
-                                        "yyyy.MM.dd  HH.mm.ss").format (new Date ())
-                                + ".js";
-                    }
-                    textReader (connection.getInputStream (),
-                            shouldSaveResponseOnFile,addressOfFileForSaveOutput);
-            }
-
-        }catch (IOException e)
+        if (followRedirect &&
+                (responseStorage.getResponseCode () ==
+                        HttpURLConnection.HTTP_SEE_OTHER ||
+                        responseStorage.getResponseCode () ==
+                                HttpURLConnection.HTTP_MOVED_TEMP ||
+                        responseStorage.getResponseCode () ==
+                                HttpURLConnection.HTTP_MOVED_PERM))
         {
-            try {
-                textReader (connection.getErrorStream (),
-                        shouldSaveResponseOnFile,addressOfFileForSaveOutput);
-            } catch (IOException ex)
-            {
-                responseStorage.setResponseTextRawData ("Error:" +
-                        " URL using bad/illegal format or missing URL");
-            }
+            String newURL = connection.getHeaderField ("Location");
+            connection.disconnect ();
+            throw new FollowRedirectException (newURL);
         }
+
+
+
+        String contentType = "text/html";
+        if (connection.getContentType () != null)
+            contentType = connection.getContentType ().split (";")[0];
+
+        switch (contentType) {
+            case "text/html":
+                if (shouldSaveResponseOnFile && addressOfFileForSaveOutput == null) {
+                    addressOfFileForSaveOutput = "./data/RawData/Output_" +
+                            new SimpleDateFormat (
+                                    "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".html";
+                }
+                in = textReader (connection.getInputStream (),
+                        shouldSaveResponseOnFile,addressOfFileForSaveOutput);
+                break;
+            case "image/png":
+                if (shouldSaveResponseOnFile && addressOfFileForSaveOutput == null) {
+                    addressOfFileForSaveOutput = "./data/RawData/Output_" +
+                            new SimpleDateFormat (
+                                    "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".png";
+                }
+                if (!shouldSaveResponseOnFile)
+                    System.out.println ("you should use --output!");
+
+                in = binaryReader (connection.getInputStream (),
+                        shouldSaveResponseOnFile,addressOfFileForSaveOutput);
+
+
+                responseStorage.setResponseTextRawData ("File is Binary !");
+                break;
+            case "text/plain":
+                if (shouldSaveResponseOnFile && addressOfFileForSaveOutput == null) {
+                    addressOfFileForSaveOutput = "./data/RawData/Output_" +
+                            new SimpleDateFormat (
+                                    "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".txt";
+                }
+                in = textReader (connection.getInputStream (),
+                        shouldSaveResponseOnFile,addressOfFileForSaveOutput);
+                break;
+            case "application/json":
+                if (shouldSaveResponseOnFile && addressOfFileForSaveOutput == null) {
+                    addressOfFileForSaveOutput = "./data/RawData/Output_" +
+                            new SimpleDateFormat (
+                                    "yyyy.MM.dd  HH.mm.ss").format (new Date ())
+                            + ".js";
+                }
+                in = textReader (connection.getInputStream (),
+                        shouldSaveResponseOnFile,addressOfFileForSaveOutput);
+        }
+        return in;
     }
 
     /**
@@ -307,9 +358,10 @@ public class HttpConnection
      * @param serverInputStream serverInputStream
      * @param shouldSaveResponseOnFile shouldSaveResponseOnFile
      * @param addressOfFileForSaveOutput addressOfFileForSaveOutput
+     * @return BufferedReader
      * @throws IOException IOException
      */
-    private void textReader (InputStream serverInputStream,
+    private Closeable textReader (InputStream serverInputStream,
                              boolean shouldSaveResponseOnFile,
                              String addressOfFileForSaveOutput
                             ) throws IOException
@@ -317,29 +369,30 @@ public class HttpConnection
         if (serverInputStream == null)
             throw new IOException ("serverInputStream is null");
         StringBuilder content = new StringBuilder ();
-        try (BufferedReader out = new BufferedReader (new InputStreamReader (serverInputStream)))
-        {
-            String line;
-            while ((line = out.readLine ()) != null) {
-                content.append (line).append ('\n');
-            }
+        BufferedReader in = new BufferedReader (new InputStreamReader (serverInputStream));
+
+        String line;
+        while ((line = in.readLine ()) != null) {
+            content.append (line).append ('\n');
         }
+
 
         responseStorage.setResponseTextRawData (content.toString ());
         responseStorage.setReadLength (content.toString ().getBytes ().length);
         if (shouldSaveResponseOnFile)
         {
-            try (BufferedOutputStream in = new BufferedOutputStream (new FileOutputStream (
+            try (BufferedOutputStream out = new BufferedOutputStream (new FileOutputStream (
                     addressOfFileForSaveOutput)))
             {
-                in.write (content.toString ().getBytes ());
-                in.flush ();
+                out.write (content.toString ().getBytes ());
+                out.flush ();
             } catch (IOException e)
             {
                 System.err.println ("Some thing went Wrong in Save response on File");
             }
 
         }
+        return in;
     }
 
     /**
@@ -347,20 +400,20 @@ public class HttpConnection
      * @param serverInputStream serverInputStream
      * @param shouldSaveResponseOnFile shouldSaveResponseOnFile
      * @param addressOfFileForSaveOutput addressOfFileForSaveOutput
+     * @return InputStream
      * @throws IOException IOException
      */
-    private void binaryReader (InputStream serverInputStream,
+    private Closeable binaryReader (InputStream serverInputStream,
                                boolean shouldSaveResponseOnFile,
                                String addressOfFileForSaveOutput
                               ) throws IOException
     {
         if (serverInputStream == null)
             throw new IOException ("serverInputStream is null");
-        try (BufferedInputStream in= new BufferedInputStream (serverInputStream))
-        {
-            responseStorage.setResponseBinaryRawData (in.readAllBytes ());
-            responseStorage.setReadLength (responseStorage.getResponseBinaryRawData ().length);
-        }
+        BufferedInputStream in= new BufferedInputStream (serverInputStream);
+        responseStorage.setResponseBinaryRawData (in.readAllBytes ());
+        responseStorage.setReadLength (responseStorage.getResponseBinaryRawData ().length);
+
         if (shouldSaveResponseOnFile)
         {
             try (BufferedOutputStream out = new BufferedOutputStream (
@@ -373,6 +426,7 @@ public class HttpConnection
                 System.err.println ("Some thing went Wrong in Save response on File");
             }
         }
+        return in;
     }
 
     /**
@@ -382,27 +436,27 @@ public class HttpConnection
      * @param file binary file
      * @param boundary boundary
      * @param formUrlEncodedData formUrlEncodedData
+     * @return OutputStream
+     * @throws IOException IOException
      */
-    private void writeToServer (int messageType,
+    private Closeable writeToServer (int messageType,
                                 HashMap<String,String> multipartData, File file,
                                 String boundary,
-                                String formUrlEncodedData)
+                                String formUrlEncodedData) throws IOException
     {
-        try {
-            if (messageType == 1)
-            {
-                writeBinaryFormData (connection.getOutputStream (),boundary,multipartData);
-            } else if (messageType == 2)
-            {
-                writeBinaryFile (connection.getOutputStream (),file);
-            } else if (messageType == 3)
-            {
-                writeBinaryFormDataEncoded (connection.getOutputStream (),formUrlEncodedData);
-            }
-        } catch (IOException e)
+        Closeable out = null;
+        if (messageType == 1)
         {
-            System.err.println ("Couldn't write on Server ");
+            out = writeBinaryFormData (connection.getOutputStream (),boundary,multipartData);
+        } else if (messageType == 2)
+        {
+            out = writeBinaryFile (connection.getOutputStream (),file);
+        } else if (messageType == 3)
+        {
+            out = writeBinaryFormDataEncoded (connection.getOutputStream (),formUrlEncodedData);
         }
+
+        return out;
     }
 
 
@@ -411,73 +465,80 @@ public class HttpConnection
      * @param serverOutPutSteam serverOutPutSteam
      * @param boundary boundary
      * @param body body
+     * @return OutputStream
      * @throws IOException IOException
      */
-    private void writeBinaryFormData (OutputStream serverOutPutSteam, String boundary,
+    private Closeable writeBinaryFormData (OutputStream serverOutPutSteam, String boundary,
                               HashMap<String,String> body) throws IOException
     {
         if (body == null || boundary == null)
             throw new IOException("Body or Boundary is Empty");
-        try (BufferedOutputStream out = new BufferedOutputStream (serverOutPutSteam))
-        {
-            for (String key : body.keySet())
-            {
-                out.write(("--" + boundary + "\r\n").getBytes());
-                if (key.contains("file")) {
-                    out.write (("" +
-                            "" + (new File(body.get(key))).getName() +
-                            "\"\r\nContent-Type: Auto\r\n\r\n").getBytes());
+        BufferedOutputStream out = new BufferedOutputStream (serverOutPutSteam);
 
-                    try (BufferedInputStream tempBufferedInputStream = new BufferedInputStream
-                            (new FileInputStream(new File(body.get(key)))))
-                    {
-                        byte[] filesBytes = tempBufferedInputStream.readAllBytes();
-                        out.write(filesBytes);
-                        out.write("\r\n".getBytes());
-                    }
-                } else {
-                    out.write(("Content-Disposition: form" +
-                            "-data; name=\"" + key + "\"\r\n\r\n").getBytes());
-                    out.write((body.get(key) + "\r\n").getBytes());
+        for (String key : body.keySet())
+        {
+            out.write(("--" + boundary + "\r\n").getBytes());
+            if (key.contains("file")) {
+                out.write (("" +
+                        "" + (new File(body.get(key))).getName() +
+                        "\"\r\nContent-Type: Auto\r\n\r\n").getBytes());
+
+                try (BufferedInputStream tempBufferedInputStream = new BufferedInputStream
+                        (new FileInputStream(new File(body.get(key)))))
+                {
+                    byte[] filesBytes = tempBufferedInputStream.readAllBytes();
+                    out.write(filesBytes);
+                    out.write("\r\n".getBytes());
                 }
+            } else {
+                out.write(("Content-Disposition: form" +
+                        "-data; name=\"" + key + "\"\r\n\r\n").getBytes());
+                out.write((body.get(key) + "\r\n").getBytes());
             }
-            out.write(("--" + boundary + "--\r\n").getBytes());
-            out.flush();
         }
+        out.write(("--" + boundary + "--\r\n").getBytes());
+        out.flush();
+
+        return out;
     }
 
     /**
      * write binary file to server
      * @param serverOutPutStream serverOutPutStream
      * @param file file
+     * @return OutputStream
      * @throws IOException IOException
      */
-    private void writeBinaryFile (OutputStream serverOutPutStream, File file)
+    private Closeable writeBinaryFile (OutputStream serverOutPutStream, File file)
                                     throws IOException
     {
-        try (BufferedOutputStream out = new BufferedOutputStream (serverOutPutStream);
-             BufferedInputStream in = new BufferedInputStream (new FileInputStream (file))) {
+        BufferedOutputStream out = new BufferedOutputStream (serverOutPutStream);
+
+        try (BufferedInputStream in = new BufferedInputStream (new FileInputStream (file))) {
             out.write (in.readAllBytes ());
             out.flush ();
         }
+        return out;
     }
 
     /**
      * write form data encoded
      * @param serverOutPutStream serverOutPutStream
      * @param formUrlEncodedData formUrlEncodedData
+     * @return OutputStream
      * @throws IOException IOException
      */
-    private void writeBinaryFormDataEncoded (OutputStream serverOutPutStream,
+    private Closeable writeBinaryFormDataEncoded (OutputStream serverOutPutStream,
                                              String formUrlEncodedData) throws IOException
     {
         if (formUrlEncodedData == null)
             throw new IOException("Body is Empty");
-        try (BufferedOutputStream out = new BufferedOutputStream (serverOutPutStream))
-        {
-            out.write (formUrlEncodedData.getBytes (StandardCharsets.UTF_8));
-            out.flush ();
-        }
+        BufferedOutputStream out = new BufferedOutputStream (serverOutPutStream);
+
+        out.write (formUrlEncodedData.getBytes (StandardCharsets.UTF_8));
+        out.flush ();
+
+        return out;
     }
 
 

@@ -49,7 +49,35 @@ public class InputProcessor
         }
 
         ReservedWord reservedWordStart;
-        if ((reservedWordStart = isReserveWord (commands[1])) != null)
+        if ((reservedWordStart = isReserveWord (commands[1])) != null && reservedWordStart ==
+        ReservedWord.SEND)
+        {
+            tasks.put (reservedWordStart,new ArrayList<> ());
+            inputType = 0;
+            for (int i = 2; i < commands.length; i++)
+            {
+                ReservedWord reservedWord;
+                if ((reservedWord = isReserveWord (commands[i])) != null)
+                {
+                    if (reservedWord == ReservedWord.IP || reservedWord == ReservedWord.PORT)
+                    {
+                        ArrayList<String> args = findArgumentForReserveWord
+                                (reservedWord,i + 1);
+                        if (args == null)
+                        {
+                            System.out.println
+                                    ("jurl: try 'jurl --help' / 'jurl -h' for more information");
+                            getLine ();
+                            return;
+                        }
+
+                        tasks.put (reservedWord,args);
+                    }
+
+                }
+            }
+        }
+        else if ((reservedWordStart = isReserveWord (commands[1])) != null)
         {
             if (reservedWordStart != ReservedWord.FIRE && reservedWordStart != ReservedWord.HELP_V2
             && reservedWordStart != ReservedWord.LIST && reservedWordStart != ReservedWord.CLOSE &&
@@ -81,8 +109,13 @@ public class InputProcessor
                     if (reservedWord != ReservedWord.FIRE && reservedWord != ReservedWord.LIST &&
                             reservedWord != ReservedWord.CLOSE &&
                             reservedWord != ReservedWord.REMOVE_V2 &&
-                            reservedWord != ReservedWord.RENAME)
+                            reservedWord != ReservedWord.HELP_V2 &&
+                            reservedWord != ReservedWord.RENAME &&
+                            reservedWord != ReservedWord.SEND)
                     {
+                        if (reservedWord == ReservedWord.PROXY)
+                            inputType = 3;
+
                         ArrayList<String> args = findArgumentForReserveWord
                                 (reservedWord,i + 1);
                         if (args == null)
@@ -174,6 +207,18 @@ public class InputProcessor
         else if (command.equals (ReservedWord.RENAME.getCommandString ()))
             return ReservedWord.RENAME;
 
+        else if (command.equals (ReservedWord.SEND.getCommandString ()))
+            return ReservedWord.SEND;
+
+        else if (command.equals (ReservedWord.PROXY.getCommandString ()))
+            return ReservedWord.PROXY;
+
+        else if (command.equals (ReservedWord.PORT.getCommandString ()))
+            return ReservedWord.PORT;
+
+        else if (command.equals (ReservedWord.IP.getCommandString ()))
+            return ReservedWord.IP;
+
         else
             return null;
     }
@@ -201,8 +246,25 @@ public class InputProcessor
             case METHOD_V2:
             case FORM_DATA_ENCODED:
             case FORM_DATA_V2:
+            case IP:
                 if (nextIndex < commands.length && isReserveWord (commands[nextIndex]) == null)
                     args.add (commands[nextIndex]);
+                else
+                {
+                    return null;
+                }
+                break;
+            case PORT:
+                if (nextIndex < commands.length && isReserveWord (commands[nextIndex]) == null)
+                {
+                    try {
+                        Integer.parseInt (commands[nextIndex]);
+                    } catch (NumberFormatException e)
+                    {
+                        return null;
+                    }
+                    args.add (commands[nextIndex]);
+                }
                 else
                 {
                     return null;

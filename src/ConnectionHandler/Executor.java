@@ -63,5 +63,5 @@ public class Executor implements Runnable
             pool.execute (new Connector (clientRequest));
         }
         pool.shutdown ();
-    }
+    } // TODO : some change in exception
 }
