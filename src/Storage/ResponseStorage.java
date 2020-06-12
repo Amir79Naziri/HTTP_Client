@@ -210,6 +210,7 @@ public class ResponseStorage implements Serializable
     public void printRawResponse ()
     {
         System.out.println (getResponseTextRawData ());
+        System.out.println ();
     }
 
     /**

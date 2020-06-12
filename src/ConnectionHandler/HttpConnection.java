@@ -221,7 +221,7 @@ public class HttpConnection
                     in = writeToServer (messageBodyType, multipartData, binaryFileUpload, boundary,
                             formUrlEncodedData);
                 } catch (IOException e) {
-                    System.out.println ("Some thing went wrong in reading from server");
+                    System.err.println ("Some thing went wrong in reading from server");
                     throw new IOException ("IOException");
                 }
 
