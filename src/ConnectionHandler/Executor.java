@@ -53,15 +53,14 @@ public class Executor implements Runnable
         for (ClientRequest clientRequest : clientRequests)
         {
             try {
-                Thread.sleep (500);
+                Thread.sleep (3000);
             } catch (InterruptedException e)
             {
-                System.out.println (e.getMessage ());
                 pool.shutdownNow ();
                 return;
             }
             pool.execute (new Connector (clientRequest));
         }
         pool.shutdown ();
-    } // TODO : some change in exception
+    }
 }

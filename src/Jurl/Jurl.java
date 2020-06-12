@@ -229,9 +229,12 @@ public class Jurl
                 " -r, --remove <indexes>         remove requests by their index (only first element)\n" +
                 " list                           print list of requests (only first element)\n" +
                 " fire <indexes>                 send requests by their index (only first element)\n" +
-                " --rename <index> <new name>    rename request by its index to new name (only first element)\n";
+                " --rename <index> <new name>    rename request by its index to new name (only first element)\n" +
+                " --port <port>    set port of proxy server\n" +
+                " --ip <IP address>    set IP of proxy server\n " +
+                " --send                send all saved request to proxy server\n" +
+                " --proxy               send this request to proxy server";
         System.out.println (help);
     }
-
-
+    
 }
