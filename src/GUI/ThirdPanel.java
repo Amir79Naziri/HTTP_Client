@@ -1,5 +1,7 @@
 package GUI;
 
+import ClientRequest.ClientRequest;
+import ClientSocketHandler.ClientSocket;
 import Storage.ResponseStorage;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -224,12 +226,14 @@ public class ThirdPanel extends JPanel
 
     /**
      * execute
+     * @param type type 1 means normal execute , 2 means server execute
+     * @param clientSocket clientSocket , if type 1 it is null
      */
-    protected void execute ()
+    protected void execute (int type, ClientSocket clientSocket)
     {
         if (responseCalculator != null)
             responseCalculator.cancel (true);
-        responseCalculator = new ResponseCalculator (this);
+        responseCalculator = new ResponseCalculator (this,type,clientSocket);
         responseCalculator.addPropertyChangeListener (new PropertyChangeListener () {
         @Override
         public void propertyChange (PropertyChangeEvent evt) {

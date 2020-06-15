@@ -1,6 +1,8 @@
 package GUI;
 
 import ClientRequest.RequestType;
+import ClientSocketHandler.ClientSocket;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -19,6 +21,7 @@ public class SecondPanel extends JPanel
     private JComboBox<String> type; // type of requestGui
     private JButton send; // send button
     private JCheckBox save; // save button
+    private JButton proxy; // proxy button
     // private int messageBody;
     // panel's in second Panel
     private QueryPanel queryPanel;
@@ -110,6 +113,11 @@ public class SecondPanel extends JPanel
         send.setBackground (Color.WHITE);
         send.addActionListener (componentHandler);
 
+        proxy = new JButton ("Proxy");
+        proxy.setFont (new Font ("Arial",Font.PLAIN,11));
+        proxy.setBackground (Color.WHITE);
+        proxy.addActionListener (componentHandler);
+
         save = new JCheckBox ("Save Output");
         save.setFont (new Font ("Arial",Font.PLAIN,11));
         save.setBackground (Color.WHITE);
@@ -128,8 +136,8 @@ public class SecondPanel extends JPanel
 
         constraints.weightx = 0.0;
         GridBagAdder.addComponent (send,0,11,1,layout,constraints,urlPanel);
-
-        GridBagAdder.addComponent (save,0,12,1,layout,constraints,urlPanel);
+        GridBagAdder.addComponent (proxy,0,12,1,layout,constraints,urlPanel);
+        GridBagAdder.addComponent (save,0,13,1,layout,constraints,urlPanel);
 
         add(urlPanel,BorderLayout.NORTH);
     }
@@ -258,7 +266,7 @@ public class SecondPanel extends JPanel
                 {
                     gui.setThirdPanel (mainThirdPanel);
                     programThirdPanel = mainThirdPanel;
-                    mainThirdPanel.execute ();
+                    mainThirdPanel.execute (1,null);
                 }
             }
             else
@@ -289,7 +297,48 @@ public class SecondPanel extends JPanel
                 {
                     gui.setThirdPanel (mainThirdPanel);
                     programThirdPanel = mainThirdPanel;
-                    mainThirdPanel.execute ();
+                    mainThirdPanel.execute (1,null);
+                }
+            } else if (e.getSource () == proxy)
+            {
+                if (initializeForSend (true))
+                {
+                    String ip =
+                            JOptionPane.showInputDialog (gui.getBaseFrame (),"IP");
+                    if (ip == null)
+                    {
+                        JOptionPane.showMessageDialog (gui.getBaseFrame (),
+                                "IP didn't set","Error",JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    String port =
+                            JOptionPane.showInputDialog (gui.getBaseFrame (),"Port");
+
+                    if (port == null)
+                    {
+                        JOptionPane.showMessageDialog (gui.getBaseFrame (),
+                                "Port didn't set","Error",JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    int port1;
+                    try{
+                        port1 = Integer.parseInt (port);
+                    } catch (NumberFormatException ex)
+                    {
+                        JOptionPane.showMessageDialog (gui.getBaseFrame (),
+                                "Port should be number"
+                                ,"Error",JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    ClientSocket clientSocket = new ClientSocket (requestGui.getClientRequest (),
+                            ip,port1);
+
+
+
+                    gui.setThirdPanel (mainThirdPanel);
+                    programThirdPanel = mainThirdPanel;
+                    mainThirdPanel.execute (2,clientSocket);
                 }
             }
         }

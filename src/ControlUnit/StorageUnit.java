@@ -138,10 +138,12 @@ public class StorageUnit
     {
         for (ClientRequest clientRequest : getClientRequests ())
         {
-            for (ClientRequest clientRequest1 : requestsStorage.getClientRequests ())
+            for (ClientRequest clientRequest2 : requestsStorage.getClientRequests ())
             {
-                if (clientRequest.equals (clientRequest1))
-                    clientRequest = clientRequest1;
+                if (clientRequest.equals (clientRequest2))
+                {
+                    clientRequest.setResponseStorage (clientRequest2.getResponseStorage ());
+                }
             }
         }
     }

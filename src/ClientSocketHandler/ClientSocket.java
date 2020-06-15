@@ -20,7 +20,38 @@ public class ClientSocket implements Runnable
     private int port; // port number
     private String host; // IP Address
     private RequestsStorage requestsStorage;
-    private boolean successfullyFinished;
+    private boolean finished;
+
+    /**
+     * client Socket
+     * @param clientRequests clientRequests
+     * @param host IP
+     * @param port port
+     */
+    public ClientSocket (ArrayList<ClientRequest> clientRequests, String host, int port)
+    {
+        this.port = port;
+        this.host = host;
+        this.requestsStorage = new RequestsStorage ();
+        requestsStorage.getClientRequests ().addAll (clientRequests);
+        finished = false;
+    }
+
+    /**
+     * client Socket
+     * @param clientRequest clientRequest
+     * @param port port
+     * @param host IP
+     */
+    public ClientSocket (ClientRequest clientRequest, String host, int port)
+    {
+        this.port = port;
+        this.host = host;
+        requestsStorage = new RequestsStorage ();
+        requestsStorage.add (clientRequest);
+        finished = false;
+    }
+
 
     /**
      * client Socket
@@ -32,7 +63,7 @@ public class ClientSocket implements Runnable
         this.host = null;
         this.requestsStorage = new RequestsStorage ();
         requestsStorage.getClientRequests ().addAll (clientRequests);
-        successfullyFinished = false;
+        finished = false;
     }
 
     /**
@@ -45,8 +76,9 @@ public class ClientSocket implements Runnable
         this.host = null;
         requestsStorage = new RequestsStorage ();
         requestsStorage.add (clientRequest);
-        successfullyFinished = false;
+        finished = false;
     }
+
 
     /**
      * sets IP Address
@@ -66,35 +98,32 @@ public class ClientSocket implements Runnable
 
     /**
      *
-     * @return isSuccessfullyFinished
+     * @return isFinished
      */
-    public boolean isSuccessfullyFinished () {
-        return successfullyFinished;
+    public boolean isFinished () {
+        return finished;
     }
 
-    /**
-     *
-     * @return requestsStorage
-     */
-    public RequestsStorage getRequestsStorage () {
-        return requestsStorage;
-    }
+
 
     @Override
     public void run () {
         if (port == -1 && host == null)
         {
             System.err.println ("port number is not valid" + "\nIP is not valid");
+            finished = true;
             return;
         }
         if (port == -1)
         {
             System.err.println ("port number is not valid");
+            finished = true;
             return;
         }
         if (host == null)
         {
             System.err.println ("IP is not valid");
+            finished = true;
             return;
         }
         ObjectOutputStream out = null;
@@ -103,23 +132,28 @@ public class ClientSocket implements Runnable
         {
             out = sendData (connection.getOutputStream ());
             in = receiveData (connection.getInputStream ());
-            successfullyFinished = true;
-            Controller.printAllResult (requestsStorage);
-            Controller.updateRequestsStorage (requestsStorage);
         }
         catch (ConnectException e)
         {
             System.err.println ("Couldn't connect to Server");
+            for (ClientRequest clientRequest : requestsStorage.getClientRequests ())
+                clientRequest.getResponseStorage ().reset ();
         }
         catch (ClassNotFoundException e)
         {
             System.err.println ("Some Thing went Wrong while reading from Client");
+            for (ClientRequest clientRequest : requestsStorage.getClientRequests ())
+                clientRequest.getResponseStorage ().reset ();
         } catch (SocketException e)
         {
             System.err.println ("Server Not Responding");
+            for (ClientRequest clientRequest : requestsStorage.getClientRequests ())
+                clientRequest.getResponseStorage ().reset ();
         } catch (IOException e)
         {
             System.err.println ("Some went Wrong");
+            for (ClientRequest clientRequest : requestsStorage.getClientRequests ())
+                clientRequest.getResponseStorage ().reset ();
         } finally {
             try {
                 if (in != null)
@@ -127,10 +161,14 @@ public class ClientSocket implements Runnable
             }
             catch (SocketException ignore)
             {
+                for (ClientRequest clientRequest : requestsStorage.getClientRequests ())
+                    clientRequest.getResponseStorage ().reset ();
             }
             catch (IOException e)
             {
                 System.err.println ("Some thing went wrong in closing ServerInputStream");
+                for (ClientRequest clientRequest : requestsStorage.getClientRequests ())
+                    clientRequest.getResponseStorage ().reset ();
             }
             try {
                 if (out != null)
@@ -138,12 +176,19 @@ public class ClientSocket implements Runnable
             }
             catch (SocketException ignore)
             {
+                for (ClientRequest clientRequest : requestsStorage.getClientRequests ())
+                    clientRequest.getResponseStorage ().reset ();
             }
             catch (IOException e)
             {
                 System.err.println ("Some thing went wrong in closing ServerOutputStream");
+                for (ClientRequest clientRequest : requestsStorage.getClientRequests ())
+                    clientRequest.getResponseStorage ().reset ();
             }
         }
+        Controller.printAllResult (requestsStorage);
+        Controller.updateRequestsStorage (requestsStorage);
+        finished = true;
     }
 
     /**
@@ -173,5 +218,7 @@ public class ClientSocket implements Runnable
         System.out.println ("-> data sent to Server");
         return out;
     }
+
+
 
 }

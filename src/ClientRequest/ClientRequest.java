@@ -174,6 +174,14 @@ public class ClientRequest implements Serializable
     }
 
     /**
+     * changes response Storage
+     * @param responseStorage responseStorage
+     */
+    public void setResponseStorage (ResponseStorage responseStorage) {
+        this.responseStorage = responseStorage;
+    }
+
+    /**
      * add query
      * @param key key
      * @param value value
