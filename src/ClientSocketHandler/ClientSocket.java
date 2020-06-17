@@ -141,6 +141,12 @@ public class ClientSocket implements Runnable
                 }
             }
         }
+        catch (IllegalArgumentException e)
+        {
+            System.err.println ("Some went Wrong in start");
+            for (ClientRequest clientRequest : requestsStorage.getClientRequests ())
+                clientRequest.getResponseStorage ().reset ();
+        }
         catch (ConnectException e)
         {
             System.err.println ("Couldn't connect to Server");

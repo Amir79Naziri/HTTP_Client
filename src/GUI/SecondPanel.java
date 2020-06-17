@@ -305,7 +305,7 @@ public class SecondPanel extends JPanel
                 {
                     String ip =
                             JOptionPane.showInputDialog (gui.getBaseFrame (),"IP");
-                    if (ip == null)
+                    if (ip == null || ip.length () == 0)
                     {
                         JOptionPane.showMessageDialog (gui.getBaseFrame (),
                                 "IP didn't set","Error",JOptionPane.ERROR_MESSAGE);
