@@ -1,6 +1,5 @@
 package GUI;
 
-import ClientRequest.ClientRequest;
 import ClientSocketHandler.ClientSocket;
 import Storage.ResponseStorage;
 import javax.swing.*;

@@ -1,6 +1,8 @@
 package Storage;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -211,6 +213,89 @@ public class ResponseStorage implements Serializable
     {
         System.out.println (getResponseTextRawData ());
         System.out.println ();
+    }
+
+    /**
+     * save result in file not - Automatic
+     * @param addressOfFileForSaveOutput addressOfFileForSaveOutput
+     */
+    public void handSaveOutput (String addressOfFileForSaveOutput)
+    {
+        String contentType = "text/html";
+
+        if (getResponseHeaders () != null)
+        {
+            if (getResponseHeaders ().get ("Content-Type") != null)
+            {
+                contentType = getResponseHeaders ().get ("Content-Type").get (0);
+                if (contentType != null)
+                    contentType = contentType.split (";")[0];
+                else
+                {
+                    System.err.println ("Content type didn't set");
+                    return;
+                }
+            }
+        }
+
+
+
+        switch (contentType) {
+            case "image/png":
+                if (addressOfFileForSaveOutput == null) {
+                    addressOfFileForSaveOutput = "./data/RawData/Output_" +
+                            new SimpleDateFormat (
+                                    "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".png";
+                }
+
+                try (BufferedOutputStream out = new BufferedOutputStream (
+                        new FileOutputStream (addressOfFileForSaveOutput)))
+                {
+                    out.write (getResponseBinaryRawData ());
+                    out.flush ();
+                } catch (IOException e)
+                {
+                    System.err.println ("Some thing went Wrong in Save response on File");
+                }
+
+                return;
+            case "text/html":
+                if (addressOfFileForSaveOutput == null) {
+                    addressOfFileForSaveOutput = "./data/RawData/Output_" +
+                            new SimpleDateFormat (
+                                    "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".html";
+                }
+
+                break;
+            case "text/plain":
+                if (addressOfFileForSaveOutput == null) {
+                    addressOfFileForSaveOutput = "./data/RawData/Output_" +
+                            new SimpleDateFormat (
+                                    "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".txt";
+                }
+
+
+                break;
+            case "application/json":
+                if (addressOfFileForSaveOutput == null) {
+                    addressOfFileForSaveOutput = "./data/RawData/Output_" +
+                            new SimpleDateFormat (
+                                    "yyyy.MM.dd  HH.mm.ss").format (new Date ())
+                            + ".js";
+                }
+                break;
+        }
+
+        try (BufferedOutputStream out = new BufferedOutputStream (new FileOutputStream (
+                addressOfFileForSaveOutput)))
+        {
+            out.write (getResponseTextRawData ().getBytes ());
+            out.flush ();
+        } catch (IOException e)
+        {
+            System.err.println ("Some thing went Wrong in Save response on File");
+        }
+
     }
 
     /**

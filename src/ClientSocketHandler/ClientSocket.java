@@ -132,6 +132,14 @@ public class ClientSocket implements Runnable
         {
             out = sendData (connection.getOutputStream ());
             in = receiveData (connection.getInputStream ());
+            for (ClientRequest clientRequest : requestsStorage.getClientRequests ())
+            {
+                if (clientRequest.isShouldSaveOutputInFile ())
+                {
+                    clientRequest.getResponseStorage ().handSaveOutput
+                            (clientRequest.getAddressOfFileForSaveOutput ());
+                }
+            }
         }
         catch (ConnectException e)
         {

@@ -143,6 +143,11 @@ public class HttpConnection
             } catch (IOException e)
             {
                 try {
+                    if (shouldSaveResponseOnFile && addressOfFileForSaveOutput == null) {
+                        addressOfFileForSaveOutput = "./data/RawData/Output_" +
+                                new SimpleDateFormat (
+                                        "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".html";
+                    }
                     textReader (connection.getErrorStream (),
                             shouldSaveResponseOnFile,addressOfFileForSaveOutput);
                 } catch (IOException ex)
@@ -230,6 +235,11 @@ public class HttpConnection
                             shouldSaveResponseOnFile, addressOfFileForSaveOutput);
                 } catch (IOException e) {
                     try {
+                        if (shouldSaveResponseOnFile && addressOfFileForSaveOutput == null) {
+                            addressOfFileForSaveOutput = "./data/RawData/Output_" +
+                                    new SimpleDateFormat (
+                                            "yyyy.MM.dd  HH.mm.ss").format (new Date ()) + ".html";
+                        }
                         textReader (connection.getErrorStream (),
                                 shouldSaveResponseOnFile, addressOfFileForSaveOutput);
                     } catch (IOException ex) {
